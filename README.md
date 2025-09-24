@@ -18,10 +18,10 @@
   
 #### Main entity
 
-##### Trip
-###### Attributes: 
+##### Trip 
 We plan to offer a trip as base structure of our webpage selling them appart and as pack with all included. Our idea is to have a static page where the trips with all the atributtes remain the same through out all the times that people enter. The only difference is the availability, we can change it from yes to no and that way the the site will have functionality at the same time remaning simple. The relation wth the secondary one is when they have selected the trip, extra activities will pop up in order tto th costumer to buy it.
 
+###### Attributes:
 - **City_ID** Each trip has a unique identification number.
 - **Destination**  When the client clicks, he will find a range of cities where he can choose. Every one has an image that corresponds and you can find the links down below.The cities are New York, London, Tokyo, Paris, Shangai, Valencia, Buenos Aires, Cape Town and Sydney. Our plan is to have it writen in big letters in the center.
 - **Duration** This atribute describes the lenght of the trip in days.  
