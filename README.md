@@ -36,6 +36,8 @@ We plan to offer a trip as base structure of our webpage selling them appart and
 - **Date**   
 - **Information**  
   
+### Images
+Each entity or secondary entity will have an associated image so that the user can have an idea of ​​the type of trip or activity he is going to do.
 
   ### Searching
 As there must be a search engine we plan to implement one that looks if the city that you are looking for is in the page. Also we plan a filter to separate out if the trips are available by clicking on a button.
