@@ -39,6 +39,7 @@ There will be activities that you could book and add to you trip, this activitie
 - **Fee** This is an aditional price aded to the price of the trip.  
 - **Time span**  It indicates in the trip what is the lenght, start and end of the activity. 
 - **Information** Here we describe what the trip is about.
+- **Max travellers** This is the maximum number of people can choose to do this activity.
   
 ### Images
 Each entity or secondary entity will have an associated image so that the user can have an idea of ​​the type of trip or activity he is going to do.
@@ -58,6 +59,6 @@ The system will allow:
 - **Categorization**:
   - National vs international trips  
   - Packages with or without flights  
-  - Adventure,family,leisure 
+  - Adventure, family ,leisure 
 
 
