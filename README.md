@@ -32,10 +32,10 @@ We plan to offer a trip as base structure of our webpage selling them appart and
 ##### Activities
 There will be activities that you could book and add to you trip, this activities will be added to your trip and you could see the caracteristics and information of each them before booking it.
 
-- **Name** 
-- **Fee**  
-- **Date**   
-- **Information**  
+- **Name** This is the name of each that each trip offers, as it is static we plan to add one or two activities by trip. 
+- **Fee** This is an aditional price aded to the price of the trip.  
+- **Time span**  It indicates in the trip what is the lenght, start and end of the activity. 
+- **Information** Here we describe what the trip is about.
   
 ### Images
 Each entity or secondary entity will have an associated image so that the user can have an idea of ​​the type of trip or activity he is going to do.
