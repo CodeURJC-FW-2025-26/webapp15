@@ -19,6 +19,7 @@
 #### Main entity
 
 ##### Trip
+###### Attributes: 
 We plan to offer a trip as base structure of our webpage selling them appart and as pack with all included. Our idea is to have a static page where the trips with all the atributtes remain the same through out all the times that people enter. The only difference is the availability, we can change it from yes to no and that way the the site will have functionality at the same time remaning simple. The relation wth the secondary one is when they have selected the trip, extra activities will pop up in order tto th costumer to buy it.
 
 - **City_ID** Each trip has a unique identification number.
@@ -26,7 +27,8 @@ We plan to offer a trip as base structure of our webpage selling them appart and
 - **Duration** This atribute describes the lenght of the trip in days.  
 - **Total Price** The amount o be paid for the service.   
 - **Availability** If there is space to book it or not it tells hich trips are actv or not, marking it by a yes or not.
-
+- **Type of trip** (family, leisure or cultural) This attribute defines the kind of trip you choose.
+  
 #### Secondary entity
 
 ##### Activities
