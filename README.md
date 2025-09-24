@@ -39,5 +39,21 @@ We plan to offer a trip as base structure of our webpage selling them appart and
 ### Images
 Each entity or secondary entity will have an associated image so that the user can have an idea of ​​the type of trip or activity he is going to do.
 
-  ### Searching
-As there must be a search engine we plan to implement one that looks if the city that you are looking for is in the page. Also we plan a filter to separate out if the trips are available by clicking on a button.
+### Search, Filtering, and Categorization
+
+The system will allow:
+
+- **Trip search** by:
+  - Destination
+  - Dates
+  - Type of trip (family, leisure, cultural, etc.)
+- **Additional filters**:
+  - Price range
+  - Duration (days)
+  - Available seats
+- **Categorization**:
+  - National vs international trips  
+  - Packages with or without flights  
+  - Adventure,family,leisure 
+
+
