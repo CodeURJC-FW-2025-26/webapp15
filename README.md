@@ -30,6 +30,7 @@ We plan to offer a trip as base structure of our webpage selling them appart and
 #### Secondary entity
 
 ##### Activities
+There will be activities that you could book and add to you trip, this activities will be added to your trip and you could see the caracteristics and information of each them before booking it.
 
 - **Name** 
 - **Fee**  
