@@ -48,7 +48,7 @@ The system will allow:
   - Destination
   - Dates
   - Type of trip (family, leisure, cultural, etc.)
-- **Additional filters**:
+- **Filters**:
   - Price range
   - Duration (days)
   - Available seats
