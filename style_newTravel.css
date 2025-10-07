@@ -1,0 +1,16 @@
+h1 {
+    text-align: right;
+    color: rgb(0, 0, 0) ;
+    padding-right: 10px;
+}
+.navbar-custom {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    padding: 2px;
+    border-bottom: 10px solid rgb(165, 165, 165)
+}
+body {
+    padding-top: 100px;
+}
