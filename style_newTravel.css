@@ -15,9 +15,37 @@ body {
     border-bottom: 10px solid rgb(165, 165, 165);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 .navbar-custom input[type="text"] {
     height: 30px;
     border-radius: 10px;
+}
+form {
+    display: flex;
+    flex-direction: column; /* apila los hijos verticalmente */
+    gap: 15px; /* espacio entre cada campo */
+}
+.form-align {
+    display: flex;
+    justify-content: center;
+}
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aquamarine;
+    padding: 30px;
+    border-radius: 15px;
+    border-color: black;
+    border: 2px solid;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    flex-direction: column;
+}
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+
 }

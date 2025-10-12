@@ -9,48 +9,31 @@
 <body>  
     <header>
         <nav class="navbar-custom d-flex">
-            <input type="text" placeholder="Buscar">    
-            <h1>EUROTRAVEL</h1>                   
+            <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Catálogo
+                </button>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-item" href="#">Países</li>
+                    <li class="dropdown-item" href="#">Actividades</li>
+                    <li class="dropdown-item" href="#">Tarifas</li>
+                </ul>               
+            </div>           
+                <input type="text" placeholder="Buscar"> 
+                <h1>EUROTRAVEL</h1>                  
         </nav>
     </header>  
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p><p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p><p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p><p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p><p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p><p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    <p>12</p>
-    
-    
+    <div class="form-align">
+        <div class="form-container">
+            <h2>Nuevo Viaje</h2>
+            <form>
+                <label for="main_city">Ciudad principal:</label>
+                <input type="text" id="main_city" name="main_city">
+
+                <label for="duration">Duración:</label>
+                <input type="range" id="duration" name="duration" min="0" max="100" value="50">
+            </form>
+        </div>
+    </div>
 </body>
 </html>
