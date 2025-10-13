@@ -14,12 +14,12 @@
         <nav class="navbar-custom d-flex">
             <div class="dropdown">
                 <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    Catálogo
+                    Catalogue
                 </button>
                 <ul class="dropdown-menu">
-                    <li class="dropdown-item" href="#">Países</li>
-                    <li class="dropdown-item" href="#">Actividades</li>
-                    <li class="dropdown-item" href="#">Tarifas</li>
+                    <li class="dropdown-item" href="#">Countries</li>
+                    <li class="dropdown-item" href="#">Activities</li>
+                    <li class="dropdown-item" href="#">Prices</li>
                 </ul>               
             </div>           
                 <input type="text" placeholder="Buscar"> 
@@ -32,7 +32,7 @@
             <img src="fotopuente.png" id="imagen" class="img-fluid rounded shadow-sm mx-auto d-block mb-4" alt="Puente de Londres">
             <ul class="list-unstyled text-center mb-4">
                 <li><i class="bi bi-clock"></i> <strong>Duration:</strong> 5 days</li>
-                <li><i class="bi bi-currency-euro"></i> <strong>Price:</strong> 700$</li>
+                <li><i class="bi bi-currency-euro"></i> <strong>Price:</strong> 700€</li>
                 <li><i class="bi bi-people"></i> <strong>Max packages:</strong> 5</li>
                 <li><i class="bi bi-check-circle"></i> <strong>Availability:</strong> Yes</li>
             </ul>
@@ -54,8 +54,8 @@
                 <div class="p-4 bg-white rounded shadow h-100">
                     <h3 class="text-center">Farm day</h3>
                     <ol>
-                        <li><strong>Fee:</strong> 80$</li>
-                        <li><strong>Time Span:</strong> 1 day</li>
+                        <li><strong>Fee:</strong> 80€</li>
+                        <li><strong>Time Span:</strong> 12 hours</li>
                         <li><strong>Turistic guide:</strong> NO</li>
                     </ol>
                     <p class="item">We offer all kinds of experiences. In Marlow near London you will live and experience a farm (transportation included).</p>
@@ -70,7 +70,7 @@
                 <div class="p-4 bg-white rounded shadow h-100">
                     <h3 class="text-center">Football hopping</h3>
                     <ol>
-                        <li><strong>Fee:</strong> 200$</li>
+                        <li><strong>Fee:</strong> 200€</li>
                         <li><strong>Time Span:</strong> 2 days</li>
                         <li><strong>Turistic guide:</strong> NO</li>
                     </ol>
@@ -86,7 +86,7 @@
                 <div class="p-4 bg-white rounded shadow h-100">
                     <h3 class="text-center">London Eye</h3>
                     <ol>
-                        <li><strong>Fee:</strong> 20$</li>
+                        <li><strong>Fee:</strong> 20€</li>
                         <li><strong>Time Span:</strong> 4h</li>
                         <li><strong>Turistic guide:</strong> NO</li>
                     </ol>
@@ -102,7 +102,7 @@
                 <div class="p-4 bg-white rounded shadow h-100">
                     <h3 class="text-center">Tower Bridge</h3>
                     <ol>
-                        <li><strong>Fee:</strong> 10$</li>
+                        <li><strong>Fee:</strong> 10€</li>
                         <li><strong>Time Span:</strong> 2h</li>
                         <li><strong>Turistic guide:</strong> YES</li>
                     </ol>
@@ -117,55 +117,42 @@
     </main>
     <div class="form-align">
         <div class="form-container">
-            <h2>Nuevo Viaje</h2>
+            <h2>New activity</h2>
             <form>
-                <label for="main_city">Ciudad principal:</label>
-                <input type="text" id="main_city" name="main_city">
+                <label for="main_city">Name of the activity:</label>
+                <input type="text" id="main_activity" name="main_activity" placeholder="Tee time">
 
-                <label for="duration">Duración (días):</label>
-                <input type="number" id="duration" name="duration" min="0" max="100" step="1" placeholder="0 días">
+                <label for="duration">Time span:</label>
+                <input type="number" id="duration" name="duration" min="0" max="12" step="1" placeholder="3 horas">
 
-                <label for="image">Imágen:</label>
-                <input type="url" id="image" name="image" placeholder="jpeg jpg or png">
+                <label for="price">Fee(€):</label>
+                <input type="number" id="fee" name="fee" min="0" max="100000" step="200" placeholder="0€">
 
-                <label for="price">Precio (€):</label>
-                <input type="number" id="price" name="price" min="0" max="100000" step="200" placeholder="0€">
+                <label for="description">Description of the activity:</label>
+                <input type="text" id="description_activity" name="description_activity">
 
-                <label for="t_trip">Tipo de viaje:</label>
-                <select id="t_trip" name="t_trip">
-                    <option value="">Selecciona un tipo</option>
-                    <option value="aventura">Family</option>
-                    <option value="relax">Leisure</option>
-                    <option value="cultural">Cultural</option>
+                <label for="guide_travel">Guide:</label>
+                <select id="guide_travel" name="guide_travel">
+                    <option value="">Select the option</option>
+                    <option value="aventura">YES</option>
+                    <option value="relax">NO</option>
                 </select>
 
-                <div class="checkbox-group">
-                    <label for="flight">¿Requiere vuelo?</label>
-                    <input type="checkbox" id="flight" name="flight">
-                </div>
 
-                <div class="checkbox-group">
-                    <label for="national">¿El viaje es nacional?</label>
-                    <input type="checkbox" id="national" name="national">
-                </div>
-
-                <label for="max_travellers">Personas:</label>
-                <input type="number" id="max_travellers" name="max_travellers" min="0" max="100" step="1" placeholder="1">
-
-                <button type="submit" class="btn button btn-dark">Crear</button>
+                <button type="submit" class="btn button btn-dark">Create</button>
             </form>
         </div>
     </div>
     <footer>
         
-            <p><strong>EuroTravel</strong> · Madrid, España</p>
+            <p><strong>EuroTravel</strong> · Madrid, Spain</p>
             <p>✉️ info@eurotravel.com · ☎️ +34 600 123 456</p>
             <a href="#" class="icon">🌍</a>
             <a href="#" class="icon">✈️</a>
             <a href="#" class="icon">🏝️</a>
             <p>
-                <a href="#" class="text-white text-decoration-underline">Política de privacidad</a> |
-                <a href="#" class="text-white text-decoration-underline">Términos</a>
+                <a href="#" class="text-white text-decoration-underline">Privacy policy</a> |
+                <a href="#" class="text-white text-decoration-underline">Terms</a>
             </p>
             <a href="https://github.com/CodeURJC-FW-2025-26/webapp15" class="text-white text-decoration-underline">link portfolio</a>
             <p class="footer-text mb-0">© 2025 Eurotravel - All rights reserved</p>
@@ -174,6 +161,8 @@
 
 </body>
 </html>
+
+
 
 
 
