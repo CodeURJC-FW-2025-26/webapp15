@@ -19,12 +19,13 @@ body {
     align-items: center;
     justify-content: space-between;
     z-index: 1000;
+    flex-wrap: wrap;
 }
 .navbar-custom input[type="text"] {
     height: 30px;
     border-radius: 10px;
     flex: 1 1 200px;
-    max-width: 300px;
+    max-width: 200px;
 }
 .list-group-item {
   background-color: rgba(21, 0, 255, 0.922);
