@@ -35,7 +35,7 @@ body {
 }
 
 .list-group-item:hover {
-  background-color:  rgb(255, 255, 255);  
+  background-color:  rgb(31, 216, 74);  
   color: rgb(0, 0, 0);              
   transform: scale(1.02);    
 }
@@ -127,4 +127,27 @@ form {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+.dropdown button{
+    border-radius: 12px; 
+    font-family: 'poppins', sans-serif;
+}
+.dropdown button:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border-radius: 12px; 
+}
+.button{
+    border-radius: 12px; 
+    font-family: 'poppins', sans-serif;
+}
+.button:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border-radius: 12px; 
+}
+.button2:hover {
+    background-color: rgb(160, 159, 159);
+    color: black;
+    border-radius: 12px; 
 }
