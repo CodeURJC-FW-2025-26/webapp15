@@ -4,22 +4,24 @@ header{
   color: rgb(251, 251, 251);
 }
 #cabecera{
+  margin-top: 100px;
   margin-bottom: 100px;
   margin-left: 40px;
+  margin-right: 40px;
+  font-family: Verdana;
 }
 
 body{
+    font-family: Verdana;
     background-color: rgb(121, 157, 249);
-    text-align: justify;
-     
+    text-align: justify; 
 }
 h1 {
     text-align: center;
-    color: rgb(255, 255, 255) ;
-    
+    color: rgb(255, 255, 255) ; 
 }
 .btn-primary{
-   background-color: rgb(232, 172, 8);
+  background-color: rgb(232, 172, 8);
   border: 4px;
   margin-bottom: 40px;
 }
@@ -33,7 +35,7 @@ h1 {
 }
 
 .card-img-top:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 
@@ -43,6 +45,7 @@ footer {
   color: white;
   text-align: center;
   padding: 20px;
+  font-family: Verdana;
 }
 
 .icon {
