@@ -1,18 +1,20 @@
 body {
     padding-top: 120px;
+    font-family: Verdana;
+    background-color: rgb(121,157,249);
 }
 .navbar-custom h1 {
     text-align: right;
-    color: rgb(0, 0, 0) ;
+    color: rgb(255, 255, 255) ;
     font-weight: bold;
 }
 .navbar-custom {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: grey;
+    background-color: rgb(104, 104, 104);
     padding: 0px 20px;
-    border-bottom: 10px solid rgb(165, 165, 165);
+    border-bottom: 10px solid rgb(67, 66, 66);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -37,7 +39,7 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: aquamarine;
+    background-color: rgb(205, 205, 205);
     padding: 30px;
     border-radius: 15px;
     border-color: black;

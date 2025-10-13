@@ -1,6 +1,29 @@
 body {
+    padding-top: 120px;
     font-family: Verdana;
     background-color: rgb(121,157,249);
+}
+.navbar-custom h1 {
+    text-align: right;
+    color: rgb(255, 255, 255) ;
+    font-weight: bold;
+}
+.navbar-custom {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgb(104, 104, 104);
+    padding: 0px 20px;
+    border-bottom: 10px solid rgb(67, 66, 66);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar-custom input[type="text"] {
+    height: 30px;
+    border-radius: 10px;
+    flex: 1 1 200px;
+    max-width: 300px;
 }
 .list-group-item {
   background-color: rgba(21, 0, 255, 0.922);
