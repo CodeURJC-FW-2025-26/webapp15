@@ -26,6 +26,7 @@ body{
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    z-index: 1000;
 }
 .navbar-custom input[type="text"] {
     height: 30px;
