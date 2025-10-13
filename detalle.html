@@ -115,9 +115,47 @@
             </div>
         </div>
     </main>
+    <div class="form-align">
+        <div class="form-container">
+            <h2>Nuevo Viaje</h2>
+            <form>
+                <label for="main_city">Ciudad principal:</label>
+                <input type="text" id="main_city" name="main_city">
 
-    <footer class="bg-dark text-white text-center py-4 mt-5">
-        <div class="container-fluid">
+                <label for="duration">Duración (días):</label>
+                <input type="number" id="duration" name="duration" min="0" max="100" step="1" placeholder="0 días">
+
+                <label for="image">Imágen:</label>
+                <input type="url" id="image" name="image" placeholder="jpeg jpg or png">
+
+                <label for="price">Precio (€):</label>
+                <input type="number" id="price" name="price" min="0" max="100000" step="200" placeholder="0€">
+
+                <label for="t_trip">Tipo de viaje:</label>
+                <select id="t_trip" name="t_trip">
+                    <option value="">Selecciona un tipo</option>
+                    <option value="aventura">Family</option>
+                    <option value="relax">Leisure</option>
+                    <option value="cultural">Cultural</option>
+                </select>
+
+                <div class="checkbox-group">
+                    <label for="flight">¿Requiere vuelo?</label>
+                    <input type="checkbox" id="flight" name="flight">
+                </div>
+
+                <div class="checkbox-group">
+                    <label for="national">¿El viaje es nacional?</label>
+                    <input type="checkbox" id="national" name="national">
+                </div>
+
+                <label for="max_travellers">Personas:</label>
+                <input type="number" id="max_travellers" name="max_travellers" min="0" max="100" step="1" placeholder="1">
+            </form>
+        </div>
+    </div>
+    <footer>
+        
             <p><strong>EuroTravel</strong> · Madrid, España</p>
             <p>✉️ info@eurotravel.com · ☎️ +34 600 123 456</p>
             <a href="#" class="icon">🌍</a>
@@ -129,7 +167,7 @@
             </p>
             <a href="https://github.com/CodeURJC-FW-2025-26/webapp15" class="text-white text-decoration-underline">link portfolio</a>
             <p class="footer-text mb-0">© 2025 Eurotravel - All rights reserved</p>
-        </div>
+        
     </footer>
 
 </body>
