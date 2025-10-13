@@ -30,7 +30,7 @@ We plan to offer a trip as base structure of our webpage selling them appart and
 - **Type of trip** (t_trip) (family, leisure or cultural) 
 - **Flight** (flight) (boolean)
 - **National** (national) (boolean)
-- **Max travellers** This is the maximum number of people can choose to do this activity.
+- **Max travellers** (max_travellers) This is the maximum number of people can choose to do this activity.
   
 #### Secondary entity
 
