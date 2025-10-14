@@ -28,8 +28,8 @@ body {
 }
 form {
     display: flex;
-    flex-direction: column; /* apila los hijos verticalmente */
-    gap: 15px; /* espacio entre cada campo */
+    flex-direction: column; 
+    gap: 15px; 
 }
 .form-align {
     display: flex;

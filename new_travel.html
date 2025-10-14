@@ -13,12 +13,12 @@
         <nav class="navbar-custom d-flex">
             <div class="dropdown">
                 <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    Catálogo
+                    Info
                 </button>
                 <ul class="dropdown-menu">
-                    <li class="dropdown-item" href="#">Países</li>
-                    <li class="dropdown-item" href="#">Actividades</li>
-                    <li class="dropdown-item" href="#">Tarifas</li>
+                    <li class="dropdown-item" href="#">Countries</li>
+                    <li class="dropdown-item" href="#">Activities</li>
+                    <li class="dropdown-item" href="#">Sales rates</li>
                 </ul>               
             </div>           
                 <input type="text" placeholder="Buscar"> 
@@ -29,41 +29,41 @@
         <div class="form-container">
             <h2>Nuevo Viaje</h2>
             <form>
-                <label for="main_city">Ciudad principal:</label>
+                <label for="main_city">Main city:</label>
                 <input type="text" id="main_city" name="main_city">
 
-                <label for="duration">Duración (días):</label>
-                <input type="number" id="duration" name="duration" min="0" max="100" step="1" placeholder="0 días">
+                <label for="duration">Duration (days):</label>
+                <input type="number" id="duration" name="duration" min="0" max="100" step="1" placeholder="0">
 
-                <label for="image">Imágen:</label>
+                <label for="image">Image:</label>
                 <input type="url" id="image" name="image" placeholder="jpeg jpg or png">
 
-                <label for="price">Precio (€):</label>
+                <label for="price">Price (€):</label>
                 <input type="number" id="price" name="price" min="0" max="100000" step="200" placeholder="0€">
 
-                <label for="t_trip">Tipo de viaje:</label>
+                <label for="t_trip">Type of trip:</label>
                 <select id="t_trip" name="t_trip">
-                    <option value="">Selecciona un tipo</option>
+                    <option value="">Select a type</option>
                     <option value="aventura">Family</option>
                     <option value="relax">Leisure</option>
                     <option value="cultural">Cultural</option>
                 </select>
 
                 <div class="checkbox-group">
-                    <label for="flight">¿Requiere vuelo?</label>
+                    <label for="flight">Need a flight?</label>
                     <input type="checkbox" id="flight" name="flight">
                 </div>
 
                 <div class="checkbox-group">
-                    <label for="national">¿El viaje es nacional?</label>
+                    <label for="national">Is it national?</label>
                     <input type="checkbox" id="national" name="national">
                 </div>
 
-                <label for="max_travellers">Personas:</label>
+                <label for="max_travellers">People:</label>
                 <input type="number" id="max_travellers" name="max_travellers" min="0" max="100" step="1" placeholder="1">
                 
-                <button type="submit" class="btn button btn-dark">Crear</button>
-                <a href="main.html" class="btn button btn-dark">Cancelar</a> 
+                <button type="submit" class="btn button btn-dark">Create</button>
+                <a href="main.html" class="btn button btn-dark">Cancel</a> 
             </form>
         </div>
     </div>
