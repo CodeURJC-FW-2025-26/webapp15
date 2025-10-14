@@ -71,10 +71,10 @@ The system will allow:
   ![main 3](main_3.jpg)
 
   -Detail
-  ![detail 1](detail.jpg)  
-  ![detail 2](detail.jpg)
-  ![detail 3](detail.jpg)
-  ![detail 4](detail.jpg)
+  ![detail 1](detail_1.jpg)  
+  ![detail 2](detail_2.jpg)
+  ![detail 3](detail_3.jpg)
+  ![detail 4](detail_4.jpg)
 
   -New_trip
   ![new_trip 1](new_trip_1.jpg)
