@@ -74,6 +74,11 @@ The system will allow:
   - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/7b35a56a37c4916d2d4b105cbd579a4a123c5961
   - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/9ec6df08ac3fc6ff42786475bf23bdadb5f83884
 
+  - List of the 5 files in which I have participated the most:
+  - [detalle.html](detalle.html)
+  - [main.html](main.html)
+  - [style_detalle.css](style_detalle.css)
+  
 
 ➡ **Daniel Villalón Muñoz**
 - Throughout this project, my work has mainly consisted of taking charge of the “new element” page and its corresponding .css file with its styling.
