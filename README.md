@@ -1,5 +1,4 @@
-# Travel Agency 
-
+# Eurotravel
 **Web Fundamentals**  
 **2nd Year - Software Engineering Degree**  
 **Project 2025 – 2026**
