@@ -65,17 +65,11 @@ The system will allow:
 ## 1 Part
 - **Stanislaw Cherkhavskyy Pater**
 - So the main thing that I did is the detail page except the footer and the header. In the page I did the details about the main and secundary entity with all the tables, pictures and divisions. I looked up Boostrap and implemented it, also making it responsive and the hover on the shadow of the picture but the form I only adapted it so it woould be the same. The associated CSS page was also done by me. Moreover I helped on the main pages with some other small things apart from writing. Organising the page and telling how to link main and secondary entities.
--**Commits**:
--https://github.com/CodeURJC-FW-2025-26/webapp15
--https://github.com/CodeURJC-FW-2025-26/webapp15/commit/95f6814c827a3114cd276383893bd91bc6eb7111
--https://github.com/CodeURJC-FW-2025-26/webapp15/commit/741e05a6042f41717bcb61d72006ae977663e556ç
--https://github.com/CodeURJC-FW-2025-26/webapp15/commit/3e736482307c127c502f577bb5e6b7f6d85fd50f
--https://github.com/CodeURJC-FW-2025-26/webapp15/commit/95f6814c827a3114cd276383893bd91bc6eb7111
-- **Filters**:
-  - (https://github.com/CodeURJC-FW-2025-26/webapp15)
-  - (https://github.com/CodeURJC-FW-2025-26/webapp15/commit/95f6814c827a3114cd276383893bd91bc6eb7111)
-  - (https://github.com/CodeURJC-FW-2025-26/webapp15/commit/741e05a6042f41717bcb61d72006ae977663e556ç)
-  - ttps://github.com/CodeURJC-FW-2025-26/webapp15/commit/3e736482307c127c502f577bb5e6b7f6d85fd50f 
-  - (https://github.com/CodeURJC-FW-2025-26/webapp15/commit/95f6814c827a3114cd276383893bd91bc6eb7111)
-  - Family, leisure or cultural
+- **Commits**:
+  - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/d3888e1086ac7a5b42cb7e27907db8913cd02221
+  - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/95f6814c827a3114cd276383893bd91bc6eb7111
+  - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/741e05a6042f41717bcb61d72006ae977663e556ç
+  - (https://github.com/CodeURJC-FW-2025-26/webapp15/commit/3e736482307c127c502f577bb5e6b7f6d85fd50f) 
+  - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/7b35a56a37c4916d2d4b105cbd579a4a123c5961
+  - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/9ec6df08ac3fc6ff42786475bf23bdadb5f83884
 
