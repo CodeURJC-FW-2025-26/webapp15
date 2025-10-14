@@ -75,18 +75,18 @@ The system will allow:
   - https://github.com/CodeURJC-FW-2025-26/webapp15/commit/9ec6df08ac3fc6ff42786475bf23bdadb5f83884
 
 
-- **Daniel Villalón Muñoz**
+➡ **Daniel Villalón Muñoz**
 - Throughout this project, my work has mainly consisted of taking charge of the “new element” page and its corresponding .css file with its styling.
 In addition to that, I created the header for all three pages, designed the button styles, and, like my teammates, I was able to make changes to the three pages whenever a detail was missing or there was an error.
 
--**List of the 5 most significant commits:**
+- **List of the 5 most significant commits:**
   - [all button and few style changes](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/a0739c97bd9f8516bc626075517cdbd33a731894)
   - [newtravel start](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/8e2102fe87071ec4442fad5a2e6f3882ba4940e0)
   - [Start of form and added dropbox to navbar](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/6a3237a535c8bbd5863804825396eb8c5fe7a949)
   - [form finished](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/6f0c37a7661bfc8cd89eefe55fb7380954457f26)
   - [added header](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/de7d013f369011bbf81598a102a67e9b2a77c8e7)
 
--List of the 5 files in which I have participated the most:
+- List of the 5 files in which I have participated the most:
  - [new_travel.html](new_travel.html)
  - [style_newTravel.css](style_newTravel.css)
  - [style_detalle.css](style_detalle.css)
