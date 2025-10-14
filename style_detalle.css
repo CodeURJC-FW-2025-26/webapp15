@@ -92,7 +92,6 @@ footer {
     transform: scale(1.2)
 }
 
-
 form {
     display: flex;
     flex-direction: column; 
@@ -121,12 +120,6 @@ form {
     text-align: center;
     margin-bottom: 20px;
     font-weight: bold;
-
-}
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 .dropdown button{
     border-radius: 12px; 
