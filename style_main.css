@@ -10,6 +10,9 @@ body{
     text-align: justify; 
     padding-top: 120px;
 }
+#b1{
+  margin-bottom: 20px;
+}
 .navbar-custom h1 {
     text-align: right;
     color: rgb(255, 255, 255) ;
