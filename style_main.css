@@ -1,8 +1,8 @@
 #cabecera{
-  margin-bottom: 100px;
-  margin-left: 40px;
-  margin-right: 40px;
-  font-family: Verdana;
+    margin-bottom: 100px;
+    margin-left: 40px;
+    margin-right: 40px;
+    font-family: Verdana;
 }
 body{
     font-family: Verdana;
@@ -11,7 +11,10 @@ body{
     padding-top: 120px;
 }
 #b1{
-  margin-bottom: 20px;
+    padding: 0.8em 1.5em; 
+    font-size: 1rem;       
+    margin-bottom: 20px;
+    float: right; 
 }
 .navbar-custom h1 {
     text-align: right;
@@ -42,21 +45,21 @@ h1 {
     color: rgb(255, 255, 255) ; 
 }
 .btn-primary{
-  background-color: rgb(232, 172, 8);
-  border: 4px;
-  margin-bottom: 40px;
+    background-color: rgb(232, 172, 8);
+    border: 4px;
+    margin-bottom: 40px;
 }
 
 .card-img-top {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-  border-radius: 10px 10px 0 0;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    border-radius: 10px 10px 0 0;
 }
 
 .card-img-top:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 
