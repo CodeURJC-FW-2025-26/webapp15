@@ -133,3 +133,5 @@ In addition to that, I created the header for all three pages, designed the butt
   - [detalle.html](detalle.html)
   - [new_travel.html](new_travel.html)
   - [detalle.css](detalle.css)
+
+  ![alt text](image.png)
