@@ -66,20 +66,17 @@ The system will allow:
 
 ➡ **Images**
   -Main
-  ![main 1](main_1.jpg)
-  ![main 2](main_2.jpg)
-  ![main 3](main_3.jpg)
+  ![main 1](image-1.png)
+  ![main 2](image-2.png)
 
   -Detail
-  ![detail 1](detail_1.jpg)  
-  ![detail 2](detail_2.jpg)
-  ![detail 3](detail_3.jpg)
-  ![detail 4](detail_4.jpg)
+  ![detail 1](image-3.png)
+  ![detail 2](image-4.png)
+  ![detail 3](image-5.png)
 
   -New_trip
-  ![new_trip 1](new_trip_1.jpg)
-  ![new_trip 2](new_trip_2.jpg)
-  ![new_trip 3](new_trip_3.jpg)
+  ![new_trip 1](image-6.png)
+  ![new_trip 2](image-7.png)
 
 ➡ **Stanislaw Cherkhavskyy Pater**
 - So the main thing that I did is the detail page except the footer and the header. In the page I did the details about the main and secundary entity with all the tables, pictures and divisions. I looked up Boostrap and implemented it, also making it responsive and the hover on the shadow of the picture but the form I only adapted it so it woould be the same. The associated CSS page was also done by me. Moreover I helped on the main pages with some other small things apart from writing. Organising the page and telling how to link main and secondary entities.
@@ -134,4 +131,4 @@ In addition to that, I created the header for all three pages, designed the butt
   - [new_travel.html](new_travel.html)
   - [detalle.css](detalle.css)
 
-  ![alt text](image.png)
+  
