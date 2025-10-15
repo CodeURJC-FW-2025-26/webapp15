@@ -122,9 +122,9 @@ In addition to that, I created the header for all three pages, designed the butt
 
   - **List of the 5 most significant commits:**
   - [Responsive update of the main page and style css update](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/11808d3fbc8386e33d347347d3c16b1248b36654)
+  - [Responsive footer modification](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/b3cc27ce117a3a99fe6f40c54aa688a3a86ee47a)
   - [footer added and style_main modification](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/be93a173329d21e9f33ee8bb22a229d598a38ebb)
   - [section of images added](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/66ecbd61122cf3ef5d556bfba43661290e8fefbb)
-  - [main page start](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/7b02c8346ae3171021272f41781c341b4f4ec8a0)
   - [css changes to armonice the page](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/a7c8b2d39f80fced6ae67c7babc3e0d3e8dca902)
 
   - **List of the 5 files in which I have participated the most:**
