@@ -86,7 +86,7 @@ The system will allow:
   - [secondary entity atributes](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/95f6814c827a3114cd276383893bd91bc6eb7111)
   - [photos of the page](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/363bc999e44702ab01fb4db11412c6934ebab823)
   - [added the symbols](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/3e736482307c127c502f577bb5e6b7f6d85fd50f) 
-  - [changes in the detail page] (https://github.com/CodeURJC-FW-2025-26/webapp15/commit/7b35a56a37c4916d2d4b105cbd579a4a123c5961)
+  - [changes in detail page](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/7b35a56a37c4916d2d4b105cbd579a4a123c5961)
  
 
   - List of the 5 files in which I have participated the most:
