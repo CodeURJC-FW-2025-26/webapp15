@@ -13,11 +13,11 @@ router.get('/', async (req, res) => {
     res.render('main', { trips: trips });
 });
 
-router.get('/trip/:id/image', (req, res) => {
+router.get('/trip/:id/image', async (req, res) => {
     let trip = await db.getTrip(req.params.id);
 
     if (trip && trip.image) {
-        res.download(db.UPLOADS_FOLDER);
+        res.download(db.UPLOADS_FOLDER + '/' + trip.image);
     } else {
         res.status(404).send('Image not found');
     }

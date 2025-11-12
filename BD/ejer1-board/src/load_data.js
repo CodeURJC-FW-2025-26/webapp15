@@ -1,19 +1,34 @@
 import fs from 'node:fs/promises';
-import * as db from './database.js';
+import * as db from './database.js'; 
 
-let dataFile = `${db.DATA_FOLDER}/data.json`;
+(async () => {
+    try {
+        console.log('Checking data base "gotravel"...');
+        let currentTrips = await db.getTrips(); 
+        if (currentTrips.length === 0) {
+            console.log('Empty database. Loading sample data...');
+            
+            const dataFile = `${db.DATA_FOLDER}/data.json`;
+            const dataString = await fs.readFile(dataFile, 'utf8');
 
-const dataString = await fs.readFile(DATA_FOLDER + '/' + dataFile, 'utf8');
+            const tripsToLoad = JSON.parse(dataString);
 
-const posts = JSON.parse(dataString);
+            for (const trip of tripsToLoad) {
+                await db.addTrip(trip);
+            }
+            console.log(`${tripsToLoad.length} loaded trips into MongoDB.`);
 
-await board.deletePosts();
-for(let post of posts){
-    await board.addPost(post);
-}
+            await fs.rm(db.UPLOADS_FOLDER, { recursive: true, force: true });
+            await fs.mkdir(db.UPLOADS_FOLDER);
+            await fs.cp(`${db.DATA_FOLDER}/images`, db.UPLOADS_FOLDER, { recursive: true });
+            
+            console.log('Example images copied to ./uploads');
 
-await fs.rm(UPLOADS_FOLDER, { recursive: true, force: true });
-await fs.mkdir(UPLOADS_FOLDER);
-await fs.cp(DATA_FOLDER + '/images', UPLOADS_FOLDER, { recursive: true });
+        } else {
+            console.log('The database already contains data. No examples are loaded.');
+        }
 
-console.log('Demo data loaded');
+    } catch (error) {
+        console.error('Error al inicializar la base de datos:', error);
+    }
+})();

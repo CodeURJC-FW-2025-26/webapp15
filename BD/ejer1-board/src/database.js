@@ -6,10 +6,10 @@ const client = new MongoClient('mongodb://localhost:27017');
 
 try {
     await client.connect();
-    console.log('Conectado a MongoDB');
+    console.log('Connecting to  MongoDB');
 } catch (e) {
-    console.error('No se pudo conectar a MongoDB. Asegúrate de que está arrancado.', e);
-    process.exit(1); // Cierra la aplicación si no puede conectar
+    console.error('Could not connect to MongoDB. Make sure it is running.', e);
+    process.exit(1);
 }
 
 const db = client.db('gotravel');

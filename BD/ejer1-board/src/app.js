@@ -9,6 +9,7 @@ const app = express();
 
 app.use(express.static('./public'));
 
+//Moustache settings
 app.set('view engine', 'html');
 app.engine('html', mustacheExpress(), ".html");
 app.set('views', './views');
