@@ -1,10 +1,7 @@
 import fs from 'node:fs/promises';
-import * as board from './board.js';
+import * as db from './database.js';
 
-const UPLOADS_FOLDER = './uploads';
-const DATA_FOLDER = './data';
-
-let dataFile = 'data.json';
+let dataFile = `${db.DATA_FOLDER}/data.json`;
 
 const dataString = await fs.readFile(DATA_FOLDER + '/' + dataFile, 'utf8');
 

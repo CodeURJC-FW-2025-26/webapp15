@@ -1,59 +1,24 @@
 import express from 'express';
 import multer from 'multer';
-import fs from 'node:fs/promises';
 
-import * as board from './board.js';
+import * as db from './database.js';
 
 const router = express.Router();
+const upload = multer({ dest: db.UPLOADS_FOLDER });
+
 export default router;
 
-const upload = multer({ dest: board.UPLOADS_FOLDER })
-
 router.get('/', async (req, res) => {
-
-    let posts = await board.getPosts();
-
-    res.render('main', { posts });
+    let trips = await db.getTrips();
+    res.render('main', { trips: trips });
 });
 
-router.post('/post/new', upload.single('image'), async (req, res) => {
+router.get('/trip/:id/image', (req, res) => {
+    let trip = await db.getTrip(req.params.id);
 
-    let post = {
-        user: req.body.user,
-        title: req.body.title,
-        text: req.body.text,
-        imageFilename: req.file?.filename
-    };
-
-    await board.addPost(post);
-
-    res.render('detalle', { _id: post._id.toString() });
-
-});
-
-router.get('/post/:id', async (req, res) => {
-
-    let post = await board.getPost(req.params.id);
-
-    res.render('new_travel', { post });
-});
-
-router.get('/post/:id/delete', async (req, res) => {
-
-    let post = await board.deletePost(req.params.id);
-
-    if (post && post.imageFilename) {
-        await fs.rm(board.UPLOADS_FOLDER + '/' + post.imageFilename);
+    if (trip && trip.image) {
+        res.download(db.UPLOADS_FOLDER);
+    } else {
+        res.status(404).send('Image not found');
     }
-
-    res.render('deleted_post');
 });
-
-router.get('/post/:id/image', async (req, res) => {
-
-    let post = await board.getPost(req.params.id);
-
-    res.download(board.UPLOADS_FOLDER + '/' + post.imageFilename);
-
-});
-
