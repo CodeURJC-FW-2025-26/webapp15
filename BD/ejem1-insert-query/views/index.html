@@ -1,0 +1,20 @@
+<html>
+
+<body>
+
+    <h1>Movies</h1>
+
+    {{#movies}}
+    <h2>{{title}} ({{year}})</h2>
+    <p><strong>Genre:</strong> {{#genre}}{{.}} {{/genre}}</p>
+    <p><strong>Actors:</strong></p>
+    <ul>
+        {{#actors}}
+        <li>{{.}}</li>
+        {{/actors}}
+    </ul>
+    {{/movies}}
+
+</body>
+
+</html>
