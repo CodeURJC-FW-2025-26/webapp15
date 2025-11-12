@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
     let posts = await board.getPosts();
 
-    res.render('index', { posts });
+    res.render('main', { posts });
 });
 
 router.post('/post/new', upload.single('image'), async (req, res) => {
@@ -27,7 +27,7 @@ router.post('/post/new', upload.single('image'), async (req, res) => {
 
     await board.addPost(post);
 
-    res.render('saved_post', { _id: post._id.toString() });
+    res.render('detalle', { _id: post._id.toString() });
 
 });
 
@@ -35,7 +35,7 @@ router.get('/post/:id', async (req, res) => {
 
     let post = await board.getPost(req.params.id);
 
-    res.render('show_post', { post });
+    res.render('new_travel', { post });
 });
 
 router.get('/post/:id/delete', async (req, res) => {
