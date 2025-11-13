@@ -16,8 +16,9 @@ try {
 const db = client.db('gotravel');
 const trips = db.collection('trips');
 
-export const UPLOADS_FOLDER = './uploads'
-export const DATA_FOLDER = './data';
+// 💡 CORRECCIÓN APLICADA: Se añade '../' para salir de la carpeta 'src'
+export const UPLOADS_FOLDER = '../uploads' 
+export const DATA_FOLDER = '../data';      
 
 // --- Funciones de Consulta (Lectura) ---
 

@@ -7,12 +7,14 @@ import './load_data.js';
 
 const app = express();
 
-app.use(express.static('./public'));
+// CORREGIDO: Ruta estática para salir de 'src' y encontrar 'public'
+app.use(express.static('../public'));
 
-//Moustache settings
+// Moustache settings
 app.set('view engine', 'html');
 app.engine('html', mustacheExpress(), ".html");
-app.set('views', './views');
+// CORREGIDO: Ruta de vistas para salir de 'src' y encontrar 'views'
+app.set('views', '../views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
