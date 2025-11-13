@@ -14,7 +14,7 @@ try {
 
 const db = client.db('gotravel');
 const trips = db.collection('trips');
-const activities = db.collection('activities');
+const activities = db.collection('activities'); v
 
 // 💡 CORRECCIÓN APLICADA: Se añade '../' para salir de la carpeta 'src'
 export const UPLOADS_FOLDER = '../uploads' 
