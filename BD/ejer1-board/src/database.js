@@ -1,20 +1,20 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import fs from 'node:fs/promises';
 
-// --- Configuración de Conexión a MongoDB ---
-const client = new MongoClient('mongodb://localhost:27017');
+const client = new MongoClient('mongodb://localhost:27017');// la conection a mongo db 
 
 try {
     await client.connect();
-    console.log('Connecting to  MongoDB');
+    console.log('Succesfully connected to MongoDB');
 } catch (e) {
-    console.error('Could not connect to MongoDB. Make sure it is running.', e);
+    console.error('There was an error', e);
     process.exit(1);
 }
 
-// --- Colecciones y Constantes ---
+
 const db = client.db('gotravel');
 const trips = db.collection('trips');
+const activities = db.collection('activities');
 
 // 💡 CORRECCIÓN APLICADA: Se añade '../' para salir de la carpeta 'src'
 export const UPLOADS_FOLDER = '../uploads' 
