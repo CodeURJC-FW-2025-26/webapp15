@@ -1,15 +1,15 @@
 import { MongoClient, ObjectId } from 'mongodb';
 
-// Connection URL
+
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 
-// Database and Collection names
+
 const dbName = 'gotravel';
 const tripsCollectionName = 'trips';
 const activitiesCollectionName = 'activities';
 
-// Folder constants
+
 export const UPLOADS_FOLDER = '../uploads';
 export const DATA_FOLDER = '../data';
 
@@ -17,7 +17,7 @@ let db;
 let trips;
 let activities;
 
-// --- Initialization & Connection ---
+
 
 async function initDatabase() {
     try {
@@ -28,7 +28,7 @@ async function initDatabase() {
         trips = db.collection(tripsCollectionName);
         activities = db.collection(activitiesCollectionName);
 
-        // Check if DB is empty to insert seed data [cite: 323]
+        
         const count = await trips.countDocuments();
         if (count === 0) {
             console.log('Database is empty. Inserting example data...');
@@ -41,11 +41,11 @@ async function initDatabase() {
     }
 }
 
-// Call initialization immediately
+
 await initDatabase();
 
 
-// --- Seed Data Function (Ejemplos) ---
+
 async function seedDatabase() {
     const exampleTrips = [
         { name: "Trip to Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp" },
@@ -54,17 +54,17 @@ async function seedDatabase() {
         { name: "Trip to China", description: "The city that never sleeps.", price: 1800, image: "china.jpg" },
         { name: "Trip to Georgia", description: "Walk through ancient history.", price: 1100, image: "georgia.jpeg" },
         { name: "Trip to Madagascar", description: "Peace and beaches.", price: 1500, image: "madagascar.jpeg" },
-        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg" }
-        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg" } 
+        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg" },
+        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg" }, 
         { name: "Trip to London", description: "Skiing and snow.", price: 2000, image: "towerbridge.jpeg" }// 7 items to test pagination (limit 6)
     ];
 
     const result = await trips.insertMany(exampleTrips);
     
-    // Insert an example activity for the first trip
+    
     const firstTripId = result.insertedIds[0];
     await activities.insertOne({
-        tripId: firstTripId.toString(), // Link to the parent entity
+        tripId: firstTripId.toString(), 
         name: "Visit Eiffel Tower",
         description: "Guided tour to the top.",
         price: 50
@@ -74,12 +74,7 @@ async function seedDatabase() {
 }
 
 
-// --- TRIPS Functions (Main Entity) ---
 
-/**
- * Get the total count of trips matching a query.
- * Used for pagination calculation.
- */
 export async function countTrips(query = {}) {
     return await trips.countDocuments(query);
 }
@@ -140,19 +135,19 @@ export async function updateTrip(id, updatedFields) {
  */
 export async function deleteTrip(id) {
     const result = await trips.deleteOne({ _id: new ObjectId(id) });
-    // Optional: Delete associated activities when a trip is deleted
+
     await activities.deleteMany({ tripId: id });
     return result;
 }
 
 
-// --- ACTIVITIES Functions (Secondary Entity) ---
+
 
 /**
  * Get all activities associated with a specific trip ID.
  */
 export async function getActivitiesByTripId(tripId) {
-    // tripId is stored as a string in activities to link them
+    
     return await activities.find({ tripId: tripId }).toArray();
 }
 
@@ -171,7 +166,7 @@ export async function getActivity(id) {
  * Create a new activity linked to a trip.
  */
 export async function addActivity(activity) {
-    // Ensure the activity has a tripId before calling this
+    
     await activities.insertOne(activity);
 }
 
