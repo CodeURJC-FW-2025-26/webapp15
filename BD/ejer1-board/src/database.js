@@ -48,13 +48,15 @@ await initDatabase();
 // --- Seed Data Function (Ejemplos) ---
 async function seedDatabase() {
     const exampleTrips = [
-        { name: "Paris Getaway", description: "A romantic weekend in Paris.", price: 1200, image: "paris.jpg" },
-        { name: "Safari in Kenya", description: "Experience the wild nature.", price: 3500, image: "safari.jpg" },
-        { name: "Tokyo Adventure", description: "Discover the technology and tradition.", price: 2500, image: "tokyo.jpg" },
-        { name: "New York City", description: "The city that never sleeps.", price: 1800, image: "nyc.jpg" },
-        { name: "Rome History", description: "Walk through ancient history.", price: 1100, image: "rome.jpg" },
-        { name: "Bali Relax", description: "Peace and beaches.", price: 1500, image: "bali.jpg" },
-        { name: "Swiss Alps", description: "Skiing and snow.", price: 2000, image: "alps.jpg" } // 7 items to test pagination (limit 6)
+        { name: "Trip to Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp" },
+        { name: "Trip to Austria", description: "Experience the wild nature.", price: 3500, image: "safari.jpg" },
+        { name: "Trip to Germany", description: "Discover the technology and tradition.", price: 2500, image: "tokyo.jpg" },
+        { name: "Trip to China", description: "The city that never sleeps.", price: 1800, image: "nyc.jpg" },
+        { name: "Trip to Georgia", description: "Walk through ancient history.", price: 1100, image: "rome.jpg" },
+        { name: "Trip to Madagascar", description: "Peace and beaches.", price: 1500, image: "bali.jpg" },
+        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "alps.jpg" }
+        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "alps.jpg" } 
+        { name: "Trip to London", description: "Skiing and snow.", price: 2000, image: "alps.jpg" }// 7 items to test pagination (limit 6)
     ];
 
     const result = await trips.insertMany(exampleTrips);
