@@ -1,59 +1,77 @@
 import express from 'express';
 import multer from 'multer';
-import fs from 'node:fs/promises';
 
-import * as board from './board.js';
+import * as db from './database.js'; // Asegúrate de que las nuevas funciones se importen
 
 const router = express.Router();
-export default router;
+const upload = multer({ dest: db.UPLOADS_FOLDER });
 
-const upload = multer({ dest: board.UPLOADS_FOLDER })
 
-router.get('/', async (req, res) => {
+// NUEVO ENDPOINT PARA LA PAGINACIÓN Y FILTRADO (CONSUMIDO POR script.js)
 
-    let posts = await board.getPosts();
+router.get('/api/trips', async (req, res) => {
+    // 1. Obtener y sanitizar los parámetros de la URL
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6; // Usamos 6 por defecto
+    const search = req.query.search || '';
+    const category = req.query.category || '';
 
-    res.render('index', { posts });
-});
+    const skip = (page - 1) * limit;
 
-router.post('/post/new', upload.single('image'), async (req, res) => {
+    // 2. Construir el objeto de consulta para MongoDB
+    let query = {};
 
-    let post = {
-        user: req.body.user,
-        title: req.body.title,
-        text: req.body.text,
-        imageFilename: req.file?.filename
-    };
-
-    await board.addPost(post);
-
-    res.render('saved_post', { _id: post._id.toString() });
-
-});
-
-router.get('/post/:id', async (req, res) => {
-
-    let post = await board.getPost(req.params.id);
-
-    res.render('show_post', { post });
-});
-
-router.get('/post/:id/delete', async (req, res) => {
-
-    let post = await board.deletePost(req.params.id);
-
-    if (post && post.imageFilename) {
-        await fs.rm(board.UPLOADS_FOLDER + '/' + post.imageFilename);
+    // Filtro de Búsqueda por Main_city
+    if (search) {
+        // La búsqueda no es sensible a mayúsculas/minúsculas y busca coincidencias parciales
+        query.Main_city = { $regex: search, $options: 'i' }; 
     }
 
-    res.render('deleted_post');
+    // Filtro por Categoría (t_trip)
+    if (category) {
+        query.t_trip = category; 
+    }
+    
+    try {
+        // 3. Obtener los resultados paginados y el conteo total
+        const trips = await db.getTrips(query, skip, limit);
+        const totalItems = await db.countTrips(query);
+        const totalPages = Math.ceil(totalItems / limit);
+
+        // 4. Responder al frontend con los datos
+        res.json({
+            trips: trips,
+            totalPages: totalPages,
+            currentPage: page
+        });
+
+    } catch (error) {
+        console.error("Error fetching trips from MongoDB:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
-router.get('/post/:id/image', async (req, res) => {
 
-    let post = await board.getPost(req.params.id);
 
-    res.download(board.UPLOADS_FOLDER + '/' + post.imageFilename);
+// RUTA PRINCIPAL
 
+// Esta ruta renderiza la vista principal (main.html, que carga script.js)
+router.get('/', (req, res) => {
+    // La página se llenará con los datos a través de la llamada AJAX de script.js a /api/trips
+    res.render('main', {}); 
 });
 
+// Ruta para servir las imágenes de los viajes
+router.get('/trip/:id/image', async (req, res) => {
+    let trip = await db.getTrip(req.params.id);
+
+    if (trip && trip.image) {
+    
+        // las imagenes las tomo de la carpeta public
+        res.download(db.PUBLIC_FOLDER + '/' + trip.image);
+    } else {
+        res.status(404).send('Image not found');
+    }
+});
+
+export default router;

@@ -1,14 +1,24 @@
 [
-    {
-        "user": "Pepe",
-        "title": "Vendo moto",
-        "text": "Barata, barata",
-        "imageFilename": "post0.jpeg"
+    {   
+        "main_city": "Peru",
+        "duration": 7,
+        "price": 900,
+        "availability": "Yes",
+        "t_trip": "cultural",
+        "flight": true,
+        "national": false,
+        "max_travellers": 10,
+        "image": "peru.webp"
     },
     {
-        "user": "Juan",
-        "title": "Compro coche",
-        "text": "Pago bien",
-        "imageFilename": "post1.jpeg"
+        "main_city": "London",
+        "duration": 5,
+        "price": 700,
+        "availability": "Yes",
+        "t_trip": "leisure",
+        "flight": true,
+        "national": false,
+        "max_travellers": 5,
+        "image": "peru.webp" 
     }
 ]
