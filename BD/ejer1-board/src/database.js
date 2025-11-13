@@ -49,14 +49,14 @@ await initDatabase();
 async function seedDatabase() {
     const exampleTrips = [
         { name: "Trip to Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp" },
-        { name: "Trip to Austria", description: "Experience the wild nature.", price: 3500, image: "safari.jpg" },
-        { name: "Trip to Germany", description: "Discover the technology and tradition.", price: 2500, image: "tokyo.jpg" },
-        { name: "Trip to China", description: "The city that never sleeps.", price: 1800, image: "nyc.jpg" },
-        { name: "Trip to Georgia", description: "Walk through ancient history.", price: 1100, image: "rome.jpg" },
-        { name: "Trip to Madagascar", description: "Peace and beaches.", price: 1500, image: "bali.jpg" },
-        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "alps.jpg" }
-        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "alps.jpg" } 
-        { name: "Trip to London", description: "Skiing and snow.", price: 2000, image: "alps.jpg" }// 7 items to test pagination (limit 6)
+        { name: "Trip to Austria", description: "Experience the wild nature.", price: 3500, image: "austria.webp" },
+        { name: "Trip to Germany", description: "Discover the technology and tradition.", price: 2500, image: "alemania.webp" },
+        { name: "Trip to China", description: "The city that never sleeps.", price: 1800, image: "china.jpg" },
+        { name: "Trip to Georgia", description: "Walk through ancient history.", price: 1100, image: "georgia.jpeg" },
+        { name: "Trip to Madagascar", description: "Peace and beaches.", price: 1500, image: "madagascar.jpeg" },
+        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg" }
+        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg" } 
+        { name: "Trip to London", description: "Skiing and snow.", price: 2000, image: "towerbridge.jpeg" }// 7 items to test pagination (limit 6)
     ];
 
     const result = await trips.insertMany(exampleTrips);
