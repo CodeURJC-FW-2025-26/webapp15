@@ -1,7 +1,7 @@
 body {
     padding-top: 120px;
     font-family: Verdana;
-    background-color: rgb(121,157,249);
+    background-color: rgb(221, 206, 92);
     text-align: justify;
 }
 
@@ -24,9 +24,9 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: rgb(104, 104, 104);
+    background-color: rgb(42, 98, 42);
     padding: 0px 20px;
-    border-bottom: 10px solid rgb(67, 66, 66);
+    border-bottom: 10px solid rgb(26, 55, 27);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -175,7 +175,7 @@ form textarea {
 /* FOOTER */
 footer {
     padding: 30px;
-    background-color: rgb(104, 104, 104);
+    background-color: rgb(42, 98, 42);
     color: white;
     font-family: Verdana;
 }
