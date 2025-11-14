@@ -73,4 +73,10 @@ router.get('/api/trips', async (req, res) => {
     }
 });
 
+router.get('/new', (req, res) => {
+    
+    res.render('new_travel', {
+        pageTitle: 'Add New Trip'
+    });
+});
 export default router;
