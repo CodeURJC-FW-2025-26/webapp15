@@ -4,11 +4,77 @@
         "duration": 7,
         "price": 900,
         "availability": "Yes",
-        "t_trip": "cultural",
+        "t_trip": "Culture",
         "flight": true,
         "national": false,
         "max_travellers": 10,
         "image": "peru.webp"
+    },
+    {
+        "main_city": "London",
+        "duration": 5,
+        "price": 700,
+        "availability": "Yes",
+        "t_trip": "leisure",
+        "flight": true,
+        "national": false,
+        "max_travellers": 5,
+        "image": "peru.webp" 
+    },
+    {
+        "main_city": "London",
+        "duration": 5,
+        "price": 700,
+        "availability": "Yes",
+        "t_trip": "leisure",
+        "flight": true,
+        "national": false,
+        "max_travellers": 5,
+        "image": "peru.webp" 
+    },
+    {
+        "main_city": "London",
+        "duration": 5,
+        "price": 700,
+        "availability": "Yes",
+        "t_trip": "Relax",
+        "flight": true,
+        "national": false,
+        "max_travellers": 5,
+        "image": "peru.webp" 
+    },
+    {
+        "main_city": "London",
+        "duration": 5,
+        "price": 700,
+        "availability": "Yes",
+        "t_trip": "leisure",
+        "flight": true,
+        "national": false,
+        "max_travellers": 5,
+        "image": "peru.webp" 
+    },
+    {
+        "main_city": "London",
+        "duration": 5,
+        "price": 700,
+        "availability": "Yes",
+        "t_trip": "leisure",
+        "flight": true,
+        "national": false,
+        "max_travellers": 5,
+        "image": "peru.webp" 
+    },
+    {
+        "main_city": "London",
+        "duration": 5,
+        "price": 700,
+        "availability": "Yes",
+        "t_trip": "leisure",
+        "flight": true,
+        "national": false,
+        "max_travellers": 5,
+        "image": "peru.webp" 
     },
     {
         "main_city": "London",

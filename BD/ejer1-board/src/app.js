@@ -19,7 +19,7 @@ const partialsDir = path.join(projectRoot, 'views', 'partials');
 
 
 app.use(express.static(path.join(projectRoot, 'public')));
-app.use('/uploads', express.static(path.join(projectRoot, 'uploads')));
+app.use('/uploads', express.static(path.join(projectRoot, 'data', 'images')));
 
 
 app.set('view engine', 'html');
