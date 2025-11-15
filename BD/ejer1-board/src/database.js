@@ -67,19 +67,15 @@ async function seedDatabase() {
     console.log('Example data inserted successfully.');
 }
 
-// ------------------------------------
-// --- El resto del archivo (intacto) ---
-// ------------------------------------
-
 export async function countTrips(query = {}) {
     return await trips.countDocuments(query);
 }
 
 /**
- * Get a list of trips with pagination.
- * @param {Object} query - Filter query
- * @param {number} skip - Documents to skip
- * @param {number} limit - Max documents to return
+ * 
+ * @param {Object} query 
+ * @param {number} skip 
+ * @param {number} limit 
  */
 export async function getTrips(query = {}, skip = 0, limit = 0) {
     let cursor = trips.find(query);
@@ -91,9 +87,7 @@ export async function getTrips(query = {}, skip = 0, limit = 0) {
     return await cursor.toArray();
 }
 
-/**
- * Get a single trip by ID.
- */
+
 export async function getTrip(id) {
     try {
         return await trips.findOne({ _id: new ObjectId(id) });
@@ -102,17 +96,12 @@ export async function getTrip(id) {
     }
 }
 
-/**
- * Create a new trip.
- */
+
 export async function addTrip(trip) {
     await trips.insertOne(trip);
 }
 
-/**
- * Update an existing trip.
- * Uses $set to update only the specified fields.
- */
+
 export async function updateTrip(id, updatedFields) {
     try {
         const result = await trips.updateOne(
@@ -126,9 +115,7 @@ export async function updateTrip(id, updatedFields) {
     }
 }
 
-/**
- * Delete a trip by ID.
- */
+
 export async function deleteTrip(id) {
     const result = await trips.deleteOne({ _id: new ObjectId(id) });
 
@@ -136,17 +123,11 @@ export async function deleteTrip(id) {
     return result;
 }
 
-/**
- * Get all activities associated with a specific trip ID.
- */
 export async function getActivitiesByTripId(tripId) {
     
     return await activities.find({ tripId: tripId }).toArray();
 }
 
-/**
- * Get a single activity by ID (for editing).
- */
 export async function getActivity(id) {
     try {
         return await activities.findOne({ _id: new ObjectId(id) });
@@ -155,17 +136,13 @@ export async function getActivity(id) {
     }
 }
 
-/**
- * Create a new activity linked to a trip.
- */
+
 export async function addActivity(activity) {
     
     await activities.insertOne(activity);
 }
 
-/**
- * Update an existing activity.
- */
+
 export async function updateActivity(id, updatedFields) {
     const result = await activities.updateOne(
         { _id: new ObjectId(id) },
@@ -174,9 +151,7 @@ export async function updateActivity(id, updatedFields) {
     return result;
 }
 
-/**
- * Delete an activity by ID.
- */
+
 export async function deleteActivity(id) {
     return await activities.deleteOne({ _id: new ObjectId(id) });
 }

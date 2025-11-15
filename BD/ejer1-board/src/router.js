@@ -72,7 +72,6 @@ router.get('/new', (req, res) => {
     });
 });
 
-// --- RUTA DE DETALLE AÑADIDA ---
 router.get('/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -84,7 +83,7 @@ router.get('/trip/:id', async (req, res) => {
             return;
         }
 
-        res.render('detail', {
+        res.render('detalle', {
             pageTitle: viaje.name,
             trip: viaje,
             activities: actividades
@@ -97,3 +96,5 @@ router.get('/trip/:id', async (req, res) => {
 });
 
 export default router;
+
+
