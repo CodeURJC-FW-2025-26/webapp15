@@ -38,22 +38,19 @@ async function initDatabase() {
 
 await initDatabase();
 
-//
-// --- ¡CAMBIO REALIZADO AQUÍ! ---
-// Se ha añadido el campo 't_trip' a cada viaje
-// para que los filtros de categoría funcionen.
-//
+
+
 async function seedDatabase() {
     const exampleTrips = [
-        { name: "Trip to Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp", t_trip: "Culture" },
-        { name: "Trip to Austria", description: "Experience the wild nature.", price: 3500, image: "austria.webp", t_trip: "Adventure" },
-        { name: "Trip to Germany", description: "Discover the technology and tradition.", price: 2500, image: "alemania.webp", t_trip: "Culture" },
-        { name: "Trip to China", description: "The city that never sleeps.", price: 1800, image: "china.jpg", t_trip: "Culture" },
-        { name: "Trip to Georgia", description: "Walk through ancient history.", price: 1100, image: "georgia.jpeg", t_trip: "Culture" },
-        { name: "Trip to Madagascar", description: "Peace and beaches.", price: 1500, image: "madagascar.jpeg", t_trip: "Relax" },
-        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg", t_trip: "Adventure" },
-        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg", t_trip: "Relax" }, 
-        { name: "Trip to London", description: "Skiing and snow.", price: 2000, image: "towerbridge.jpeg", t_trip: "Culture" }
+        { name: "Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp", t_trip: "Culture" },
+        { name: "Austria", description: "Experience the wild nature.", price: 3500, image: "austria.webp", t_trip: "Adventure" },
+        { name: "Germany", description: "Discover the technology and tradition.", price: 2500, image: "alemania.webp", t_trip: "Culture" },
+        { name: "China", description: "The city that never sleeps.", price: 1800, image: "china.jpg", t_trip: "Culture" },
+        { name: "Georgia", description: "Walk through ancient history.", price: 1100, image: "georgia.jpeg", t_trip: "Culture" },
+        { name: "Madagascar", description: "Peace and beaches.", price: 1500, image: "madagascar.jpeg", t_trip: "Relax" },
+        { name: "New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg", t_trip: "Adventure" },
+        { name: "Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg", t_trip: "Relax" }, 
+        { name: "London", description: "Skiing and snow.", price: 2000, image: "towerbridge.jpeg", t_trip: "Culture" }
     ];
 
     const result = await trips.insertMany(exampleTrips);
