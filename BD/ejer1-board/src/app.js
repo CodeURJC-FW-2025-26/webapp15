@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import path from 'path'; 
 import { fileURLToPath } from 'url'; 
 
-import router from './router.js';
+import { router } from './router.js';
 import './load_data.js';
 
 

@@ -1,14 +1,11 @@
 import { MongoClient, ObjectId } from 'mongodb';
 
-
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
-
 
 const dbName = 'gotravel';
 const tripsCollectionName = 'trips';
 const activitiesCollectionName = 'activities';
-
 
 export const UPLOADS_FOLDER = '../uploads';
 export const DATA_FOLDER = '../data';
@@ -16,8 +13,6 @@ export const DATA_FOLDER = '../data';
 let db;
 let trips;
 let activities;
-
-
 
 async function initDatabase() {
     try {
@@ -41,22 +36,24 @@ async function initDatabase() {
     }
 }
 
-
 await initDatabase();
 
-
-
+//
+// --- ¡CAMBIO REALIZADO AQUÍ! ---
+// Se ha añadido el campo 't_trip' a cada viaje
+// para que los filtros de categoría funcionen.
+//
 async function seedDatabase() {
     const exampleTrips = [
-        { name: "Trip to Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp" },
-        { name: "Trip to Austria", description: "Experience the wild nature.", price: 3500, image: "austria.webp" },
-        { name: "Trip to Germany", description: "Discover the technology and tradition.", price: 2500, image: "alemania.webp" },
-        { name: "Trip to China", description: "The city that never sleeps.", price: 1800, image: "china.jpg" },
-        { name: "Trip to Georgia", description: "Walk through ancient history.", price: 1100, image: "georgia.jpeg" },
-        { name: "Trip to Madagascar", description: "Peace and beaches.", price: 1500, image: "madagascar.jpeg" },
-        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg" },
-        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg" }, 
-        { name: "Trip to London", description: "Skiing and snow.", price: 2000, image: "towerbridge.jpeg" }// 7 items to test pagination (limit 6)
+        { name: "Trip to Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp", t_trip: "Culture" },
+        { name: "Trip to Austria", description: "Experience the wild nature.", price: 3500, image: "austria.webp", t_trip: "Adventure" },
+        { name: "Trip to Germany", description: "Discover the technology and tradition.", price: 2500, image: "alemania.webp", t_trip: "Culture" },
+        { name: "Trip to China", description: "The city that never sleeps.", price: 1800, image: "china.jpg", t_trip: "Culture" },
+        { name: "Trip to Georgia", description: "Walk through ancient history.", price: 1100, image: "georgia.jpeg", t_trip: "Culture" },
+        { name: "Trip to Madagascar", description: "Peace and beaches.", price: 1500, image: "madagascar.jpeg", t_trip: "Relax" },
+        { name: "Trip to New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg", t_trip: "Adventure" },
+        { name: "Trip to Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg", t_trip: "Relax" }, 
+        { name: "Trip to London", description: "Skiing and snow.", price: 2000, image: "towerbridge.jpeg", t_trip: "Culture" }
     ];
 
     const result = await trips.insertMany(exampleTrips);
@@ -73,7 +70,9 @@ async function seedDatabase() {
     console.log('Example data inserted successfully.');
 }
 
-
+// ------------------------------------
+// --- El resto del archivo (intacto) ---
+// ------------------------------------
 
 export async function countTrips(query = {}) {
     return await trips.countDocuments(query);
@@ -139,9 +138,6 @@ export async function deleteTrip(id) {
     await activities.deleteMany({ tripId: id });
     return result;
 }
-
-
-
 
 /**
  * Get all activities associated with a specific trip ID.
