@@ -37,18 +37,25 @@ router.get('/', async (req, res) => {
         const hasNext = page < totalPages;
         const nextPage = page + 1;
 
+        const isCategoryActive = {
+            Adventure: category === 'Adventure',
+            Culture: category === 'Culture',
+            Relax: category === 'Relax'
+        };
+
+        const pagination = {
+            pages: pages,
+            hasPrev: hasPrev,
+            prevPage: prevPage,
+            hasNext: hasNext,
+            nextPage: nextPage,
+            isCategoryActive: isCategoryActive
+        };
+
         res.render('main', {
             pageTitle: 'Home',
             trips: viajes,
-            
-            pagination: {
-                pages: pages,
-                hasPrev: hasPrev,
-                prevPage: prevPage,
-                hasNext: hasNext,
-                nextPage: nextPage
-            },
-
+            pagination: pagination,
             searchTerm: searchTerm,
             category: category
         });
@@ -60,5 +67,33 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/new', (req, res) => {
-    res.render('new');
-})
+    res.render('new', {
+        pageTitle: 'Add New Trip'
+    });
+});
+
+// --- RUTA DE DETALLE AÑADIDA ---
+router.get('/trip/:id', async (req, res) => {
+    try {
+        const tripId = req.params.id;
+        const viaje = await db.getTrip(tripId);
+        const actividades = await db.getActivitiesByTripId(tripId);
+
+        if (!viaje) {
+            res.status(404).send('Viaje no encontrado');
+            return;
+        }
+
+        res.render('detail', {
+            pageTitle: viaje.name,
+            trip: viaje,
+            activities: actividades
+        });
+
+    } catch (error) {
+        console.error("Error al cargar la página de detalle:", error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
+export default router;
