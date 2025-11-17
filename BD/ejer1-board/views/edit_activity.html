@@ -1,0 +1,30 @@
+{{> header}}
+<div class="form-align">
+    <div class="form-container">
+        <h2>Edit Activity: {{formData.name}}</h2>
+        <form method="POST" action="/edit/activity/{{formData._id}}">
+
+            <label for="main_activity">Name of the activity:</label>
+            <input type="text" id="main_activity" name="name" value="{{formData.name}}" required>
+            
+            <label for="duration">Time span (hours):</label>
+            <input type="number" id="duration" name="duration" value="{{formData.duration}}" min="0" max="12" step="1" placeholder="3 hours">
+            
+            <label for="price">Fee(€):</label>
+            <input type="number" id="price" name="price" value="{{formData.price}}" min="0" max="6000" step="1" placeholder="50€">
+
+            <label for="description_activity">Description of the activity:</label>
+            <textarea id="description_activity" name="description" rows="4" cols="40" placeholder="Insert text">{{formData.description}}</textarea>
+
+            <label for="guide_travel">Guide:</label>
+            <select id="guide_travel" name="guide_travel">
+                <option value="">Select the option</option>
+                <option value="YES" {{#formData.isGuideYES}}selected{{/formData.isGuideYES}}>YES</option>
+                <option value="NO" {{#formData.isGuideNO}}selected{{/formData.isGuideNO}}>NO</option>
+            </select>
+            
+            <button type="submit" class="btn button btn-dark">Update Activity</button>
+        </form>
+    </div>
+</div>
+{{> footer}}

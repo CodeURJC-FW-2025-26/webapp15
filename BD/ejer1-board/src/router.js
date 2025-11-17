@@ -448,20 +448,98 @@ router.post('/add-activity/:tripId', async (req, res) => {
 router.post('/delete/activity/:id', async (req, res) => {
     try {
         const activityId = req.params.id;
-
-        // (Opcional: si las actividades tienen imagen, también habría que borrarla)
-        
+        const activity = await db.getActivity(activityId);
+        if (!activity) {
+            return res.status(404).render('error_page', { pageTitle: 'Error', errorMsg: 'Activity not found' });
+        }
         await db.deleteActivity(activityId);
 
-        // Redirigir de vuelta a la página de detalle para ver el cambio
-        res.redirect('back');
-
-    } catch (error) {
-        console.error("Error al borrar la actividad:", error);
-        res.status(500).render('error_page', {
-             pageTitle: 'Error',
-             errorMsg: 'Error interno al borrar la actividad.'
+        res.render('confirmation_page', {
+            pageTitle: 'Activity Deleted',
+            message : `The activity "${activity.name}" has been deleted successfully.`,
+            returnLink: `/trip/${activity.tripId}`
         });
+    } catch (error) {
+        console.error("Error deleting activity:", error);
+        res.status(500).render('error_page', {
+            pageTitle: 'Error',
+            errorMsg: 'Internal error deleting activity.'
+        });
+    }
+});
+
+router.get('/edit/activity/:id', async (req, res) => {
+    try {
+        const activity = await db.getActivity(req.params.id);
+        if (!activity) {
+            return res.status(404).render('error_page', { pageTitle: 'Error', errorMsg: 'Activity not found' });
+        }
+
+        activity.isGuideYes = (activity.guide_travel === 'YES');
+        activity.isGuideNo = (activity.guide_travel === 'NO');
+
+        res.render('edit_activity', {
+            pageTitle: `Edit Activity: ${activity.name}`,
+            formData: activity
+        });
+    } catch (error) {
+        res.status(500).render('error_page', { pageTitle: 'Error', errorMsg: 'Internal error loading activity edit page.' });
+    }
+});
+router.post('/edit/activity/:id', async (req, res) => {
+    const activityId = req.params.id;
+    const formData = req.body;
+    const errors = [];
+
+    if (!formData.name || formData.name.trim() === '') {
+        errors.push('The name of the activity is required.');
+    }
+    if (!formData.duration) {
+        errors.push('The duration of the activity is required.');
+    }
+    if (!formData.price) {
+        errors.push('The price of the activity is required.');
+    }
+    if (!formData.description || formData.description.trim() === '') {
+        errors.push('The description of the activity is required.');
+    }
+
+    if (errors.length > 0) {
+        try {
+            const activity = await db.getActivity(activityId);
+            activity.isGuideYes = (formData.guide_travel === 'YES');
+            activity.isGuideNo = (formData.guide_travel === 'NO');
+            const formWithErrors = { ...activity, ...formData };
+
+            return res.render('edit_activity', {
+                pageTitle: `Edit Activity: ${activity.name}`,
+                formData: formWithErrors,
+                errors: errors
+            });
+        } catch (error) {
+            return res.status(500).render('error_page', { pageTitle: 'Error', errorMsg: 'Internal error loading activity edit page.' });
+        }
+    }
+
+    try {
+        const updatedFields = {
+            name: formData.name,
+            description: formData.description,
+            duration: parseInt(formData.duration) || 0,
+            price: parseFloat(formData.price),
+            guide_travel: formData.guide_travel
+        };
+
+        const activity = await db.getActivity(activityId);
+        await db.updateActivity(activityId, updatedFields);
+
+        res.render('confirmation_page', {
+            pageTitle: 'Activity Updated!',
+            message : `The activity "${updatedFields.name}" has been updated successfully.`,
+            returnLink: `/trip/${activity.tripId}`
+        });
+    } catch (error) {
+        res.status(500).render('error_page', { pageTitle: 'Error', errorMsg: 'Internal error updating activity.' });
     }
 });
 
