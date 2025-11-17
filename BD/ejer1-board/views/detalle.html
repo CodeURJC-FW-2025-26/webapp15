@@ -36,7 +36,7 @@
             {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
             <form action="/delete/trip/{{trip._id}}" method="POST" style="display:inline;">
     <button type="submit" class="btn btn-danger btn-lg">Delete the trip</button>
-         </form>
+        </form>
         </div>
     </div>
 
@@ -68,7 +68,7 @@
         {{/activities}}
 
         {{^activities}}
-            <p class="text-center text-muted">Aún no hay actividades para este viaje.</p>
+            <p class="text-center text-muted">There are no activities scheduled for this trip yet.</p>
         {{/activities}}
 
     </div>

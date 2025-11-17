@@ -69,14 +69,20 @@ async function seedDatabase() {
 
     const result = await trips.insertMany(exampleTrips);
 
-    // Create 1 example activity for the first trip
-    const firstTripId = result.insertedIds[0];
-    await activities.insertOne({
-        tripId: firstTripId.toString(),
-        name: "Visit Eiffel Tower",
-        description: "Guided tour to the top.",
-        price: 50
-    });
+    // Create 1 example activity for each trip
+    const newTripsIds = Object.values(result.insertedIds);
+    const activitiesToInsert = newTripsIds.map((tripId, index) => ({
+        const tripName = exampleTrips[index].name;
+
+        return {
+            tripId: tripId.toString(),
+            name: `Main tour in ${tripName}`,
+            description: `A guided tour of ${tripName}'s highlights.`,
+            price: (index + 1) * 50
+        };
+    }));
+    await activities.insertMany(activitiesToInsert);
+    console.log(`${activitiesToInsert.length} example activities inserted.`);
 
     console.log("Example data inserted successfully.");
 }
