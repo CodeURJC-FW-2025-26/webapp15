@@ -1,21 +1,27 @@
 {{> header}}
 
 <section id="cabecera">
-    <a href="/new" class="btn button btn-dark" id="b1">Add new trip</a>
-    <h2>Traveling was never so easy.</h2>
-    <p>In Eurotravel we offered excursions and adventures ready to enjoy. You only have to choose the destiny, we take care of the trouble. <strong>¡Get ready to write your next story with us!</strong></p>
+    <video autoplay muted loop id="video-fondo">
+        <source src="videoavion.mp4" type="video/mp4">
+    </video>
+    <div class="contenido-cabecera"> 
+        <h2>Traveling was never so easy.</h2>
+        <p>In Eurotravel we offered excursions and adventures ready to enjoy. You only have to choose the destiny, we take care of the trouble. <strong>¡Get ready to write your next story with us!</strong></p>
+    </div>
 </section>
 
 <form action="/" method="GET" class="d-flex mb-4">
     <input class="form-control me-2" 
-           type="search" 
-           placeholder="Busque su viaje" 
-           name="searchQuery"
-           value="{{searchTerm}}"> {{#category}}
+            type="search" 
+            placeholder="Busque su viaje" 
+            name="searchQuery"
+            value="{{searchTerm}}"> {{#category}}
     <input type="hidden" name="category" value="{{category}}">
     {{/category}}
             
     <button class="btn btn-outline-success" type="submit">Buscar</button>
+
+    <a href="/new" class="btn button btn-dark" id="b1">Add new trip</a>
 </form>
 
 <div class="mb-4">
