@@ -3,19 +3,18 @@ import * as db from './database.js';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import fs from 'fs'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const uploadDir = path.join(__dirname, '..', 'data', 'images');
+const uploadDir = path.join(__dirname, '..', 'uploads');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
-        
         cb(null, Date.now() + '_' + file.originalname);
     }
 });
@@ -24,7 +23,7 @@ const upload = multer({ storage: storage });
 
 export const router = express.Router();
 
-// ruta principal
+
 router.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -84,11 +83,14 @@ router.get('/', async (req, res) => {
 
     } catch (error) {
         console.error("Error al cargar la página principal:", error);
-        res.status(500).send('Error interno del servidor');
+        res.status(500).render('error_page', {
+            pageTitle: 'Error',
+            errorMsg: 'Error interno al cargar la página principal.'
+        });
     }
 });
 
-// ruta nuevo viaje
+
 router.get('/new', (req, res) => {
     res.render('new_travel', {
         pageTitle: 'Add New Trip',
@@ -193,12 +195,15 @@ router.post('/new', upload.single('image'), async (req, res) => {
 
         } catch (error) {
             console.error("Error al guardar el viaje:", error);
-            res.status(500).send('Error interno al guardar el viaje');
+            res.status(500).render('error_page', {
+                pageTitle: 'Error',
+                errorMsg: 'Error interno al guardar el viaje.'
+            });
         }
     }
 });
 
-//ruta detalle
+
 router.get('/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -216,8 +221,48 @@ router.get('/trip/:id', async (req, res) => {
         });
     } catch (error) {
         console.error("Error al cargar la página de detalle:", error);
-        res.status(500).send('Error interno del servidor');
+        res.status(500).render('error_page', {
+            pageTitle: 'Error',
+            errorMsg: 'Error interno al cargar la página de detalle.'
+        });
     }
 });
+
+
+
+router.post('/delete/trip/:id', async (req, res) => {
+    try {
+        const tripId = req.params.id;
+
+        const trip = await db.getTrip(tripId); 
+
+        if (trip && trip.image && trip.image !== 'default.jpg') {
+            const imagePath = path.join(uploadDir, trip.image);
+            
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.error("No se pudo borrar la imagen del disco:", err);
+                } else {
+                    console.log("Imagen borrada exitosamente:", imagePath);
+                }
+            });
+        }
+        
+        await db.deleteTrip(tripId); 
+
+        res.render('deleted_trip', { 
+            pageTitle: 'Trip Deleted',
+            tripName: trip.name 
+        });
+
+    } catch (error) {
+        console.error("Error al borrar el viaje:", error);
+        res.status(500).render('error_page', {
+             pageTitle: 'Error',
+             errorMsg: 'Error interno al borrar el viaje.'
+        });
+    }
+});
+
 
 export default router;

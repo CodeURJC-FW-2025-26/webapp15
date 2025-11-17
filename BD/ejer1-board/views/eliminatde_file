@@ -1,0 +1,13 @@
+{{> header}}
+
+<div class="form-align" style="text-align: center; padding: 40px;">
+    <div class="form-container">
+        <h2>¡Viaje eliminado con exito!</h2>
+        <p>El viaje "<strong>{{name}}</strong>" ha sido eliminado correctamente.</p>
+        <br>
+        <a href="/trip/{{newId}}" class="btn button btn-dark" style="margin-right: 10px;">Ver Detalles del Viaje</a>
+        <a href="/" class="btn button btn-secondary">Volver al Inicio</a>
+    </div>
+</div>
+
+{{> footer}}

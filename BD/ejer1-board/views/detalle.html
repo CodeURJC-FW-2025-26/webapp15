@@ -1,32 +1,45 @@
 {{> header}}
 
 <main class="container my-5">
-    <div class="list-group-item list-group-item-action mb-5 rounded shadow" id ="secion1">
+    <div class="list-group-item list-group-item-action mb-5 rounded shadow" id="secion1">
         
         <h3 class="text-center mb-4">{{trip.name}}</h3>
         
         <img src="/uploads/{{trip.image}}" id="imagen" class="img-fluid rounded shadow-sm mx-auto d-block mb-4" alt="{{trip.name}}">
         
         <ul class="list-unstyled text-center mb-4">
-            <li><i class="bi bi-clock"></i> <strong>Duration:</strong> 5 days</li>
-            
+            {{! --- CORREGIDO --- }}
+            {{! Usamos las variables del objeto 'trip' }}
+            <li><i class="bi bi-clock"></i> <strong>Duration:</strong> {{trip.duration}} days</li>
             <li><i class="bi bi-currency-euro"></i> <strong>Price:</strong> {{trip.price}}€</li>
-            
-            <li><i class="bi bi-people"></i> <strong>Max packages:</strong> 5</li>
-            <li><i class="bi bi-check-circle"></i> <strong>Availability:</strong> Yes</li>
+            <li><i class="bi bi-people"></i> <strong>Max packages:</strong> {{trip.max_travellers}}</li>
         </ul>
+
         <div class="text-center mb-4">
             <span class="badge bg-secondary"><strong>{{trip.t_trip}}</strong></span>
             
-            <span class="badge bg-success "><strong>Flight included</strong></span>
-            <span class="badge bg-warning"><strong>International</strong></span>
+            {{! --- CORREGIDO --- }}
+            {{! Lógica para mostrar las insignias solo si son 'true' }}
+            {{#if trip.flight}}
+                <span class="badge bg-success">Flight included</span>
+            {{/if}}
+            {{#if trip.national}}
+                <span class="badge bg-info">National</span>
+            {{else}}
+                <span class="badge bg-warning">International</span>
+            {{/if}}
         </div>
+
         <div class="d-flex justify-content-center">
             <a href="/" class="button btn btn-dark btn-lg">Main Page</a>
             
             <a href="/edit/trip/{{trip._id}}" class="button btn btn-dark btn-lg">Edit the trip</a>
             
-            <a href="/delete/trip/{{trip._id}}" class="button btn btn-dark btn-lg">Delete the trip</a>
+            {{! --- ¡ESTE ES EL CAMBIO IMPORTANTE! --- }}
+            {{! Reemplazamos el <a> por un <form> que envía un POST }}
+            <form action="/delete/trip/{{trip._id}}" method="POST" style="display: inline; margin-left: 8px;">
+                <button type="submit" class="button btn btn-danger btn-lg">Delete the trip</button>
+            </form>
         </div>
     </div>
 
@@ -40,14 +53,19 @@
                 <h3 class="text-center">{{name}}</h3>
                 <ol>
                     <li><strong>Fee:</strong> {{price}}€</li>
-                    <li><strong>Time Span:</strong> 12 hours</li>
-                    <li><strong>Turistic guide:</strong> NO</li>
+                    {{! Aquí también tenías datos fijos, deberías usar variables }}
+                    <li><strong>Time Span:</strong> {{duration}} hours</li> 
+                    <li><strong>Turistic guide:</strong> {{guide_travel}}</li>
                 </ol>
                 <p class="item">{{description}}</p>
                 
                 <div class="d-flex justify-content-center">
                     <a href="/edit/activity/{{_id}}" class="button button2 btn btn-dark me-2">Edit the activity</a>
-                    <a href="/delete/activity/{{_id}}" class="button button2 btn btn-dark">Delete the activity</a>
+                    
+                    {{! Aquí también necesitarás un <form> para borrar actividades }}
+                    <form action="/delete/activity/{{_id}}" method="POST" style="display: inline;">
+                        <button type="submit" class="button button2 btn btn-dark">Delete the activity</button>
+                    </form>
                 </div>
             </div>
         </div>
