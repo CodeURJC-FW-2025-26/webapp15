@@ -14,8 +14,8 @@ body {
     min-height: 70vh;
     
 
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
+    margin-left: 0px;
+    margin-right: 0px;
     margin-top: 0;
     margin-bottom: 60px;
 
