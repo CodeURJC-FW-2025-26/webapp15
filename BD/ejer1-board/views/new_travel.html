@@ -3,42 +3,85 @@
 <div class="form-align">
     <div class="form-container">
         <h2>New trip</h2>
-        <form>
-            <label for="main_city">Main city:</label>
-            <input type="text" id="main_city" name="main_city">
+
+        {{#errors}}
+        <div class="alert alert-danger" style="color: red; border: 1px solid red; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+            <strong>Por favor, corrige los siguientes errores:</strong>
+            <ul>
+                {{#errors}} <li>{{.}}</li>
+                {{/errors}}
+            </ul>
+        </div>
+        {{/errors}}
+
+        <form action="/new" method="POST" enctype="multipart/form-data">
+            
+            <label for="name">Main city (Name):</label>
+            <input type="text" id="name" name="name" 
+                    required 
+                    minlength="3" 
+                    pattern="[A-Z].*" 
+                    title="Debe empezar con una letra mayúscula y tener al menos 3 caracteres."
+                    value="{{formData.name}}">
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" 
+                        required 
+                        minlength="10" 
+                        maxlength="200" 
+                        placeholder="Mínimo 10 caracteres, máximo 200.">{{formData.description}}</textarea>
 
             <label for="duration">Duration (days):</label>
-            <input type="number" id="duration" name="duration" min="0" max="100" step="1" placeholder="0">
+            <input type="number" id="duration" name="duration" 
+                    required 
+                    min="1" 
+                    max="100" 
+                    step="1" 
+                    placeholder="1"
+                    value="{{formData.duration}}">
 
             <label for="image">Image:</label>
-            <input type="url" id="image" name="image" placeholder="jpeg jpg or png">
+            <input type="file" id="image" name="image" 
+                    accept="image/jpeg,image/jpg,image/png,image/webp">
 
             <label for="price">Price (€):</label>
-            <input type="number" id="price" name="price" min="0" max="100000" step="200" placeholder="0€">
+            <input type="number" id="price" name="price" 
+                    required 
+                    min="0" 
+                    max="100000" 
+                    step="1" 
+                    placeholder="0€"
+                    value="{{formData.price}}">
 
             <label for="t_trip">Type of trip:</label>
-            <select id="t_trip" name="t_trip">
+            <select id="t_trip" name="t_trip" required>
                 <option value="">Select a type</option>
-                <option value="family">Family</option>
-                <option value="leisure">Leisure</option>
-                <option value="cultural">Cultural</option>
+                <option value="family" {{#formData.t_trip.family}}selected{{/formData.t_trip.family}}>Family</option>
+                <option value="leisure" {{#formData.t_trip.leisure}}selected{{/formData.t_trip.leisure}}>Leisure</option>
+                <option value="cultural" {{#formData.t_trip.cultural}}selected{{/formData.t_trip.cultural}}>Cultural</option>
             </select>
 
             <div class="checkbox-group">
                 <label for="flight">Need a flight?</label>
-                <input type="checkbox" id="flight" name="flight">
+                <input type="checkbox" id="flight" name="flight" {{#formData.flight}}checked{{/formData.flight}}>
             </div>
 
             <div class="checkbox-group">
                 <label for="national">Is it international?</label>
-                <input type="checkbox" id="national" name="national">
+                <input type="checkbox" id="national" name="national" {{#formData.national}}checked{{/formData.national}}>
             </div>
 
             <label for="max_travellers">People:</label>
-            <input type="number" id="max_travellers" name="max_travellers" min="0" max="100" step="1" placeholder="1">
+            <input type="number" id="max_travellers" name="max_travellers" 
+                    required 
+                    min="1" 
+                    max="100" 
+                    step="1" 
+                    placeholder="1"
+                    value="{{formData.max_travellers}}">
             
             <button type="submit" class="btn button btn-dark">Create</button>
-            <a href="main.html" class="btn button btn-dark">Cancel</a> 
+            <a href="/" class="btn button btn-dark">Cancel</a> 
         </form>
     </div>
 </div>

@@ -72,8 +72,7 @@ export async function countTrips(query = {}) {
 }
 
 /**
- * 
- * @param {Object} query 
+ * * @param {Object} query 
  * @param {number} skip 
  * @param {number} limit 
  */
@@ -96,9 +95,24 @@ export async function getTrip(id) {
     }
 }
 
+/**
+ * Busca un viaje por su nombre (para validación de duplicados)
+ */
+export async function getTripByName(name) {
+    try {
+        return await trips.findOne({ name: name });
+    } catch (e) {
+        return null;
+    }
+}
 
+
+/**
+ * Añade un nuevo viaje y devuelve el resultado
+ */
 export async function addTrip(trip) {
-    await trips.insertOne(trip);
+    // Devuelve el resultado de la inserción, que incluye el 'insertedId'
+    return await trips.insertOne(trip);
 }
 
 

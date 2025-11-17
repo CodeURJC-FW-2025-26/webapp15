@@ -1,8 +1,30 @@
 import express from 'express';
 import * as db from './database.js';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const uploadDir = path.join(__dirname, '..', 'data', 'images');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        
+        cb(null, Date.now() + '_' + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 export const router = express.Router();
 
+// ruta principal
 router.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -66,12 +88,117 @@ router.get('/', async (req, res) => {
     }
 });
 
+// ruta nuevo viaje
 router.get('/new', (req, res) => {
-    res.render('new', {
-        pageTitle: 'Add New Trip'
+    res.render('new_travel', {
+        pageTitle: 'Add New Trip',
+        formData: {
+            
+            name: '', description: '', duration: '', price: '', max_travellers: '',
+            flight: false, national: false
+        },
+        errors: [] 
     });
 });
 
+
+router.post('/new', upload.single('image'), async (req, res) => {
+    const formData = req.body;
+    const errors = [];
+
+    
+    if (!formData.name) errors.push('El nombre (Main city) es obligatorio.');
+    if (!formData.description) errors.push('La descripción es obligatoria.');
+    if (!formData.duration) errors.push('La duración es obligatoria.');
+    if (!formData.price) errors.push('El precio es obligatorio.');
+    if (!formData.t_trip) errors.push('El tipo de viaje es obligatorio.');
+    if (!formData.max_travellers) errors.push('El número de personas es obligatorio.');
+    
+    if (formData.name && !/^[A-Z]/.test(formData.name)) {
+        errors.push('El nombre debe comenzar con una letra mayúscula.');
+    }
+    
+    
+    if (formData.name) {
+        const existingTrip = await db.getTripByName(formData.name);
+        if (existingTrip) {
+            errors.push('Ya existe un viaje con ese nombre.');
+        }
+    }
+
+    if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
+        errors.push('La descripción debe tener entre 10 y 200 caracteres.');
+    }
+
+    if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
+        errors.push('La duración debe estar entre 1 y 100 días.');
+    }
+    if (formData.price && parseInt(formData.price, 10) < 0) {
+        errors.push('El precio no puede ser negativo.');
+    }
+    if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
+        errors.push('Debe viajar al menos 1 persona.');
+    }
+
+    
+    if (errors.length > 0) {
+        
+        const t_trip_select = {
+            family: formData.t_trip === 'family',
+            leisure: formData.t_trip === 'leisure',
+            cultural: formData.t_trip === 'cultural'
+        };
+
+        res.render('new_travel', { 
+            pageTitle: 'Add New Trip',
+            errors: errors,
+            formData: {
+                name: formData.name || '',
+                description: formData.description || '',
+                duration: formData.duration || '',
+                price: formData.price || '',
+                t_trip: t_trip_select, 
+                
+                flight: formData.flight === 'on',
+                national: formData.national === 'on',
+                max_travellers: formData.max_travellers || ''
+            }
+        });
+    } else {
+        
+        try {
+            
+            const imageName = req.file ? req.file.filename : 'default.jpg';
+
+            const newTrip = {
+                name: formData.name,
+                description: formData.description,
+                duration: parseInt(formData.duration, 10),
+                image: imageName,
+                price: parseFloat(formData.price),
+                t_trip: formData.t_trip,
+                
+                flight: formData.flight === 'on',
+                national: formData.national === 'on',
+                max_travellers: parseInt(formData.max_travellers, 10)
+            };
+
+            const result = await db.addTrip(newTrip);
+            
+            res.render('created_trip', { 
+                pageTitle: 'Trip Created!',
+                name: newTrip.name,
+                newId: result.insertedId
+            });
+
+        } catch (error) {
+            console.error("Error al guardar el viaje:", error);
+            res.status(500).send('Error interno al guardar el viaje');
+        }
+    }
+});
+
+//ruta detalle
 router.get('/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -82,13 +209,11 @@ router.get('/trip/:id', async (req, res) => {
             res.status(404).send('Viaje no encontrado');
             return;
         }
-
         res.render('detalle', {
             pageTitle: viaje.name,
             trip: viaje,
             activities: actividades
         });
-
     } catch (error) {
         console.error("Error al cargar la página de detalle:", error);
         res.status(500).send('Error interno del servidor');
@@ -96,5 +221,3 @@ router.get('/trip/:id', async (req, res) => {
 });
 
 export default router;
-
-
