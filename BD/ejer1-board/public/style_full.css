@@ -49,13 +49,13 @@ body {
 
 /* LISTAS */
 .list-group-item {
-  background-color: rgba(21, 0, 255, 0.922);
+  background-color:  rgba(191, 179, 85, 0.83);
   border: 1px solid #dee2e6;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .list-group-item:hover {
-  background-color: rgb(31, 216, 74);
+  background-color: rgb(42, 98, 42);
   color: rgb(0, 0, 0);
   transform: scale(1.02);
 }
