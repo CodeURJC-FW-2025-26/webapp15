@@ -229,7 +229,7 @@ router.get('/trip/:id', async (req, res) => {
 });
 
 
-
+// --- RUTA DE BORRADO DE VIAJE (CORREGIDA) ---
 router.post('/delete/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -250,7 +250,9 @@ router.post('/delete/trip/:id', async (req, res) => {
         
         await db.deleteTrip(tripId); 
 
-        res.render('deleted_trip', { 
+        // ¡CORREGIDO! Usa tu nombre de archivo 'eliminated_file'
+        // y la variable 'tripName'
+        res.render('eliminated_file', { 
             pageTitle: 'Trip Deleted',
             tripName: trip.name 
         });
@@ -260,6 +262,58 @@ router.post('/delete/trip/:id', async (req, res) => {
         res.status(500).render('error_page', {
              pageTitle: 'Error',
              errorMsg: 'Error interno al borrar el viaje.'
+        });
+    }
+});
+
+// --- RUTA PARA AÑADIR ACTIVIDAD (NUEVA) ---
+router.post('/add-activity/:tripId', async (req, res) => {
+    try {
+        const tripId = req.params.tripId;
+        const formData = req.body;
+
+        // (Aquí iría la validación de la Práctica 2, ej: campos vacíos)
+
+        const newActivity = {
+            tripId: tripId,
+            name: formData.name,
+            description: formData.description,
+            duration: parseInt(formData.duration),
+            price: parseFloat(formData.price),
+            guide_travel: formData.guide_travel
+        };
+
+        await db.addActivity(newActivity);
+
+        // Redirigir de vuelta a la página de detalle para ver el cambio
+        res.redirect('back');
+
+    } catch (error) {
+        console.error("Error al añadir la actividad:", error);
+        res.status(500).render('error_page', {
+             pageTitle: 'Error',
+             errorMsg: 'Error interno al añadir la actividad.'
+        });
+    }
+});
+
+// --- RUTA PARA BORRAR ACTIVIDAD (NUEVA) ---
+router.post('/delete/activity/:id', async (req, res) => {
+    try {
+        const activityId = req.params.id;
+
+        // (Opcional: si las actividades tienen imagen, también habría que borrarla)
+        
+        await db.deleteActivity(activityId);
+
+        // Redirigir de vuelta a la página de detalle para ver el cambio
+        res.redirect('back');
+
+    } catch (error) {
+        console.error("Error al borrar la actividad:", error);
+        res.status(500).render('error_page', {
+             pageTitle: 'Error',
+             errorMsg: 'Error interno al borrar la actividad.'
         });
     }
 });

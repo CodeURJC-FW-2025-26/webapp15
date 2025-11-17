@@ -1,0 +1,16 @@
+{{> header}}
+
+<div class="form-align" style="text-align: center; padding: 40px;">
+    <div class="form-container">
+        <h2>¡Viaje eliminado con éxito!</h2>
+        
+        {{! --- CORREGIDO: Usando la variable 'tripName' del router --- }}
+        <p>El viaje "<strong>{{tripName}}</strong>" ha sido eliminado correctamente.</p>
+        <br>
+        
+        {{! --- CORREGIDO: Enlace solo para volver al inicio --- }}
+        <a href="/" class="btn button btn-primary btn-lg">Volver al Inicio</a>
+    </div>
+</div>
+
+{{> footer}}

@@ -8,8 +8,7 @@
         <img src="/uploads/{{trip.image}}" id="imagen" class="img-fluid rounded shadow-sm mx-auto d-block mb-4" alt="{{trip.name}}">
         
         <ul class="list-unstyled text-center mb-4">
-            {{! --- CORREGIDO --- }}
-            {{! Usamos las variables del objeto 'trip' }}
+            {{! --- CORREGIDO: Usando variables de la BBDD --- }}
             <li><i class="bi bi-clock"></i> <strong>Duration:</strong> {{trip.duration}} days</li>
             <li><i class="bi bi-currency-euro"></i> <strong>Price:</strong> {{trip.price}}€</li>
             <li><i class="bi bi-people"></i> <strong>Max packages:</strong> {{trip.max_travellers}}</li>
@@ -18,8 +17,7 @@
         <div class="text-center mb-4">
             <span class="badge bg-secondary"><strong>{{trip.t_trip}}</strong></span>
             
-            {{! --- CORREGIDO --- }}
-            {{! Lógica para mostrar las insignias solo si son 'true' }}
+            {{! --- CORREGIDO: Lógica para mostrar insignias --- }}
             {{#if trip.flight}}
                 <span class="badge bg-success">Flight included</span>
             {{/if}}
@@ -35,8 +33,7 @@
             
             <a href="/edit/trip/{{trip._id}}" class="button btn btn-dark btn-lg">Edit the trip</a>
             
-            {{! --- ¡ESTE ES EL CAMBIO IMPORTANTE! --- }}
-            {{! Reemplazamos el <a> por un <form> que envía un POST }}
+            {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
             <form action="/delete/trip/{{trip._id}}" method="POST" style="display: inline; margin-left: 8px;">
                 <button type="submit" class="button btn btn-danger btn-lg">Delete the trip</button>
             </form>
@@ -53,7 +50,6 @@
                 <h3 class="text-center">{{name}}</h3>
                 <ol>
                     <li><strong>Fee:</strong> {{price}}€</li>
-                    {{! Aquí también tenías datos fijos, deberías usar variables }}
                     <li><strong>Time Span:</strong> {{duration}} hours</li> 
                     <li><strong>Turistic guide:</strong> {{guide_travel}}</li>
                 </ol>
@@ -62,7 +58,7 @@
                 <div class="d-flex justify-content-center">
                     <a href="/edit/activity/{{_id}}" class="button button2 btn btn-dark me-2">Edit the activity</a>
                     
-                    {{! Aquí también necesitarás un <form> para borrar actividades }}
+                    {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
                     <form action="/delete/activity/{{_id}}" method="POST" style="display: inline;">
                         <button type="submit" class="button button2 btn btn-dark">Delete the activity</button>
                     </form>
@@ -81,6 +77,7 @@
 <div class="form-align">
     <div class="form-container">
         <h2>New activity</h2>
+        {{! --- ¡CORREGIDO! La acción debe coincidir con la ruta POST --- }}
         <form method="POST" action="/add-activity/{{trip._id}}">
             <label for="main_city">Name of the activity:</label>
             <input type="text" id="main_activity" name="name" placeholder="Tee time" required>
