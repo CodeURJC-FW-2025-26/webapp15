@@ -3,6 +3,9 @@
 // ======================================================================
 
 import { MongoClient, ObjectId } from "mongodb";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // ---------------------------
 // DATABASE CONFIG
@@ -84,6 +87,17 @@ async function seedDatabase() {
     });
     await activities.insertMany(activitiesToInsert);
     console.log(`${activitiesToInsert.length} example activities inserted.`);
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const uploadsPath = path.join(__dirname, '..', 'uploads');
+    const dataImagesPath = path.join(__dirname, '..', 'data', "images");
+
+    await fs.rm(uploadsPath, { recursive: true, force: true });
+    await fs.mkdir(uploadsPath);
+
+    await fs.cp(dataImagesPath, uploadsPath, { recursive: true });
+    console.log('Example images copied to uploads folder.');
 
     console.log("Example data inserted successfully.");
 }

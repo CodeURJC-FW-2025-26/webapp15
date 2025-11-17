@@ -3,7 +3,7 @@ import * as db from './database.js';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs'; 
+import fs from 'fs/promises'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -543,5 +543,25 @@ router.post('/edit/activity/:id', async (req, res) => {
     }
 });
 
+router.get('/trip/:id/image', async (req, res) => {
+    try {
+        const trip = await db.getTrip(req.params.id);
+        if (trip && trip.image) {
+            const imagePath = path.join(uploadDir, trip.image);
+
+            res.sendFile(imagePath, (err) => {
+                if (err) {
+                    console.error("Error sending image file:", err.message);
+                    res.status(404).send('Image not found on disk');
+                }
+            });
+        } else {
+            res.status(404).send('Image not found on the database');
+        }
+    } catch (error) {
+        console.error("Error retrieving trip image:", error);
+        res.status(500).send('Internal server error');
+    }
+});
 
 export default router;
