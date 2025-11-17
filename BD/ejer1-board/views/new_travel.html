@@ -2,7 +2,10 @@
 
 <div class="form-align">
     <div class="form-container">
-        <h2>{{#isEditing}}Edit Trip: {{formData.name}}{{else}}New Trip{{/isEditing}}</h2>
+        <h2>
+            {{#isEditing}}Edit Trip: {{formData.name}}{{/isEditing}}
+            {{^isEditing}}New Trip{{/isEditing}}
+        </h2>
 
         {{#errors}}
         <div class="alert alert-danger" style="color: red; border: 1px solid red; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
@@ -14,7 +17,7 @@
         </div>
         {{/errors}}
 
-        <form action="{{#isEditing}}/edit/trip/{{tripId}}{{else}}/new{{/isEditing}}" method="POST" enctype="multipart/form-data">
+        <form action="{{#isEditing}}/edit/trip/{{tripId}}{{/isEditing}}{{^isEditing}}/new{{/isEditing}}" method="POST" enctype="multipart/form-data">
             
             <label for="name">Main city (Name):</label>
             <input type="text" id="name" name="name" 
@@ -83,7 +86,7 @@
                     placeholder="1"
                     value="{{formData.max_travellers}}">
             
-            <button type="submit" class="btn button btn-dark">{{#isEditing}}Update Trip{{else}}Create{{/isEditing}}</button>
+            <button type="submit" class="btn button btn-dark">{{#isEditing}}Update Trip{{/isEditing}}{{^isEditing}}Create{{/isEditing}}</button>
             <a href="/" class="btn button btn-dark">Cancel</a> 
         </form>
     </div>

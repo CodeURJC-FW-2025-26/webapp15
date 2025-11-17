@@ -189,9 +189,10 @@ router.post('/new', upload.single('image'), async (req, res) => {
 
             const result = await db.addTrip(newTrip);
             
-            res.render('created_trip', { 
+            res.render('confirmation_page', { 
                 pageTitle: 'Trip Created!',
-                name: newTrip.name,
+                message : `The trip "${newTrip.name}" has been created successfully.`,
+                returnLink: `/trip/${result.insertedId}`,
                 newId: result.insertedId
             });
 
@@ -241,22 +242,22 @@ router.post('/delete/trip/:id', async (req, res) => {
         if (trip && trip.image && trip.image !== 'default.jpg') {
             const imagePath = path.join(uploadDir, trip.image);
             
-            fs.unlink(imagePath, (err) => {
-                if (err) {
-                    console.error("No se pudo borrar la imagen del disco:", err);
-                } else {
-                    console.log("Imagen borrada exitosamente:", imagePath);
-                }
-            });
+            try {
+                await fs.unlink(imagePath);
+                console.log("Image deleted: ", imagePath);
+            } catch (err) {
+                console.error("Error deleting image file:", err);
+            }
         }
         
         await db.deleteTrip(tripId); 
 
         // ¡CORREGIDO! Usa tu nombre de archivo 'eliminated_file'
         // y la variable 'tripName'
-        res.render('eliminated_file', { 
+        res.render('confirmation_page', { 
             pageTitle: 'Trip Deleted',
-            tripName: trip.name 
+            message : `The trip ${trip.name} has been deleted successfully.`,
+            returnLink: '/',
         });
 
     } catch (error) {
@@ -367,12 +368,11 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
             };
             await db.updateTrip(tripId, updatedTrip);
 
-            res.render('created_trip', {
+            res.render('confirmation_page', {
                 pageTitle: 'Trip Updated!',
-                message : 'The trip has been updated successfully.',
-                name: updatedTrip.name,
+                message : `The trip ${updatedTrip.name} has been updated successfully.`,
                 newId: tripId,
-                returnLink: '/trip/${tripId}'
+                returnLink: `/trip/${tripId}`
             });
         } catch (error) {
             console.error("Error updating trip:", error);
@@ -386,31 +386,60 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
 
 // --- RUTA PARA AÑADIR ACTIVIDAD (NUEVA) ---
 router.post('/add-activity/:tripId', async (req, res) => {
-    try {
         const tripId = req.params.tripId;
         const formData = req.body;
+        const errors = [];
 
-        // (Aquí iría la validación de la Práctica 2, ej: campos vacíos)
+        try {
+            if (!formData.name || formData.name.trim() === '') {
+                errors.push('The name of the activity is required.');
+            }
+            if (!formData.description || formData.description.trim() === '') {
+                errors.push('The description of the activity is required.');
+            }
+            if (!formData.price) {
+                errors.push('The price of the activity is required.');
+            }
+            if (!formData.duration) {
+                errors.push('The duration of the activity is required.');
+            }
+
+            if (errors.length > 0) {
+                const viaje = await db.getTrip(tripId);
+                const actividades = await db.getActivitiesByTripId(tripId);
+
+                res.render('detalle', {
+                    pageTitle: viaje.name,
+                    trip: viaje,
+                    activities: actividades,
+                    acformData: formData,
+                    acerrors: errors
+                });
+                return; 
+            }
 
         const newActivity = {
             tripId: tripId,
             name: formData.name,
-            description: formData.description,
-            duration: parseInt(formData.duration),
+            description: formData.description || '',
+            duration: parseInt(formData.duration) || 0,
             price: parseFloat(formData.price),
             guide_travel: formData.guide_travel
         };
 
         await db.addActivity(newActivity);
 
-        // Redirigir de vuelta a la página de detalle para ver el cambio
-        res.redirect('back');
+        res.render('confirmation_page', {
+            pageTitle: 'Activity Added!',
+            message : `The activity "${newActivity.name}" has been added successfully.`,
+            returnLink: `/trip/${tripId}`
+        });
 
     } catch (error) {
         console.error("Error al añadir la actividad:", error);
         res.status(500).render('error_page', {
-             pageTitle: 'Error',
-             errorMsg: 'Error interno al añadir la actividad.'
+            pageTitle: 'Error',
+            errorMsg: 'Error interno al añadir la actividad.'
         });
     }
 });
