@@ -1,45 +1,59 @@
-import { MongoClient, ObjectId } from 'mongodb';
+// ======================================================================
+//   DATABASE MODULE - COMPLETE AND FIXED
+// ======================================================================
 
-const url = 'mongodb://localhost:27017';
+import { MongoClient, ObjectId } from "mongodb";
+
+// ---------------------------
+// DATABASE CONFIG
+// ---------------------------
+const url = "mongodb://localhost:27017";
 const client = new MongoClient(url);
 
-const dbName = 'gotravel';
-const tripsCollectionName = 'trips';
-const activitiesCollectionName = 'activities';
+const dbName = "gotravel";
+const tripsCollectionName = "trips";
+const activitiesCollectionName = "activities";
 
-export const UPLOADS_FOLDER = '../uploads';
-export const DATA_FOLDER = '../data';
+// Folders (for images and JSON data)
+export const UPLOADS_FOLDER = "../uploads";
+export const DATA_FOLDER = "../data";
 
+// These will hold references after connecting
 let db;
 let trips;
 let activities;
 
+// ======================================================================
+//   INIT DATABASE
+// ======================================================================
 async function initDatabase() {
     try {
         await client.connect();
-        console.log('Successfully connected to MongoDB');
+        console.log("Successfully connected to MongoDB");
 
         db = client.db(dbName);
         trips = db.collection(tripsCollectionName);
         activities = db.collection(activitiesCollectionName);
 
-        
+        // Insert seed data only if empty
         const count = await trips.countDocuments();
         if (count === 0) {
-            console.log('Database is empty. Inserting example data...');
+            console.log("Database is empty. Inserting example data…");
             await seedDatabase();
         }
 
     } catch (e) {
-        console.error('Error connecting to MongoDB:', e);
+        console.error("Error connecting to MongoDB:", e);
         process.exit(1);
     }
 }
 
+// Auto-initialize DB module
 await initDatabase();
 
-
-
+// ======================================================================
+//   SEED EXAMPLE DATA
+// ======================================================================
 async function seedDatabase() {
     const exampleTrips = [
         { name: "Peru", description: "A romantic weekend in Paris.", price: 1200, image: "peru.webp", t_trip: "Culture" },
@@ -49,44 +63,44 @@ async function seedDatabase() {
         { name: "Georgia", description: "Walk through ancient history.", price: 1100, image: "georgia.jpeg", t_trip: "Culture" },
         { name: "Madagascar", description: "Peace and beaches.", price: 1500, image: "madagascar.jpeg", t_trip: "Relax" },
         { name: "New York", description: "Skiing and snow.", price: 2000, image: "eeuu.jpeg", t_trip: "Adventure" },
-        { name: "Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg", t_trip: "Relax" }, 
+        { name: "Portugal", description: "Skiing and snow.", price: 2000, image: "portugal.jpg", t_trip: "Relax" },
         { name: "London", description: "Skiing and snow.", price: 2000, image: "towerbridge.jpeg", t_trip: "Culture" }
     ];
 
     const result = await trips.insertMany(exampleTrips);
-    
-    
+
+    // Create 1 example activity for the first trip
     const firstTripId = result.insertedIds[0];
     await activities.insertOne({
-        tripId: firstTripId.toString(), 
+        tripId: firstTripId.toString(),
         name: "Visit Eiffel Tower",
         description: "Guided tour to the top.",
         price: 50
     });
-    
-    console.log('Example data inserted successfully.');
+
+    console.log("Example data inserted successfully.");
 }
 
+// ======================================================================
+//   TRIP FUNCTIONS
+// ======================================================================
+
+// Count all trips or filtered ones
 export async function countTrips(query = {}) {
     return await trips.countDocuments(query);
 }
 
-/**
- * * @param {Object} query 
- * @param {number} skip 
- * @param {number} limit 
- */
+// Get all trips or paginated subset
 export async function getTrips(query = {}, skip = 0, limit = 0) {
     let cursor = trips.find(query);
-    
+
     if (limit > 0) {
         cursor = cursor.skip(skip).limit(limit);
     }
-    
     return await cursor.toArray();
 }
 
-
+// Get a single trip by ID
 export async function getTrip(id) {
     try {
         return await trips.findOne({ _id: new ObjectId(id) });
@@ -95,27 +109,21 @@ export async function getTrip(id) {
     }
 }
 
-/**
- * Busca un viaje por su nombre (para validación de duplicados)
- */
+// Check if a trip with a given name exists
 export async function getTripByName(name) {
     try {
-        return await trips.findOne({ name: name });
+        return await trips.findOne({ name });
     } catch (e) {
         return null;
     }
 }
 
-
-/**
- * Añade un nuevo viaje y devuelve el resultado
- */
+// Insert new trip
 export async function addTrip(trip) {
-    // Devuelve el resultado de la inserción, que incluye el 'insertedId'
     return await trips.insertOne(trip);
 }
 
-
+// Update a trip by ID
 export async function updateTrip(id, updatedFields) {
     try {
         const result = await trips.updateOne(
@@ -129,19 +137,23 @@ export async function updateTrip(id, updatedFields) {
     }
 }
 
-
+// Delete a trip and its activities
 export async function deleteTrip(id) {
     const result = await trips.deleteOne({ _id: new ObjectId(id) });
-
     await activities.deleteMany({ tripId: id });
     return result;
 }
 
+// ======================================================================
+//   ACTIVITY FUNCTIONS
+// ======================================================================
+
+// Get all activities for one trip
 export async function getActivitiesByTripId(tripId) {
-    
-    return await activities.find({ tripId: tripId }).toArray();
+    return await activities.find({ tripId }).toArray();
 }
 
+// Get one activity
 export async function getActivity(id) {
     try {
         return await activities.findOne({ _id: new ObjectId(id) });
@@ -150,22 +162,20 @@ export async function getActivity(id) {
     }
 }
 
-
+// Add new activity
 export async function addActivity(activity) {
-    
-    await activities.insertOne(activity);
+    return await activities.insertOne(activity);
 }
 
-
+// Update activity
 export async function updateActivity(id, updatedFields) {
-    const result = await activities.updateOne(
+    return await activities.updateOne(
         { _id: new ObjectId(id) },
         { $set: updatedFields }
     );
-    return result;
 }
 
-
+// Delete activity
 export async function deleteActivity(id) {
     return await activities.deleteOne({ _id: new ObjectId(id) });
 }

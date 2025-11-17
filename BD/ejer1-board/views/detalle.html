@@ -18,14 +18,14 @@
             <span class="badge bg-secondary"><strong>{{trip.t_trip}}</strong></span>
             
             {{! --- CORREGIDO: Lógica para mostrar insignias --- }}
-            {{#if trip.flight}}
+            {{#trip.flight}}
                 <span class="badge bg-success">Flight included</span>
-            {{/if}}
-            {{#if trip.national}}
+            {{/trip.flight}}
+            {{#trip.national}}
                 <span class="badge bg-info">National</span>
             {{else}}
                 <span class="badge bg-warning">International</span>
-            {{/if}}
+            {{/trip.national}}
         </div>
 
         <div class="d-flex justify-content-center">
@@ -34,14 +34,14 @@
             <a href="/edit/trip/{{trip._id}}" class="button btn btn-dark btn-lg">Edit the trip</a>
             
             {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
-            <form action="/delete/trip/{{trip._id}}" method="POST" style="display: inline; margin-left: 8px;">
-                <button type="submit" class="button btn btn-danger btn-lg">Delete the trip</button>
-            </form>
+            <form action="/delete/trip/{{trip._id}}" method="POST" style="display:inline;">
+    <button type="submit" class="btn btn-danger btn-lg">Delete the trip</button>
+         </form>
         </div>
     </div>
 
     <h2 class="mb-4 text-center">Activities</h2>
-    <div class="row g-4">
+    <div class="row g-4"> 
 
         {{#activities}}
         <div class="col-12 col-md-6 col-sm-2" >
@@ -77,7 +77,7 @@
 <div class="form-align">
     <div class="form-container">
         <h2>New activity</h2>
-        {{! --- ¡CORREGIDO! La acción debe coincidir con la ruta POST --- }}
+     
         <form method="POST" action="/add-activity/{{trip._id}}">
             <label for="main_city">Name of the activity:</label>
             <input type="text" id="main_activity" name="name" placeholder="Tee time" required>
