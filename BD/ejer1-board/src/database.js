@@ -71,16 +71,17 @@ async function seedDatabase() {
 
     // Create 1 example activity for each trip
     const newTripsIds = Object.values(result.insertedIds);
-    const activitiesToInsert = newTripsIds.map((tripId, index) => ({
+    const activitiesToInsert = newTripsIds.map((tripId, index) => {
         const tripName = exampleTrips[index].name;
 
         return {
             tripId: tripId.toString(),
             name: `Main tour in ${tripName}`,
+            duration: 1 + index,
             description: `A guided tour of ${tripName}'s highlights.`,
             price: (index + 1) * 50
         };
-    }));
+    });
     await activities.insertMany(activitiesToInsert);
     console.log(`${activitiesToInsert.length} example activities inserted.`);
 

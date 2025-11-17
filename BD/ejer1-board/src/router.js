@@ -94,6 +94,7 @@ router.get('/', async (req, res) => {
 router.get('/new', (req, res) => {
     res.render('new_travel', {
         pageTitle: 'Add New Trip',
+        isEditing: false,
         formData: {
             
             name: '', description: '', duration: '', price: '', max_travellers: '',
@@ -153,6 +154,7 @@ router.post('/new', upload.single('image'), async (req, res) => {
 
         res.render('new_travel', { 
             pageTitle: 'Add New Trip',
+            isEditing: false,
             errors: errors,
             formData: {
                 name: formData.name || '',
@@ -260,9 +262,125 @@ router.post('/delete/trip/:id', async (req, res) => {
     } catch (error) {
         console.error("Error al borrar el viaje:", error);
         res.status(500).render('error_page', {
-             pageTitle: 'Error',
-             errorMsg: 'Error interno al borrar el viaje.'
+            pageTitle: 'Error',
+            errorMsg: 'Error interno al borrar el viaje.'
         });
+    }
+});
+
+// --- Edit trip routes ---
+router.get('/edit/trip/:id', async (req, res) => {
+    try {
+        const tripId = req.params.id;
+        const viaje = await db.getTrip(tripId);
+
+        if (!viaje) {
+            res.status(404).send('Trip not found');
+            return;
+        }
+
+        const t_trip_select = {
+            culture : viaje.t_trip === 'Culture',
+            adventure : viaje.t_trip === 'Adventure',
+            relax : viaje.t_trip === 'Relax'
+        };
+        res.render('new_travel', {
+            pageTitle: 'Edit Trip',
+            isEditing: true,
+            tripId: tripId,
+            formData: viaje,
+            t_trip: t_trip_select,
+            errors: []
+        });
+    } catch (error) {
+        console.error("Error loading edit trip page:", error);
+        res.status(500).render('error_page', {
+            pageTitle: 'Error',
+            errorMsg: 'Internal error loading edit trip page.'
+        });
+    }
+});
+router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
+    const tripId = req.params.id;
+    const formData = req.body;
+    const errors = [];
+
+    if (!formData.name) errors.push('The name (Main city) is required.');
+    if (!formData.description) errors.push('The description is required.');
+    if (!formData.duration) errors.push('The duration is required.');
+    if (!formData.price) errors.push('The price is required.');
+    if (!formData.t_trip) errors.push('The type of trip is required.');
+    if (!formData.max_travellers) errors.push('The amount of travellers is required.');
+
+    if (formData.name && !/^[A-Z]/.test(formData.name)) {
+        errors.push('El nombre debe comenzar con una letra mayúscula.');
+    }   
+    if (formData.name) {
+        const existingTrip = await db.getTripByName(formData.name);
+        if (existingTrip && existingTrip._id.toString() !== tripId ) {
+            errors.push('Ya existe un viaje con ese nombre.');
+        }
+    }
+    if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
+        errors.push('La descripción debe tener entre 10 y 200 caracteres.');
+    }
+    if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
+        errors.push('La duración debe estar entre 1 y 100 días.');
+    }
+    if (formData.price && parseInt(formData.price, 10) < 0) {
+        errors.push('El precio no puede ser negativo.');
+    }
+    if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
+        errors.push('Debe viajar al menos 1 persona.');
+    }
+    if (errors.length > 0) {
+        const t_trip_select = {
+            culture : viaje.t_trip === 'Culture',
+            adventure : viaje.t_trip === 'Adventure',
+            relax : viaje.t_trip === 'Relax'
+        };
+        res.render('new_travel', {
+            pageTitle: 'Edit Trip',
+            isEditing: true,
+            tripId: tripId,
+            errors: errors,
+            formData: formData,
+            t_trip: t_trip_select
+        });
+    } else {
+        try {
+            const oldTrip = await db.getTrip(tripId);
+            let imageName = oldTrip.image;
+            if (req.file) {
+                imageName = req.file.filename;
+            }
+            const updatedTrip = {
+                name: formData.name,
+                description: formData.description,
+                duration: parseInt(formData.duration, 10),
+                image: imageName,
+                price: parseFloat(formData.price),
+                t_trip: formData.t_trip,
+                flight: formData.flight === 'on',
+                national: formData.national === 'on',
+                max_travellers: parseInt(formData.max_travellers, 10)
+            };
+            await db.updateTrip(tripId, updatedTrip);
+
+            res.render('created_trip', {
+                pageTitle: 'Trip Updated!',
+                message : 'The trip has been updated successfully.',
+                name: updatedTrip.name,
+                newId: tripId,
+                returnLink: '/trip/${tripId}'
+            });
+        } catch (error) {
+            console.error("Error updating trip:", error);
+            res.status(500).render('error_page', {
+                pageTitle: 'Error',
+                errorMsg: 'Internal error updating trip.'
+            });
+        }
     }
 });
 
