@@ -128,7 +128,7 @@ In addition to that, I created the header for all three pages, designed the butt
     
 ## 2 Part
 
-➡ **Video**
+➡ **Video**https://youtu.be/t_0I_cP7d8Q
 
   ➡ **Raul Martin Sanchez**
   - In this part of the proyect , I made changes in the add new trip page where I did the implementation of the form to be abble to save the information of the new travel on the database , implemented with  Mongo DB, also I have done the first version of the filtering by type in the main page and by name, furthermore I create the confirmation page ,also I did the part of mustache for the header and the footer and   for the parts where it is needed. In adition I did a few cahnges in the aesthetic of the main page and the background colors.
