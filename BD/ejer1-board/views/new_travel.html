@@ -1,93 +1,63 @@
 {{> header}}
 
-<main class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
+<div class="form-align">
+    <div class="form-container">
+        <h2>
+            {{#isEditing}}Edit Trip: {{formData.name}}{{/isEditing}}
+            {{^isEditing}}New Trip{{/isEditing}}
+        </h2>
 
-            <div class="card shadow border-0 rounded-3">
-                
-                <div class="card-header bg-dark text-white text-center py-3">
-                    <h3 class="mb-0 h5">
-                        {{#isEditing}}Edit Trip: {{formData.name}}{{/isEditing}}
-                        {{^isEditing}}Create New Trip{{/isEditing}}
-                    </h3>
-                </div>
+        {{#errors}}
+        <div class="alert alert-danger" style="color: red; border: 1px solid red; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+            <strong>Por favor, corrige los siguientes errores:</strong>
+            <ul>
+                {{#errors}} <li>{{.}}</li>
+                {{/errors}}
+            </ul>
+        </div>
+        {{/errors}}
 
-                <div class="card-body p-4 p-md-5">
+        <form action="{{#isEditing}}/edit/trip/{{tripId}}{{/isEditing}}{{^isEditing}}/new{{/isEditing}}" method="POST" enctype="multipart/form-data">
+            
+            <label for="name">Main city (Name):</label>
+            <input type="text" id="name" name="name" 
+                    required 
+                    minlength="3" 
+                    pattern="[A-Z].*" 
+                    title="Debe empezar con una letra mayúscula y tener al menos 3 caracteres."
+                    value="{{formData.name}}">
 
-                    {{#errors}}
-                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                        <h4 class="alert-heading h6"><i class="bi bi-exclamation-triangle-fill me-2"></i>Please correct the following errors:</h4>
-                        <ul class="mb-0 small">
-                            {{#errors}} <li>{{.}}</li> {{/errors}}
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {{/errors}}
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" 
+                        required 
+                        minlength="10" 
+                        maxlength="200" 
+                        placeholder="Mínimo 10 caracteres, máximo 200.">{{formData.description}}</textarea>
 
-                    <form action="{{#isEditing}}/edit/trip/{{tripId}}{{/isEditing}}{{^isEditing}}/new{{/isEditing}}" method="POST" enctype="multipart/form-data">
-                        
-                        <div class="mb-4">
-                            <label for="name" class="form-label fw-bold">Main city (Name)</label>
-                            <input type="text" class="form-control form-control-lg" id="name" name="name" 
-                                   required 
-                                   minlength="3" 
-                                   pattern="[A-Z].*" 
-                                   title="Debe empezar con una letra mayúscula y tener al menos 3 caracteres."
-                                   value="{{formData.name}}"
-                                   placeholder="e.g. Paris">
-                        </div>
+            <label for="duration">Duration (days):</label>
+            <input type="number" id="duration" name="duration" 
+                    required 
+                    min="1" 
+                    max="100" 
+                    step="1" 
+                    placeholder="1"
+                    value="{{formData.duration}}">
 
-                        <div class="mb-4">
-                            <label for="description" class="form-label fw-bold">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="4" 
-                                      required 
-                                      minlength="10" 
-                                      maxlength="200" 
-                                      placeholder="Brief description of the trip (10-200 chars)...">{{formData.description}}</textarea>
-                            <div class="form-text">Between 10 and 200 characters.</div>
-                        </div>
+            <label for="image">Image:</label>
+            <input type="file" id="image" name="image" 
+                    accept="image/jpeg,image/jpg,image/png,image/webp">
+            {{#isEditing}}
+                Dejar en blanco para mantener la imagen actual.
+            {{/isEditing}}
 
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label for="duration" class="form-label fw-bold">Duration (days)</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="duration" name="duration" 
-                                           required min="1" max="100" step="1" 
-                                           value="{{formData.duration}}" placeholder="1">
-                                    <span class="input-group-text">days</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="price" class="form-label fw-bold">Price (€)</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">€</span>
-                                    <input type="number" class="form-control" id="price" name="price" 
-                                           required min="0" max="100000" step="1" 
-                                           value="{{formData.price}}" placeholder="0">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label for="t_trip" class="form-label fw-bold">Type of trip</label>
-                                <select class="form-select" id="t_trip" name="t_trip" required>
-                                    <option value="">Select a type</option>
-                                    <option value="family" {{#formData.t_trip.family}}selected{{/formData.t_trip.family}}>Family</option>
-                                    <option value="leisure" {{#formData.t_trip.leisure}}selected{{/formData.t_trip.leisure}}>Leisure</option>
-                                    <option value="cultural" {{#formData.t_trip.cultural}}selected{{/formData.t_trip.cultural}}>Cultural</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="max_travellers" class="form-label fw-bold">Max People</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
-                                    <input type="number" class="form-control" id="max_travellers" name="max_travellers" 
-                                           required min="1" max="100" step="1" 
-                                           value="{{formData.max_travellers}}" placeholder="1">
-                                </div>
-                            </div>
-                        </div>
+            <label for="price">Price (€):</label>
+            <input type="number" id="price" name="price" 
+                    required 
+                    min="0" 
+                    max="100000" 
+                    step="1" 
+                    placeholder="0€"
+                    value="{{formData.price}}">
 
             <label for="t_trip">Type of trip:</label>
             <select id="t_trip" name="t_trip" required>
@@ -97,61 +67,29 @@
                 <option value="Relax" {{#formData.t_trip.relax}}selected{{/formData.t_trip.relax}}>Relax</option>
             </select>
 
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label for="t_trip" class="form-label fw-bold">Type of trip</label>
-                                <select class="form-select" id="t_trip" name="t_trip" required>
-                                    <option value="">Select a type</option>
-                                    <option value="family" {{#formData.t_trip.family}}selected{{/formData.t_trip.family}}>Family</option>
-                                    <option value="leisure" {{#formData.t_trip.leisure}}selected{{/formData.t_trip.leisure}}>Leisure</option>
-                                    <option value="cultural" {{#formData.t_trip.cultural}}selected{{/formData.t_trip.cultural}}>Cultural</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="max_travellers" class="form-label fw-bold">Max People</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
-                                    <input type="number" class="form-control" id="max_travellers" name="max_travellers" 
-                                           required min="1" max="100" step="1" 
-                                           value="{{formData.max_travellers}}" placeholder="1">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="image" class="form-label fw-bold">Trip Image</label>
-                            <input type="file" class="form-control" id="image" name="image" 
-                                   accept="image/jpeg,image/jpg,image/png,image/webp">
-                            {{#isEditing}}
-                                <div class="form-text text-muted">Leave empty to keep the current image.</div>
-                            {{/isEditing}}
-                        </div>
-
-                        <div class="bg-light p-3 rounded mb-4 border">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flight" name="flight" {{#formData.flight}}checked{{/formData.flight}}>
-                                <label class="form-check-label" for="flight">Flight included?</label>
-                            </div>
-                            
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="national" name="national" {{#formData.national}}checked{{/formData.national}}>
-                                <label class="form-check-label" for="national">Is it international?</label>
-                            </div>
-                        </div>
-
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
-                            <a href="/" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
-                            <button type="submit" class="btn btn-dark btn-lg px-5">
-                                {{#isEditing}}Update Trip{{/isEditing}}{{^isEditing}}Create Trip{{/isEditing}}
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
+            <div class="checkbox-group">
+                <label for="flight">Need a flight?</label>
+                <input type="checkbox" id="flight" name="flight" {{#formData.flight}}checked{{/formData.flight}}>
             </div>
+
+            <div class="checkbox-group">
+                <label for="national">Is it international?</label>
+                <input type="checkbox" id="national" name="national" {{#formData.national}}checked{{/formData.national}}>
             </div>
+
+            <label for="max_travellers">People:</label>
+            <input type="number" id="max_travellers" name="max_travellers" 
+                    required 
+                    min="1" 
+                    max="100" 
+                    step="1" 
+                    placeholder="1"
+                    value="{{formData.max_travellers}}">
+            
+            <button type="submit" class="btn button btn-dark">{{#isEditing}}Update Trip{{/isEditing}}{{^isEditing}}Create{{/isEditing}}</button>
+            <a href="/" class="btn button btn-dark">Cancel</a> 
+        </form>
     </div>
-</main>
+</div>
 
 {{> footer}}

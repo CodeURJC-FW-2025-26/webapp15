@@ -1,148 +1,106 @@
 {{> header}}
 
 <main class="container my-5">
+    <div class="list-group-item list-group-item-action mb-5 rounded shadow" id="secion1">
+        
+        <h3 class="text-center mb-4">{{trip.name}}</h3>
+        
+        <img src="/trip/{{trip._id}}/image" id="imagen" class="img-fluid ..." alt="{{trip.name}}">
+        
+        <ul class="list-unstyled text-center mb-4">
+            {{! --- CORREGIDO: Usando variables de la BBDD --- }}
+            <li><i class="bi bi-clock"></i> <strong>Duration:</strong> {{trip.duration}} days</li>
+            <li><i class="bi bi-currency-euro"></i> <strong>Price:</strong> {{trip.price}}€</li>
+            <li><i class="bi bi-people"></i> <strong>Max packages:</strong> {{trip.max_travellers}}</li>
+        </ul>
 
-    <div class="card mb-5 shadow border-0 overflow-hidden" id="secion1">
-        <div class="row g-0">
+        <div class="text-center mb-4">
+            <span class="badge bg-secondary"><strong>{{trip.t_trip}}</strong></span>
             
-            <div class="col-md-6 col-lg-7 position-relative" style="min-height: 400px;">
-                <img src="/trip/{{trip._id}}/image" 
-                     id="imagen" 
-                     class="w-100 h-100" 
-                     alt="{{trip.name}}"
-                     style="object-fit: cover; position: absolute; top: 0; left: 0;">
-            </div>
+            {{! --- CORREGIDO: Lógica para mostrar insignias --- }}
+            {{#trip.flight}}
+                <span class="badge bg-success">Flight included</span>
+            {{/trip.flight}}
+            {{#trip.national}}
+                <span class="badge bg-info">National</span>
+            {{else}}
+                <span class="badge bg-warning">International</span>
+            {{/trip.national}}
+        </div>
 
-            <div class="col-md-6 col-lg-5 d-flex align-items-center bg-white">
-                <div class="card-body p-5 text-center">
-                    
-                    <h2 class="card-title mb-4 fw-bold display-6">{{trip.name}}</h2>
-                    
-                    <ul class="list-unstyled mb-4 d-inline-block text-start fs-5">
-                        <li class="mb-2"><i class="bi bi-clock text-primary me-2"></i> <strong>Duration:</strong> {{trip.duration}} days</li>
-                        <li class="mb-2"><i class="bi bi-currency-euro text-success me-2"></i> <strong>Price:</strong> {{trip.price}}€</li>
-                        <li class="mb-2"><i class="bi bi-people text-secondary me-2"></i> <strong>Max packages:</strong> {{trip.max_travellers}}</li>
-                    </ul>
-
-                    <div class="mb-4">
-                        <span class="badge bg-secondary fs-6">{{trip.t_trip}}</span>
-                        
-                        {{#trip.flight}}
-                            <span class="badge bg-success fs-6">Flight included</span>
-                        {{/trip.flight}}
-                        
-                        {{#trip.national}}
-                            <span class="badge bg-info fs-6">National</span>
-                        {{else}}
-                            <span class="badge bg-warning fs-6">International</span>
-                        {{/trip.national}}
-                    </div>
-
-                    <div class="d-grid gap-2 d-md-block">
-                        <a href="/" class="btn btn-outline-dark">Main Page</a>
-                        <a href="/edit/trip/{{trip._id}}" class="btn btn-dark">Edit Trip</a>
-                        
-                        <form action="/delete/trip/{{trip._id}}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-danger">Delete Trip</button>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
+        <div class="d-flex justify-content-center">
+            <a href="/" class="button btn btn-dark btn-lg">Main Page</a>
+            
+            <a href="/edit/trip/{{trip._id}}" class="button btn btn-dark btn-lg">Edit the trip</a>
+            
+            {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
+            <form action="/delete/trip/{{trip._id}}" method="POST" style="display:inline;">
+    <button type="submit" class="btn btn-danger btn-lg">Delete the trip</button>
+        </form>
         </div>
     </div>
 
     <h2 class="mb-4 text-center">Activities</h2>
-    <div class="row g-4 mb-5"> 
+    <div class="row g-4"> 
 
         {{#activities}}
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4 d-flex flex-column">
+        <div class="col-12 col-md-6 col-sm-2" >
+            <div class="p-4 bg-white rounded shadow">
+                
+                <h3 class="text-center">{{name}}</h3>
+                <ol>
+                    <li><strong>Fee:</strong> {{price}}€</li>
+                    <li><strong>Time Span:</strong> {{duration}} hours</li> 
+                    <li><strong>Turistic guide:</strong> {{guide_travel}}</li>
+                </ol>
+                <p class="item">{{description}}</p>
+                
+                <div class="d-flex justify-content-center">
+                    <a href="/edit/activity/{{_id}}" class="button button2 btn btn-dark me-2">Edit the activity</a>
                     
-                    <h3 class="card-title text-center fw-bold mb-3">{{name}}</h3>
-                    
-                    <ul class="list-unstyled mb-3 bg-light p-3 rounded">
-                        <li><strong>Fee:</strong> {{price}}€</li>
-                        <li><strong>Time Span:</strong> {{duration}} hours</li> 
-                        <li><strong>Guide:</strong> {{guide_travel}}</li>
-                    </ul>
-                    
-                    <p class="card-text flex-grow-1 text-muted">{{description}}</p>
-                    
-                    <div class="mt-3 text-center d-flex justify-content-center gap-2">
-                        <a href="/edit/activity/{{_id}}" class="btn btn-sm btn-outline-dark">Edit</a>
-                        
-                        <form action="/delete/activity/{{_id}}" method="POST">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                        </form>
-                    </div>
+                    {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
+                    <form action="/delete/activity/{{_id}}" method="POST" style="display: inline;">
+                        <button type="submit" class="button button2 btn btn-dark">Delete the activity</button>
+                    </form>
                 </div>
             </div>
         </div>
         {{/activities}}
 
         {{^activities}}
-            <div class="col-12">
-                <div class="alert alert-info text-center" role="alert">
-                    There are no activities scheduled for this trip yet.
-                </div>
-            </div>
+            <p class="text-center text-muted">There are no activities scheduled for this trip yet.</p>
         {{/activities}}
 
     </div>
-
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-dark text-white text-center py-3">
-                    <h3 class="mb-0 h5">Add New Activity</h3>
-                </div>
-                <div class="card-body p-4">
-                    
-                    <form method="POST" action="/add-activity/{{trip._id}}">
-                        
-                        <div class="mb-3">
-                            <label for="main_activity" class="form-label">Name of the activity:</label>
-                            <input type="text" class="form-control" id="main_activity" name="name" placeholder="e.g. City Tour" required>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="duration" class="form-label">Time span (hours):</label>
-                                <input type="number" class="form-control" id="duration" name="duration" min="0" max="24" step="1" placeholder="3">
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="price" class="form-label">Fee (€):</label>
-                                <input type="number" class="form-control" id="price" name="price" min="0" max="10000" step="10" placeholder="50" required>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="guide_travel" class="form-label">Guide included?</label>
-                            <select class="form-select" id="guide_travel" name="guide_travel">
-                                <option value="" selected disabled>Select an option</option>
-                                <option value="YES">YES</option>
-                                <option value="NO">NO</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="description_activity" class="form-label">Description:</label>
-                            <textarea class="form-control" id="description_activity" name="description" rows="3" placeholder="Brief description of the activity..."></textarea>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg">Create Activity</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
 </main>
+
+<div class="form-align">
+    <div class="form-container">
+        <h2>New activity</h2>
+     
+        <form method="POST" action="/add-activity/{{trip._id}}">
+            <label for="main_city">Name of the activity:</label>
+            <input type="text" id="main_activity" name="name" placeholder="Tee time" required>
+
+            <label for="duration">Time span:</label>
+            <input type="number" id="duration" name="duration" min="0" max="12" step="1" placeholder="3 horas">
+
+            <label for="price">Fee(€):</label>
+            <input type="number" id="price" name="price" min="0" max="100000" step="200" placeholder="0€" required>
+
+            <label for="description_activity">Description of the activity:</label>
+            <textarea id="description_activity" name="description" rows="4" cols="40" placeholder="Insert text"></textarea>
+
+            <label for="guide_travel">Guide:</label>
+            <select id="guide_travel" name="guide_travel">
+                <option value="">Select the option</option>
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+
+            <button type="submit" class="btn button btn-dark">Create</button>
+        </form>
+    </div>
+</div>
 
 {{> footer}}
