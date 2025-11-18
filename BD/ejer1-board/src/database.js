@@ -51,12 +51,12 @@ async function seedDatabase() {
         { name: "Peru", description: "A romantic weekend in Paris.",duration:3, price: 1200, image: "peru.webp",max_travellers:3, flight: true,national:false,t_trip: "Culture" },
         { name: "Austria", description: "Experience the wild nature.",duration:2, price: 3500, image: "austria.webp",max_travellers:2,flight: true,national:true, t_trip: "Adventure" },
         { name: "Germany", description: "Discover the technology and tradition.",duration:4, price: 2500, image: "alemania.webp",max_travellers:5,flight: false,national:false, t_trip: "Culture" },
-        { name: "China", description: "The city that never sleeps.", duration: 5 ,price: 1800, image: "china.jpg",max_travellers:9,flight: true, t_trip: "Culture" },
+        { name: "China", description: "Ancient empires.", duration: 5 ,price: 1800, image: "china.jpg",max_travellers:9,flight: true, t_trip: "Culture" },
         { name: "Georgia", description: "Walk through ancient history.",duration: 4 ,price: 1100, image: "georgia.jpeg", max_travellers: 7,flight: false,national:false,t_trip: "Culture" },
         { name: "Madagascar", description: "Peace and beaches.",duration: 2 ,price: 1500, image: "madagascar.jpeg", max_travellers:3,flight: true,national:false, t_trip: "Relax" },
-        { name: "New York", description: "Skiing and snow.",duration: 5, price: 2000, image: "eeuu.jpeg", max_travellers:4,flight: false,national:true, t_trip: "Adventure" },
-        { name: "Portugal", description: "Skiing and snow.",duration: 5 ,price: 2000, image: "portugal.jpg", max_travellers: 5,flight: true,national:false, t_trip: "Relax" },
-        { name: "London", description: "Skiing and snow.",duration:8, price: 2000, image: "towerbridge.jpeg", max_travellers:7,flight: false,national:true, t_trip: "Culture" }
+        { name: "New York", description: "The city that never sleeps.",duration: 5, price: 2000, image: "eeuu.jpeg", max_travellers:4,flight: false,national:true, t_trip: "Adventure" },
+        { name: "Portugal", description: "Iberic magic.",duration: 5 ,price: 2000, image: "portugal.jpg", max_travellers: 5,flight: true,national:false, t_trip: "Relax" },
+        { name: "London", description: "The most important city in Europe.",duration:8, price: 2000, image: "towerbridge.jpeg", max_travellers:7,flight: false,national:true, t_trip: "Culture" }
     ];
 
     const result = await trips.insertMany(exampleTrips);
