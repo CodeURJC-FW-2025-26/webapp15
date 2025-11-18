@@ -147,9 +147,9 @@ router.post('/new', upload.single('image'), async (req, res) => {
     if (errors.length > 0) {
         
         const t_trip_select = {
-            family: formData.t_trip === 'family',
-            leisure: formData.t_trip === 'leisure',
-            cultural: formData.t_trip === 'cultural'
+            adventure: formData.t_trip === 'Adventure',
+            culture: formData.t_trip === 'Culture',
+            relax: formData.t_trip === 'Relax'
         };
 
         res.render('new_travel', { 
