@@ -5,10 +5,15 @@
         <h2>{{pageTitle}}</h2>
         <p>{{message}}</p>
         <br>
+        {{^ifError}}
         <a href="{{returnLink}}" class="btn button btn-dark" style="margin-right: 10px;">Continuar</a>
+        {{/ifError}}
         {{#newID}}
             <a href="/" class="btn button btn-secondary">Volver al Inicio</a>
         {{/newID}}
+        {{#ifError}}
+            <a href="/" class="btn button btn-secondary">Volver</a>
+        {{/ifError}}
     </div>
 </div>
 

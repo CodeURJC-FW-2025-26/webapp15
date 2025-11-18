@@ -83,9 +83,10 @@ router.get('/', async (req, res) => {
 
     } catch (error) {
         console.error("Error al cargar la página principal:", error);
-        res.status(500).render('error_page', {
+        res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            errorMsg: 'Error interno al cargar la página principal.'
+            message: 'Error interno al cargar la página principal.',
+            ifError: true
         });
     }
 });
@@ -152,21 +153,9 @@ router.post('/new', upload.single('image'), async (req, res) => {
             relax: formData.t_trip === 'Relax'
         };
 
-        res.render('new_travel', { 
-            pageTitle: 'Add New Trip',
-            isEditing: false,
-            errors: errors,
-            formData: {
-                name: formData.name || '',
-                description: formData.description || '',
-                duration: formData.duration || '',
-                price: formData.price || '',
-                t_trip: t_trip_select, 
-                
-                flight: formData.flight === 'on',
-                national: formData.national === 'on',
-                max_travellers: formData.max_travellers || ''
-            }
+        res.render('confirmation_page', {
+            pageTitle: 'Validation Errors',
+            message: errors.join('. '),
         });
     } else {
         
@@ -198,9 +187,10 @@ router.post('/new', upload.single('image'), async (req, res) => {
 
         } catch (error) {
             console.error("Error al guardar el viaje:", error);
-            res.status(500).render('error_page', {
+            res.status(500).render('confirmation_page', {
                 pageTitle: 'Error',
-                errorMsg: 'Error interno al guardar el viaje.'
+                message: 'Error interno al guardar el viaje.',
+                ifError: true
             });
         }
     }
@@ -224,9 +214,10 @@ router.get('/trip/:id', async (req, res) => {
         });
     } catch (error) {
         console.error("Error al cargar la página de detalle:", error);
-        res.status(500).render('error_page', {
+        res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            errorMsg: 'Error interno al cargar la página de detalle.'
+            message: 'Error interno al cargar la página de detalle.',
+            ifError: true
         });
     }
 });
@@ -262,9 +253,10 @@ router.post('/delete/trip/:id', async (req, res) => {
 
     } catch (error) {
         console.error("Error al borrar el viaje:", error);
-        res.status(500).render('error_page', {
+        res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            errorMsg: 'Error interno al borrar el viaje.'
+            message: 'Error interno al borrar el viaje.',
+            ifError: true
         });
     }
 });
@@ -295,9 +287,10 @@ router.get('/edit/trip/:id', async (req, res) => {
         });
     } catch (error) {
         console.error("Error loading edit trip page:", error);
-        res.status(500).render('error_page', {
+        res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            errorMsg: 'Internal error loading edit trip page.'
+            message: 'Internal error loading edit trip page.',
+            ifError: true
         });
     }
 });
@@ -335,18 +328,9 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
         errors.push('Debe viajar al menos 1 persona.');
     }
     if (errors.length > 0) {
-        const t_trip_select = {
-            culture : viaje.t_trip === 'Culture',
-            adventure : viaje.t_trip === 'Adventure',
-            relax : viaje.t_trip === 'Relax'
-        };
-        res.render('new_travel', {
-            pageTitle: 'Edit Trip',
-            isEditing: true,
-            tripId: tripId,
-            errors: errors,
-            formData: formData,
-            t_trip: t_trip_select
+        res.render('confirmation_page', {
+            pageTitle: 'Validation Errors',
+            message: errors.join('. '),
         });
     } else {
         try {
@@ -376,9 +360,10 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
             });
         } catch (error) {
             console.error("Error updating trip:", error);
-            res.status(500).render('error_page', {
+            res.status(500).render('confirmation_page', {
                 pageTitle: 'Error',
-                errorMsg: 'Internal error updating trip.'
+                message: 'Internal error updating trip.',
+                ifError: true
             });
         }
     }
@@ -437,9 +422,10 @@ router.post('/add-activity/:tripId', async (req, res) => {
 
     } catch (error) {
         console.error("Error al añadir la actividad:", error);
-        res.status(500).render('error_page', {
+        res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            errorMsg: 'Error interno al añadir la actividad.'
+            message: 'Error interno al añadir la actividad.',
+            ifError: true
         });
     }
 });
@@ -450,7 +436,7 @@ router.post('/delete/activity/:id', async (req, res) => {
         const activityId = req.params.id;
         const activity = await db.getActivity(activityId);
         if (!activity) {
-            return res.status(404).render('error_page', { pageTitle: 'Error', errorMsg: 'Activity not found' });
+            return res.status(404).render('confirmation_page', { pageTitle: 'Error', message: 'Activity not found', ifError: true });
         }
         await db.deleteActivity(activityId);
 
@@ -461,9 +447,10 @@ router.post('/delete/activity/:id', async (req, res) => {
         });
     } catch (error) {
         console.error("Error deleting activity:", error);
-        res.status(500).render('error_page', {
+        res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            errorMsg: 'Internal error deleting activity.'
+            message: 'Internal error deleting activity.',
+            ifError: true
         });
     }
 });
@@ -472,7 +459,7 @@ router.get('/edit/activity/:id', async (req, res) => {
     try {
         const activity = await db.getActivity(req.params.id);
         if (!activity) {
-            return res.status(404).render('error_page', { pageTitle: 'Error', errorMsg: 'Activity not found' });
+            return res.status(404).render('confirmation_page', { pageTitle: 'Error', message: 'Activity not found', ifError: true });
         }
 
         activity.isGuideYes = (activity.guide_travel === 'YES');
@@ -483,7 +470,7 @@ router.get('/edit/activity/:id', async (req, res) => {
             formData: activity
         });
     } catch (error) {
-        res.status(500).render('error_page', { pageTitle: 'Error', errorMsg: 'Internal error loading activity edit page.' });
+        res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading activity edit page.', ifError: true });
     }
 });
 router.post('/edit/activity/:id', async (req, res) => {
@@ -517,7 +504,7 @@ router.post('/edit/activity/:id', async (req, res) => {
                 errors: errors
             });
         } catch (error) {
-            return res.status(500).render('error_page', { pageTitle: 'Error', errorMsg: 'Internal error loading activity edit page.' });
+            return res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading activity edit page.', ifError: true } );
         }
     }
 
@@ -539,7 +526,7 @@ router.post('/edit/activity/:id', async (req, res) => {
             returnLink: `/trip/${activity.tripId}`
         });
     } catch (error) {
-        res.status(500).render('error_page', { pageTitle: 'Error', errorMsg: 'Internal error updating activity.' });
+        res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error updating activity.', ifError: true } );
     }
 });
 
