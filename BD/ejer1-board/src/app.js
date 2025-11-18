@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 
 import { router } from './router.js';
-import './load_data.js';
+
 
 
 const __filename = fileURLToPath(import.meta.url); 
