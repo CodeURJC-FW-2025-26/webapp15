@@ -51,15 +51,7 @@ The system will allow:
 
 - **Trip search** by:
   - Main city
-  - Dates
-  - Type of trip (adventure, culture, relax)
-- **Filters**:
-  - Price range
-  - Duration (days)
-  - Available seats
 - **Categorization**:
-  - National vs international trips  
-  - Packages with or without flights  
   - Adventure, culture or relax
 
 ## Documentation
@@ -139,7 +131,7 @@ In addition to that, I created the header for all three pages, designed the butt
 ➡ **Video**
 
   ➡ **Raul Martin Sanchez**
-  - In this part of the proyect , I made changes in the add new trip page where I did the implementation of the form to be abble to save the information of the new travel on the database , implemented with         Mongo DB, also I have done the first version of the filtering by type in the main page and by name, furthermore I create the confirmation page ,also I did the part of mustache for the header and the footer and   for the parts where it is needed. In adition I did a few cahnges in the aesthetic of the main page and the background colors.
+  - In this part of the proyect , I made changes in the add new trip page where I did the implementation of the form to be abble to save the information of the new travel on the database , implemented with  Mongo DB, also I have done the first version of the filtering by type in the main page and by name, furthermore I create the confirmation page ,also I did the part of mustache for the header and the footer and   for the parts where it is needed. In adition I did a few cahnges in the aesthetic of the main page and the background colors.
     
   - **List of the 5 most significant commits:**
   - [new travel form utilitys]()
@@ -154,4 +146,15 @@ In addition to that, I created the header for all three pages, designed the butt
   - [database.js](database.js)
   - [app.js](app.js)
   - [main.html](main.html)
+
+    ➡ **Stanislaw Cherkhavskyy Pater**
+   - So
+      
+  - **List of the 5 most significant commits:**
+  - [conectar secondary entities with the secondaries](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/3d886eff6719f788239bf80ce0baa4345918fee4)
+  - [functions to operate in the data base with principal and secondary entities]
+  - (https://github.com/CodeURJC-FW-2025-26/webapp15/commit/09db7d478d1e7c4afa3aefd63ca9906929a6ead3)
+  - [footer added and style_main modification](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/cf8d2d1b7c2aa40d7cac44e7386efcf8b2643ca0)
+  - [section of images added]()
+  - [css changes to armonice the page]()
    
