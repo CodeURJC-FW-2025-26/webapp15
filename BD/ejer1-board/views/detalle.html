@@ -21,9 +21,10 @@
             {{#trip.flight}}
                 <span class="badge bg-success">Flight included</span>
             {{/trip.flight}}
-            {{#trip.national}}
+            {{^trip.national}}
                 <span class="badge bg-info">National</span>
-            {{else}}
+            {{/trip.national}}
+            {{#trip.national}}
                 <span class="badge bg-warning">International</span>
             {{/trip.national}}
         </div>
