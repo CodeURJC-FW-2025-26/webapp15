@@ -71,7 +71,8 @@ async function seedDatabase() {
             name: `Main tour in ${tripName}`,
             duration: 1 + index,
             description: `A guided tour of ${tripName}'s highlights.`,
-            price: (index + 1) * 50
+            price: (index + 1) * 50,
+            guide_travel: index % 2 === 0 ? 'YES' : 'NO'
         };
     });
     await activities.insertMany(activitiesToInsert);
