@@ -5,13 +5,13 @@
         
         <h3 class="text-center mb-4">{{trip.name}}</h3>
         
-        <img src="/trip/{{trip._id}}/image" id="imagen" class="img-fluid ..." alt="{{trip.name}}">
+        <img src="/trip/{{trip._id}}/image" id="imagen" class="img-fluid ... w-100" alt="{{trip.name}}">
         
         <ul class="list-unstyled text-center mb-4">
             {{! --- CORREGIDO: Usando variables de la BBDD --- }}
             <li><i class="bi bi-clock"></i> <strong>Duration:</strong> {{trip.duration}} days</li>
             <li><i class="bi bi-currency-euro"></i> <strong>Price:</strong> {{trip.price}}€</li>
-            <li><i class="bi bi-people"></i> <strong>Max packages:</strong> {{trip.max_travellers}}</li>
+            <li><i class="bi bi-people"></i> <strong>People:</strong> {{trip.max_travellers}}</li>
         </ul>
 
         <div class="text-center mb-4">
@@ -21,9 +21,10 @@
             {{#trip.flight}}
                 <span class="badge bg-success">Flight included</span>
             {{/trip.flight}}
-            {{#trip.national}}
+            {{^trip.national}}
                 <span class="badge bg-info">National</span>
-            {{else}}
+            {{/trip.national}}
+            {{#trip.national}}
                 <span class="badge bg-warning">International</span>
             {{/trip.national}}
         </div>
