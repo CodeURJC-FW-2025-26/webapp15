@@ -9,7 +9,7 @@
 
         {{#errors}}
         <div class="alert alert-danger" style="color: red; border: 1px solid red; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
-            <strong>Por favor, corrige los siguientes errores:</strong>
+            <strong>Please, fix this errors</strong>
             <ul>
                 {{#errors}} <li>{{.}}</li>
                 {{/errors}}
@@ -24,7 +24,7 @@
                     required 
                     minlength="3" 
                     pattern="[A-Z].*" 
-                    title="Debe empezar con una letra mayúscula y tener al menos 3 caracteres."
+                    title="It may start with capital leters and have more than 3 characters."
                     value="{{formData.name}}">
 
             <label for="description">Description:</label>
@@ -32,7 +32,7 @@
                         required 
                         minlength="10" 
                         maxlength="200" 
-                        placeholder="Mínimo 10 caracteres, máximo 200.">{{formData.description}}</textarea>
+                        placeholder="Minimun 10 characters , Max 200 .">{{formData.description}}</textarea>
 
             <label for="duration">Duration (days):</label>
             <input type="number" id="duration" name="duration" 
@@ -47,7 +47,7 @@
             <input type="file" id="image" name="image" 
                     accept="image/jpeg,image/jpg,image/png,image/webp">
             {{#isEditing}}
-                Dejar en blanco para mantener la imagen actual.
+                leave in white to put the actual image.
             {{/isEditing}}
 
             <label for="price">Price (€):</label>
