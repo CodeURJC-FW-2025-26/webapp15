@@ -128,7 +128,15 @@ In addition to that, I created the header for all three pages, designed the butt
     
 ## 2 Part
 
+➡ **Ejecution instructions** You have to download the webapp15 folder and unzip the folter. When you have the code in your compiler (VS Code:recomendated), you have to open the terminal in your compiler and on the terminal you have to the GoTravel direction using *cd* , the you have to put the command *npm install multer* to be abble to load images to the trips and then you have to run the code in local host using the command *npm run watch*. Finally you have to go to your local host and try the code. The version of Mongo db is 8.2.1 and the version of Node.js is v24.11.0.
+
+➡ **File description**
+  -router.js:
+  -app.js:
+  -database.js: This file is the responsable of loading the example trips and activitys.
+
 ➡ **Video** https://youtu.be/t_0I_cP7d8Q
+
 
   ➡ **Raul Martin Sanchez**
   - In this part of the proyect , I made changes in the add new trip page where I did the implementation of the form to be abble to save the information of the new travel on the database , implemented with  Mongo DB, also I have done the first version of the filtering by type in the main page and by name, furthermore I create the confirmation page ,also I did the part of mustache for the header and the footer and   for the parts where it is needed. In adition I did a few cahnges in the aesthetic of the main page and the background colors.
