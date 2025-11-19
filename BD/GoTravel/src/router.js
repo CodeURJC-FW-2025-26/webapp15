@@ -402,12 +402,10 @@ router.post('/add-activity/:tripId', async (req, res) => {
                 const viaje = await db.getTrip(tripId);
                 const actividades = await db.getActivitiesByTripId(tripId);
 
-                res.render('detalle', {
-                    pageTitle: viaje.name,
-                    trip: viaje,
-                    activities: actividades,
-                    acformData: formData,
-                    acerrors: errors
+                res.render('confirmation_page', {
+                    pageTitle: 'Validation Errors',
+                    message: errors.join('. '),
+                    ifError: true
                 });
                     return;
             } catch (error) {
