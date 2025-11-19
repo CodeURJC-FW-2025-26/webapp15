@@ -369,40 +369,37 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     }
 });
 
-export async function getActivityByName(name) {
-    try {
-        return await activities.findOne({name});
-    } catch (error) {
-        return null;
-    }
-}
 // --- RUTA PARA AÑADIR ACTIVIDAD (NUEVA) ---
 router.post('/add-activity/:tripId', async (req, res) => {
         const tripId = req.params.tripId;
         const formData = req.body;
         const errors = [];
-
+        if (!formData.name || formData.name.trim() === '') {
+            errors.push('The name of the activity is required.');
+        }
+        if (!formData.description || formData.description.trim() === '') {
+            errors.push('The description of the activity is required.');
+        }
+        if (!formData.price) {
+            errors.push('The price of the activity is required.');
+        }
+        if (!formData.duration) {
+            errors.push('The duration of the activity is required.');
+        }
         try {
-            if (!formData.name || formData.name.trim() === '') {
-                errors.push('The name of the activity is required.');
-            }
-            if (!formData.description || formData.description.trim() === '') {
-                errors.push('The description of the activity is required.');
-            }
-            if (!formData.price) {
-                errors.push('The price of the activity is required.');
-            }
-            if (!formData.duration) {
-                errors.push('The duration of the activity is required.');
-            }
             if (formData.name) {
                 const existingActivity = await db.getActivityByName(formData.name);
                 if (existingActivity) {
                     errors.push('An activity with that name already exists.');
                 }
             }
+        } catch (error) {
+            errors.push('Error checking existing activity.');
+            console.error("Error checking existing activity:", error);
+        }
 
-            if (errors.length > 0) {
+        if (errors.length > 0) {
+            try {
                 const viaje = await db.getTrip(tripId);
                 const actividades = await db.getActivitiesByTripId(tripId);
 
@@ -413,9 +410,12 @@ router.post('/add-activity/:tripId', async (req, res) => {
                     acformData: formData,
                     acerrors: errors
                 });
-                return; 
+                    return;
+            } catch (error) {
+                return res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading trip detail page.', ifError: true } );
             }
-
+        }
+        try {
         const newActivity = {
             tripId: tripId,
             name: formData.name,

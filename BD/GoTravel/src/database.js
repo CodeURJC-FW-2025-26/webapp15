@@ -20,6 +20,13 @@ let db;
 let trips;
 let activities;
 
+export async function getActivityByName(name) {
+    try {
+        return await activities.findOne({name});
+    } catch (error) {
+        return null;
+    }
+}
 
 async function initDatabase() {
     try {
