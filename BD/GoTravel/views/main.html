@@ -56,14 +56,14 @@
                     <p class="card-text flex-grow-1">{{description}}...</p>
                     <span class="badge bg-primary align-self-start mb-2">{{t_trip}}</span>
                     <p class="card-text text-end h4"><strong>{{price}}€</strong></p>
-                    <a href="/trip/{{_id}}" class="btn btn-dark mt-auto">Ver Detalles</a> 
+                    <a href="/trip/{{_id}}" class="btn btn-dark mt-auto">See Details</a> 
                 </div>
             </div>
         </div>
         {{/trips}}
 
         {{^trips}}
-        <p class="text-center text-muted">No se encontraron viajes.</p>
+        <p class="text-center text-muted">No trips were found.</p>
         {{/trips}}
     </div>
     
@@ -72,11 +72,11 @@
             
             {{#pagination.hasPrev}}
                 <li class="page-item">
-                    <a class="page-link" href="/?page={{pagination.prevPage}}&searchQuery={{searchTerm}}&category={{category}}">Anterior</a>
+                    <a class="page-link" href="/?page={{pagination.prevPage}}&searchQuery={{searchTerm}}&category={{category}}">Previous</a>
                 </li>
             {{/pagination.hasPrev}}
             {{^pagination.hasPrev}}
-                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
             {{/pagination.hasPrev}}
 
             {{#pagination.pages}}
@@ -87,11 +87,11 @@
             
             {{#pagination.hasNext}}
                 <li class="page-item">
-                    <a class="page-link" href="/?page={{pagination.nextPage}}&searchQuery={{searchTerm}}&category={{category}}">Siguiente</a>
+                    <a class="page-link" href="/?page={{pagination.nextPage}}&searchQuery={{searchTerm}}&category={{category}}">Next</a>
                 </li>
             {{/pagination.hasNext}}
             {{^pagination.hasNext}}
-                <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
             {{/pagination.hasNext}}
 
         </ul>

@@ -24,7 +24,7 @@
                     required 
                     minlength="3" 
                     pattern="[A-Z].*" 
-                    title="Debe empezar con una letra mayúscula y tener al menos 3 caracteres."
+                    title="It must start with a capital letter and have at least 3 characters."
                     value="{{formData.name}}">
 
             <label for="description">Description:</label>
@@ -32,7 +32,7 @@
                         required 
                         minlength="10" 
                         maxlength="200" 
-                        placeholder="Mínimo 10 caracteres, máximo 200.">{{formData.description}}</textarea>
+                        placeholder="Minimum 10 characters, maximum 200.">{{formData.description}}</textarea>
 
             <label for="duration">Duration (days):</label>
             <input type="number" id="duration" name="duration" 
@@ -47,7 +47,7 @@
             <input type="file" id="image" name="image" 
                     accept="image/jpeg,image/jpg,image/png,image/webp">
             {{#isEditing}}
-                Dejar en blanco para mantener la imagen actual.
+                Leave blank to keep the current image.
             {{/isEditing}}
 
             <label for="price">Price (€):</label>

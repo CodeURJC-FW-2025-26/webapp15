@@ -8,7 +8,6 @@
         <img src="/trip/{{trip._id}}/image" id="imagen" class="img-fluid ... w-100" alt="{{trip.name}}">
         
         <ul class="list-unstyled text-center mb-4">
-            {{! --- CORREGIDO: Usando variables de la BBDD --- }}
             <li><i class="bi bi-clock"></i> <strong>Duration:</strong> {{trip.duration}} days</li>
             <li><i class="bi bi-currency-euro"></i> <strong>Price:</strong> {{trip.price}}€</li>
             <li><i class="bi bi-people"></i> <strong>People:</strong> {{trip.max_travellers}}</li>
@@ -17,7 +16,6 @@
         <div class="text-center mb-4">
             <span class="badge bg-secondary"><strong>{{trip.t_trip}}</strong></span>
             
-            {{! --- CORREGIDO: Lógica para mostrar insignias --- }}
             {{#trip.flight}}
                 <span class="badge bg-success">Flight included</span>
             {{/trip.flight}}
@@ -34,7 +32,6 @@
             
             <a href="/edit/trip/{{trip._id}}" class="button btn btn-dark btn-lg">Edit the trip</a>
             
-            {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
             <form action="/delete/trip/{{trip._id}}" method="POST" style="display:inline;">
     <button type="submit" class="btn btn-danger btn-lg">Delete the trip</button>
         </form>
@@ -59,7 +56,6 @@
                 <div class="d-flex justify-content-center">
                     <a href="/edit/activity/{{_id}}" class="button button2 btn btn-dark me-2">Edit the activity</a>
                     
-                    {{! --- ¡CORREGIDO! Se usa un FORM con POST para borrar --- }}
                     <form action="/delete/activity/{{_id}}" method="POST" style="display: inline;">
                         <button type="submit" class="button button2 btn btn-dark">Delete the activity</button>
                     </form>
