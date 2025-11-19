@@ -133,7 +133,7 @@ In addition to that, I created the header for all three pages, designed the butt
 ➡ **File description**
   -router.js:
   -app.js:
-  -database.js: This file is the responsable of loading the example trips and activitys.
+  -database.js: This file is the responsable of loading the example trips and activities.
 
 ➡ **Video** https://youtu.be/t_0I_cP7d8Q
 
