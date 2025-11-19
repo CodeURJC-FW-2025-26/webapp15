@@ -121,6 +121,9 @@ router.post('/new', upload.single('image'), async (req, res) => {
     if (formData.name && !/^[A-Z]/.test(formData.name)) {
         errors.push('The name may start whith capital leters.');
     }
+    if (formData.name && formData.name.trim().length < 3) {
+        errors.push('The name must contain at least 3 valid characters.');
+    }
     
     
     if (formData.name) {
@@ -313,6 +316,9 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
         if (existingTrip && existingTrip._id.toString() !== tripId ) {
             errors.push('There is a trip with the same name.');
         }
+    }
+    if (formData.name && formData.name.trim().length < 3) {
+        errors.push('The name must contain at least 3 valid characters.');
     }
     if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
         errors.push('The description might be between 10 and 200 characters.');
