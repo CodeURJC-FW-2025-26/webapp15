@@ -82,10 +82,10 @@ router.get('/', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error al cargar la página principal:", error);
+        console.error("Fail in loading the main page:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            message: 'Error interno al cargar la página principal.',
+            message: 'Internal error loading the main page.',
             ifError: true
         });
     }
@@ -111,37 +111,37 @@ router.post('/new', upload.single('image'), async (req, res) => {
     const errors = [];
 
     
-    if (!formData.name) errors.push('El nombre (Main city) es obligatorio.');
-    if (!formData.description) errors.push('La descripción es obligatoria.');
-    if (!formData.duration) errors.push('La duración es obligatoria.');
-    if (!formData.price) errors.push('El precio es obligatorio.');
-    if (!formData.t_trip) errors.push('El tipo de viaje es obligatorio.');
-    if (!formData.max_travellers) errors.push('El número de personas es obligatorio.');
+    if (!formData.name) errors.push('The name (Main city) is obligatory.');
+    if (!formData.description) errors.push('The description is obligatory.');
+    if (!formData.duration) errors.push('The duration is obligatory.');
+    if (!formData.price) errors.push('The price is obligatory.');
+    if (!formData.t_trip) errors.push('The type of trip is obligatory');
+    if (!formData.max_travellers) errors.push('The number of people is obligatory.');
     
     if (formData.name && !/^[A-Z]/.test(formData.name)) {
-        errors.push('El nombre debe comenzar con una letra mayúscula.');
+        errors.push('The name may start whith capital leters.');
     }
     
     
     if (formData.name) {
         const existingTrip = await db.getTripByName(formData.name);
         if (existingTrip) {
-            errors.push('Ya existe un viaje con ese nombre.');
+            errors.push('THere is a trip with the same name.');
         }
     }
 
     if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
-        errors.push('La descripción debe tener entre 10 y 200 caracteres.');
+        errors.push('The description might be between 10 and 200 characters.');
     }
 
     if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
-        errors.push('La duración debe estar entre 1 y 100 días.');
+        errors.push('The duration might be between 1 y 100 days.');
     }
     if (formData.price && parseInt(formData.price, 10) < 0) {
-        errors.push('El precio no puede ser negativo.');
+        errors.push('The price might be positive.');
     }
     if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
-        errors.push('Debe viajar al menos 1 persona.');
+        errors.push('There may at least 1 person.');
     }
 
     
@@ -186,10 +186,10 @@ router.post('/new', upload.single('image'), async (req, res) => {
             });
 
         } catch (error) {
-            console.error("Error al guardar el viaje:", error);
+            console.error("Fail saving the trip:", error);
             res.status(500).render('confirmation_page', {
                 pageTitle: 'Error',
-                message: 'Error interno al guardar el viaje.',
+                message: 'Fail saving the trip.',
                 ifError: true
             });
         }
@@ -204,7 +204,7 @@ router.get('/trip/:id', async (req, res) => {
         const actividades = await db.getActivitiesByTripId(tripId);
 
         if (!viaje) {
-            res.status(404).send('Viaje no encontrado');
+            res.status(404).send('Trip not found');
             return;
         }
         res.render('detalle', {
@@ -213,17 +213,17 @@ router.get('/trip/:id', async (req, res) => {
             activities: actividades
         });
     } catch (error) {
-        console.error("Error al cargar la página de detalle:", error);
+        console.error("Fail loading the deail page:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            message: 'Error interno al cargar la página de detalle.',
+            message: 'Fail loading the deail page.',
             ifError: true
         });
     }
 });
 
 
-// --- RUTA DE BORRADO DE VIAJE (CORREGIDA) ---
+// delete trip 
 router.post('/delete/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -243,8 +243,7 @@ router.post('/delete/trip/:id', async (req, res) => {
         
         await db.deleteTrip(tripId); 
 
-        // ¡CORREGIDO! Usa tu nombre de archivo 'eliminated_file'
-        // y la variable 'tripName'
+        
         res.render('confirmation_page', { 
             pageTitle: 'Trip Deleted',
             message : `The trip ${trip.name} has been deleted successfully.`,
@@ -252,16 +251,16 @@ router.post('/delete/trip/:id', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error al borrar el viaje:", error);
+        console.error("Fail deleting the trip:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            message: 'Error interno al borrar el viaje.',
+            message: 'Internal error loading the trip.',
             ifError: true
         });
     }
 });
 
-// --- Edit trip routes ---
+// Edit trip routes 
 router.get('/edit/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -307,25 +306,25 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     if (!formData.max_travellers) errors.push('The amount of travellers is required.');
 
     if (formData.name && !/^[A-Z]/.test(formData.name)) {
-        errors.push('El nombre debe comenzar con una letra mayúscula.');
+        errors.push('The name may start with capital letters');
     }   
     if (formData.name) {
         const existingTrip = await db.getTripByName(formData.name);
         if (existingTrip && existingTrip._id.toString() !== tripId ) {
-            errors.push('Ya existe un viaje con ese nombre.');
+            errors.push('There is a trip with the same name.');
         }
     }
     if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
-        errors.push('La descripción debe tener entre 10 y 200 caracteres.');
+        errors.push('The description might be between 10 and 200 characters.');
     }
     if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
-        errors.push('La duración debe estar entre 1 y 100 días.');
+        errors.push('The duration may be between 1 and 100 days.');
     }
     if (formData.price && parseInt(formData.price, 10) < 0) {
-        errors.push('El precio no puede ser negativo.');
+        errors.push('The price cant be negative.');
     }
     if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
-        errors.push('Debe viajar al menos 1 persona.');
+        errors.push('It may be at least 1 person.');
     }
     if (errors.length > 0) {
         res.render('confirmation_page', {
@@ -369,7 +368,7 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     }
 });
 
-// --- RUTA PARA AÑADIR ACTIVIDAD (NUEVA) ---
+// add activity
 router.post('/add-activity/:tripId', async (req, res) => {
         const tripId = req.params.tripId;
         const formData = req.body;
@@ -434,16 +433,16 @@ router.post('/add-activity/:tripId', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error al añadir la actividad:", error);
+        console.error("Fail at adding activity:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            message: 'Error interno al añadir la actividad.',
+            message: 'Fail at adding activity.',
             ifError: true
         });
     }
 });
 
-// --- RUTA PARA BORRAR ACTIVIDAD (NUEVA) ---
+// eliminate activity
 router.post('/delete/activity/:id', async (req, res) => {
     try {
         const activityId = req.params.id;

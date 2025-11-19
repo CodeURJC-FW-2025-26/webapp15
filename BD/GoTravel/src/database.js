@@ -99,9 +99,7 @@ async function seedDatabase() {
     console.log("Example data inserted successfully.");
 }
 
-// ======================================================================
-//   TRIP FUNCTIONS
-// ======================================================================
+
 
 // Count all trips or filtered ones
 export async function countTrips(query = {}) {
@@ -162,9 +160,7 @@ export async function deleteTrip(id) {
     return result;
 }
 
-// ======================================================================
-//   ACTIVITY FUNCTIONS
-// ======================================================================
+
 
 // Get all activities for one trip
 export async function getActivitiesByTripId(tripId) {
