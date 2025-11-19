@@ -78,13 +78,13 @@
 <div class="form-align">
     <div class="form-container">
         <h2>New activity</h2>
-     
+        
         <form method="POST" action="/add-activity/{{trip._id}}">
             <label for="main_city">Name of the activity:</label>
             <input type="text" id="main_activity" name="name" placeholder="Tee time" required>
 
             <label for="duration">Time span:</label>
-            <input type="number" id="duration" name="duration" min="0" max="12" step="1" placeholder="3 horas">
+            <input type="number" id="duration" name="duration" min="0" max="12" step="1" placeholder="3 horas" required>
 
             <label for="price">Fee(€):</label>
             <input type="number" id="price" name="price" min="0" max="100000" step="1" placeholder="0€" required>
