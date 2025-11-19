@@ -369,6 +369,13 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     }
 });
 
+export async function getActivityByName(name) {
+    try {
+        return await activities.findOne({name});
+    } catch (error) {
+        return null;
+    }
+}
 // --- RUTA PARA AÑADIR ACTIVIDAD (NUEVA) ---
 router.post('/add-activity/:tripId', async (req, res) => {
         const tripId = req.params.tripId;
@@ -387,6 +394,12 @@ router.post('/add-activity/:tripId', async (req, res) => {
             }
             if (!formData.duration) {
                 errors.push('The duration of the activity is required.');
+            }
+            if (formData.name) {
+                const existingActivity = await db.getActivityByName(formData.name);
+                if (existingActivity) {
+                    errors.push('An activity with that name already exists.');
+                }
             }
 
             if (errors.length > 0) {
