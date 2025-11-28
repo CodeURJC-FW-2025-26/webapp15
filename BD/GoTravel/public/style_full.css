@@ -375,3 +375,140 @@ footer {
         flex-direction: column; 
     }
 }
+
+
+
+
+@media (max-width: 992px) {
+    
+
+    #cabecera {
+        padding-top: 100px;
+        min-height: 50vh;
+        align-items: center;
+        text-align: center;
+    }
+
+    #cabecera h2 {
+        font-size: 2.2rem;
+        max-width: 100%;
+    }
+
+    #cabecera p {
+        font-size: 1rem;
+        max-width: 90%;
+    }
+
+
+    .barra-superior {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .search-form {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .search-form input[type="search"] {
+        width: 100%;
+        max-width: 100%;
+    }
+
+
+    #b1 {
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+
+    .form-container {
+        padding: 20px;
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .form-container h2 {
+        margin: -20px -20px 20px -20px; 
+        font-size: 1.5rem;
+    }
+}
+
+
+@media (max-width: 768px) {
+    
+
+    .navbar-custom {
+        height: auto;
+        min-height: 85px;
+        flex-wrap: wrap;
+        padding: 15px;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .navbar-custom h1 {
+        width: 100%;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+
+    body {
+        padding-top: 110px;
+    }
+
+
+    .list-group-item.rounded.shadow > h3 {
+        font-size: 2.5rem !important;
+        padding-top: 20px;
+    }
+
+    .list-group-item.rounded.shadow > ul li {
+        font-size: 1.1rem !important;
+    }
+    
+    .list-group-item.rounded.shadow .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .list-group-item.rounded.shadow > div.d-flex {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+
+.form-container button[type="submit"] {
+    margin-bottom: 15px;
+}
+
+
+.form-container a, 
+.form-container button:not([type="submit"]) {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    display: block;        
+    text-align: center;    
+    text-decoration: none; 
+    box-sizing: border-box;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    
+
+    background-color: #212529; 
+    color: white;
+}
+
+
+.form-container a:hover, 
+.form-container button:not([type="submit"]):hover {
+    background-color: #000000;
+    opacity: 0.9;
+}
