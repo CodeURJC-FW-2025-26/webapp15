@@ -1,0 +1,198 @@
+[
+  {
+    "_id": "69296597427012f55819ee55",
+    "name": "Peru",
+    "description": "A romantic weekend in Paris.",
+    "duration": 3,
+    "price": 1200,
+    "image": "peru.webp",
+    "max_travellers": 3,
+    "flight": true,
+    "national": false,
+    "t_trip": "Culture",
+    "activities": [
+      {
+        "_id": "69296597427012f55819ee56",
+        "name": "Main tour in Peru",
+        "duration": 1,
+        "description": "A guided tour of Peru's highlights.",
+        "price": 50,
+        "guide_travel": "YES"
+      },
+      {
+        "_id": "692975a73d85ad25ae8f9857",
+        "name": "Teruel",
+        "description": "nk fkjt jvefkjne vj ",
+        "duration": 3,
+        "price": 34,
+        "guide_travel": "NO"
+      }
+    ]
+  },
+  {
+    "_id": "69296597427012f55819ee57",
+    "name": "Austria",
+    "description": "Experience the wild nature.",
+    "duration": 2,
+    "price": 3500,
+    "image": "austria.webp",
+    "max_travellers": 2,
+    "flight": true,
+    "national": true,
+    "t_trip": "Adventure",
+    "activities": [
+      {
+        "_id": "69296597427012f55819ee58",
+        "name": "Main tour in Austria",
+        "duration": 2,
+        "description": "A guided tour of Austria's highlights.",
+        "price": 100,
+        "guide_travel": "NO"
+      }
+    ]
+  },
+  {
+    "_id": "69296597427012f55819ee59",
+    "name": "Germany",
+    "description": "Discover the technology and tradition.",
+    "duration": 4,
+    "price": 2500,
+    "image": "alemania.webp",
+    "max_travellers": 5,
+    "flight": false,
+    "national": false,
+    "t_trip": "Culture",
+    "activities": [
+      {
+        "_id": "69296597427012f55819ee5a",
+        "name": "Main tour in Germany",
+        "duration": 3,
+        "description": "A guided tour of Germany's highlights.",
+        "price": 150,
+        "guide_travel": "YES"
+      }
+    ]
+  },
+  {
+    "_id": "69296597427012f55819ee5b",
+    "name": "China",
+    "description": "Ancient empires.",
+    "duration": 5,
+    "price": 1800,
+    "image": "china.jpg",
+    "max_travellers": 9,
+    "flight": true,
+    "national": false,
+    "t_trip": "Culture",
+    "activities": [
+      {
+        "_id": "69296597427012f55819ee5c",
+        "name": "Main tour in China",
+        "duration": 4,
+        "description": "A guided tour of China's highlights.",
+        "price": 200,
+        "guide_travel": "NO"
+      }
+    ]
+  },
+  {
+    "_id": "69296597427012f55819ee61",
+    "name": "New York",
+    "description": "The city that never sleeps.",
+    "duration": 5,
+    "price": 2000,
+    "image": "eeuu.jpeg",
+    "max_travellers": 4,
+    "flight": false,
+    "national": true,
+    "t_trip": "Adventure",
+    "activities": [
+      {
+        "_id": "69296597427012f55819ee62",
+        "name": "Main tour in New York",
+        "duration": 7,
+        "description": "A guided tour of New York's highlights.",
+        "price": 350,
+        "guide_travel": "YES"
+      },
+      {
+        "_id": "69298b61db5be22cd5fc3858",
+        "name": "Madrid",
+        "description": "nv ndj af beajf vrjwnvrje",
+        "duration": 4,
+        "price": 3424,
+        "guide_travel": "YES"
+      }
+    ]
+  },
+  {
+    "_id": "69296597427012f55819ee63",
+    "name": "Portugal",
+    "description": "Iberic magic.",
+    "duration": 5,
+    "price": 2000,
+    "image": "portugal.jpg",
+    "max_travellers": 5,
+    "flight": true,
+    "national": false,
+    "t_trip": "Relax",
+    "activities": [
+      {
+        "_id": "69296597427012f55819ee64",
+        "name": "Main tour in Portugal",
+        "duration": 8,
+        "description": "A guided tour of Portugal's highlights.",
+        "price": 400,
+        "guide_travel": "NO"
+      }
+    ]
+  },
+  {
+    "_id": "69296598427012f55819ee65",
+    "name": "London",
+    "description": "The most important city in Europe.",
+    "duration": 8,
+    "price": 2000,
+    "image": "towerbridge.jpeg",
+    "max_travellers": 7,
+    "flight": false,
+    "national": true,
+    "t_trip": "Culture",
+    "activities": [
+      {
+        "_id": "692965f1427012f55819ee67",
+        "name": "Pesca deportiva",
+        "description": "una actividad chula",
+        "duration": 2,
+        "price": 230,
+        "guide_travel": "YES"
+      }
+    ]
+  },
+  {
+    "_id": "692976b73d85ad25ae8f9858",
+    "name": "Kirguistan",
+    "description": "ch whjbcih3rbchi3bchi3f",
+    "duration": 2,
+    "image": "1764325047628_WIN_20251010_13_58_57_Pro.jpg",
+    "price": 400,
+    "t_trip": "Culture",
+    "flight": true,
+    "national": true,
+    "max_travellers": 4,
+    "activities": []
+  },
+  {
+    "_id": "6929776a3d85ad25ae8f9859",
+    "name": "Pekin23",
+    "description": "dshjve ejhf nkf efkn fekt",
+    "duration": 4,
+    "image": "1764325226680_WIN_20251010_13_58_40_Pro.jpg",
+    "price": 345,
+    "t_trip": "Relax",
+    "flight": true,
+    "national": true,
+    "max_travellers": 2,
+    "activities": []
+  }
+]
