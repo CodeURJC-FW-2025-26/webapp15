@@ -48,6 +48,14 @@
         "description": "A guided tour of Austria's highlights.",
         "price": 100,
         "guide_travel": "NO"
+      },
+      {
+        "_id": "6929d09c71fe9f189c36caa4",
+        "name": "cycling",
+        "description": "Going clycling across the contryside\r\n",
+        "duration": 1,
+        "price": 4,
+        "guide_travel": "YES"
       }
     ]
   },
