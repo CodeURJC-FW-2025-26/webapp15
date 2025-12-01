@@ -73,35 +73,101 @@
         {{/trips}}
     </div>
     
-    <nav aria-label="Trip pagination" class="mt-5">
-        <ul class="pagination justify-content-center">
-            
-            {{#pagination.hasPrev}}
-                <li class="page-item">
-                    <a class="page-link" href="/?page={{pagination.prevPage}}&searchQuery={{searchTerm}}&category={{category}}">Previous</a>
-                </li>
-            {{/pagination.hasPrev}}
-            {{^pagination.hasPrev}}
-                <li class="page-item disabled"><span class="page-link">Previous</span></li>
-            {{/pagination.hasPrev}}
+    <div id="loading-spinner" class="text-center my-4" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    
+    <p id="no-more-trips" class="text-center text-muted my-4" style="display: none;">No more trips to show.</p>
 
-            {{#pagination.pages}}
-                <li class="page-item {{#isCurrent}}active{{/isCurrent}}">
-                    <a class="page-link" href="/?page={{number}}&searchQuery={{searchTerm}}&category={{category}}">{{number}}</a>
-                </li>
-            {{/pagination.pages}}
-            
-            {{#pagination.hasNext}}
-                <li class="page-item">
-                    <a class="page-link" href="/?page={{pagination.nextPage}}&searchQuery={{searchTerm}}&category={{category}}">Next</a>
-                </li>
-            {{/pagination.hasNext}}
-            {{^pagination.hasNext}}
-                <li class="page-item disabled"><span class="page-link">Next</span></li>
-            {{/pagination.hasNext}}
-
-        </ul>
-    </nav>
 </section>
 
 {{> footer}}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let page = 1; 
+        let isLoading = false;
+        let hasMore = true; // Asumimos true al principio si hay contenido
+
+        // Leer parámetros de búsqueda actuales de la URL (si los hay)
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('searchQuery') || '';
+        const category = urlParams.get('category') || '';
+        
+        // Elementos del DOM
+        const container = document.getElementById('trip-results');
+        const loader = document.getElementById('loading-spinner');
+        const noMoreMsg = document.getElementById('no-more-trips');
+
+        // Función que genera el HTML de una tarjeta igual que Mustache
+        function createTripCard(trip) {
+            // Recortamos la descripción si es larga, igual que en CSS/Mustache
+            // (En mustache pusiste {{description}}..., aquí lo simulamos un poco si quieres, 
+            // o imprimimos el texto tal cual llega de la BD)
+            return `
+            <div class="col-lg-4 col-md-6 col-sm-12 fade-in"> 
+                <div class="card h-100 shadow-sm">
+                    <img src="/trip/${trip._id}/image" class="card-img-top" alt="${trip.name}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">${trip.name}</h5>
+                        <p class="card-text flex-grow-1">${trip.description}...</p>
+                        <span class="badge bg-primary align-self-start mb-2">${trip.t_trip}</span>
+                        <p class="card-text text-end h4"><strong>${trip.price}€</strong></p>
+                        <a href="/trip/${trip._id}" class="btn btn-dark mt-auto">See Details</a> 
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        async function loadMoreTrips() {
+            if (isLoading || !hasMore) return;
+            
+            isLoading = true;
+            loader.style.display = 'block';
+            page++; // Pedimos la siguiente página
+
+            try {
+                // Fetch a la nueva API
+                const url = `/api/trips?page=${page}&searchQuery=${encodeURIComponent(searchQuery)}&category=${encodeURIComponent(category)}`;
+                const res = await fetch(url);
+                
+                if (!res.ok) throw new Error('Network error');
+
+                const data = await res.json();
+
+                if (data.trips && data.trips.length > 0) {
+                    data.trips.forEach(trip => {
+                        container.insertAdjacentHTML('beforeend', createTripCard(trip));
+                    });
+                    hasMore = data.hasMore;
+                } else {
+                    hasMore = false;
+                }
+
+                if (!hasMore) {
+                    noMoreMsg.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Error loading more trips:', error);
+                hasMore = false; // Evitar loops infinitos de error
+            } finally {
+                isLoading = false;
+                loader.style.display = 'none';
+            }
+        }
+
+        // Listener de Scroll
+        window.addEventListener('scroll', () => {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            
+            // Si estamos a 100px del final de la página
+            if (scrollTop + clientHeight >= scrollHeight - 100) {
+                loadMoreTrips();
+            }
+        });
+    });
+</script>

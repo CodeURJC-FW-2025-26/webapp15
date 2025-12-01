@@ -202,5 +202,18 @@
     "national": true,
     "max_travellers": 2,
     "activities": []
+  },
+  {
+    "_id": "6929dc60bc6a19d7860a532d",
+    "name": "Fuengirola",
+    "description": "un lugar muy chulo",
+    "duration": 4,
+    "image": "1764351072977_malaga.webp",
+    "price": 500,
+    "t_trip": "Relax",
+    "flight": false,
+    "national": false,
+    "max_travellers": 12,
+    "activities": []
   }
 ]

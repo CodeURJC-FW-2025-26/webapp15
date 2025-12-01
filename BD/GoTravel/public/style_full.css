@@ -282,7 +282,7 @@ footer {
 }
 
 #imagen:hover {
-    transform: scale(1.1); /* Amplía la imagen */
+    transform: scale(1.05); /* Amplía la imagen */
 }
 /* -------------------------------- */
 

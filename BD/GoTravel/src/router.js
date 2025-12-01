@@ -23,9 +23,45 @@ const upload = multer({ storage: storage });
 
 export const router = express.Router();
 
+// infinite scroll
+router.get('/api/trips', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 6; 
+        const skip = (page - 1) * limit;
+
+        const searchTerm = req.query.searchQuery || '';
+        const category = req.query.category || '';
+
+        let filtro = {};
+        if (searchTerm) {
+            filtro.name = { $regex: new RegExp(searchTerm, 'i') };
+        }
+        if (category) {
+            filtro.t_trip = category; 
+        }
+
+        const viajes = await db.getTrips(filtro, skip, limit);
+        const totalItems = await db.countTrips(filtro);
+        const totalPages = Math.ceil(totalItems / limit);
+
+        
+        res.json({
+            trips: viajes,
+            hasMore: page < totalPages
+        });
+
+    } catch (error) {
+        console.error("Error loading API trips:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
 
 router.get('/', async (req, res) => {
     try {
+        // first paint of six elements
         const page = parseInt(req.query.page) || 1;
         const limit = 6;
         const skip = (page - 1) * limit;
@@ -42,22 +78,8 @@ router.get('/', async (req, res) => {
         }
         
         const viajes = await db.getTrips(filtro, skip, limit);
-        const totalItems = await db.countTrips(filtro);
-        const totalPages = Math.ceil(totalItems / limit);
-
-        let pages = []; 
-        for (let i = 1; i <= totalPages; i++) {
-            pages.push({
-                number: i,
-                isCurrent: i === page
-            });
-        }
         
-        const hasPrev = page > 1;
-        const prevPage = page - 1;
-        const hasNext = page < totalPages;
-        const nextPage = page + 1;
-
+        // filtering of the buttons
         const isCategoryActive = {
             Adventure: category === 'Adventure',
             Culture: category === 'Culture',
@@ -65,11 +87,6 @@ router.get('/', async (req, res) => {
         };
 
         const pagination = {
-            pages: pages,
-            hasPrev: hasPrev,
-            prevPage: prevPage,
-            hasNext: hasNext,
-            nextPage: nextPage,
             isCategoryActive: isCategoryActive
         };
 
