@@ -47,7 +47,9 @@
             <input type="file" id="image" name="image" 
                     accept="image/jpeg,image/jpg,image/png,image/webp">
             {{#isEditing}}
-                Leave blank to keep the current image.
+                <small style="display: block; margin-bottom: 15px; color: #666;">
+                    Leave blank to keep the current image.
+                </small>
             {{/isEditing}}
 
             <label for="price">Price (€):</label>
