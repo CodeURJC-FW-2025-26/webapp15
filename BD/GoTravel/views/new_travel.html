@@ -1,5 +1,44 @@
 {{> header}}
 
+<style>
+    
+    .drop-zone {
+        width: 100%;
+        height: 200px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border: 2px dashed #cccccc;
+        border-radius: 10px;
+        cursor: pointer;
+        background-color: #f9f9f9;
+        position: relative;
+        overflow: hidden;
+        transition: border 0.3s ease, background-color 0.3s ease;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+        border-color: #000;
+        background-color: #e9ecef;
+    }
+    .drop-zone__input { display: none; }
+    .drop-zone__prompt { font-size: 1.1rem; color: #666; pointer-events: none; }
+    .drop-zone__thumb {
+        width: 100%; height: 100%; object-fit: cover;
+        border-radius: 10px; display: none;
+    }
+    /* Botón eliminar */
+    .remove-image-btn {
+        position: absolute; top: 10px; right: 10px;
+        background: rgba(255, 0, 0, 0.7); color: white;
+        border: none; border-radius: 50%; width: 30px; height: 30px;
+        cursor: pointer; display: none; align-items: center; justify-content: center;
+        font-weight: bold; z-index: 10;
+    }
+    .remove-image-btn:hover { background: rgba(255, 0, 0, 1); }
+</style>
+
 <div class="form-align">
     <div class="form-container">
         <h2>
@@ -9,73 +48,55 @@
 
         {{#errors}}
         <div class="alert alert-danger">
-            <ul>
-                {{#errors}} <li>{{.}}</li> {{/errors}}
-            </ul>
+            <ul>{{#errors}} <li>{{.}}</li> {{/errors}}</ul>
         </div>
         {{/errors}}
 
-        <form id="tripForm" action="{{#isEditing}}/edit/trip/{{tripId}}{{/isEditing}}{{^isEditing}}/new{{/isEditing}}" method="POST" enctype="multipart/form-data" novalidate>
+        <form id="tripForm" 
+              action="{{#isEditing}}/edit/trip/{{tripId}}{{/isEditing}}{{^isEditing}}/new{{/isEditing}}" 
+              method="POST" 
+              enctype="multipart/form-data" 
+              novalidate
+              data-is-editing="{{#isEditing}}true{{/isEditing}}{{^isEditing}}false{{/isEditing}}"
+              data-current-image="{{formData.image}}">
             
             {{#isEditing}}<input type="hidden" id="tripId" value="{{tripId}}">{{/isEditing}}
 
             <div class="mb-3">
                 <label for="name" class="form-label">Main city (Name):</label>
-                <input type="text" class="form-control" id="name" name="name" 
-                        required 
-                        minlength="3" 
-                        value="{{formData.name}}">
-                <div id="nameFeedback" class="invalid-feedback">
-                    Name must start with a capital letter, have at least 3 chars, and be unique.
-                </div>
+                <input type="text" class="form-control" id="name" name="name" required minlength="3" value="{{formData.name}}">
+                <div id="nameFeedback" class="invalid-feedback">Name must start with a capital letter, have at least 3 chars.</div>
             </div>
 
             <div class="mb-3">
                 <label for="description" class="form-label">Description:</label>
-                <textarea class="form-control" id="description" name="description" rows="4" 
-                            required 
-                            minlength="10" 
-                            maxlength="200" 
-                            placeholder="Minimum 10 characters, maximum 200.">{{formData.description}}</textarea>
-                <div class="invalid-feedback">
-                    Description must be between 10 and 200 characters.
-                </div>
+                <textarea class="form-control" id="description" name="description" rows="4" required minlength="10" maxlength="200">{{formData.description}}</textarea>
+                <div class="invalid-feedback">Description must be between 10 and 200 characters.</div>
             </div>
 
             <div class="mb-3">
                 <label for="duration" class="form-label">Duration (days):</label>
-                <input type="number" class="form-control" id="duration" name="duration" 
-                        required 
-                        min="1" 
-                        max="100" 
-                        step="1" 
-                        placeholder="1"
-                        value="{{formData.duration}}">
-                <div class="invalid-feedback">
-                    Duration must be between 1 and 100 days.
-                </div>
+                <input type="number" class="form-control" id="duration" name="duration" required min="1" max="100" value="{{formData.duration}}">
+                <div class="invalid-feedback">Duration must be between 1 and 100 days.</div>
             </div>
 
             <div class="mb-3">
-                <label for="image" class="form-label">Image:</label>
-                <input type="file" class="form-control" id="image" name="image" 
-                        accept="image/jpeg,image/jpg,image/png,image/webp">
-                {{#isEditing}}
-                    <small class="text-muted">Leave blank to keep the current image.</small>
-                {{/isEditing}}
+                <label class="form-label">Image:</label>
+                <input type="hidden" name="remove_image" id="remove_image" value="false">
+
+                <div class="drop-zone" id="dropZone">
+                    <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                    <input type="file" name="image" id="imageInput" class="drop-zone__input" accept="image/jpeg,image/jpg,image/png,image/webp">
+                    
+                    <img src="" alt="Preview" class="drop-zone__thumb" id="imagePreview">
+                    <button type="button" class="remove-image-btn" id="removeImageBtn" title="Remove Image">&times;</button>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label for="price" class="form-label">Price (€):</label>
-                <input type="number" class="form-control" id="price" name="price" 
-                        required 
-                        min="0" 
-                        step="1" 
-                        placeholder="0"
-                        value="{{formData.price}}">
-                <div class="invalid-feedback">
-                    Price must be a positive number.
-                </div>
+                <input type="number" class="form-control" id="price" name="price" required min="0" value="{{formData.price}}">
+                <div class="invalid-feedback">Price must be a positive number.</div>
             </div>
 
             <div class="mb-3">
@@ -86,16 +107,13 @@
                     <option value="Culture" {{#formData.t_trip.culture}}selected{{/formData.t_trip.culture}}>Culture</option>
                     <option value="Relax" {{#formData.t_trip.relax}}selected{{/formData.t_trip.relax}}>Relax</option>
                 </select>
-                <div class="invalid-feedback">
-                    Please select a type of trip.
-                </div>
+                <div class="invalid-feedback">Please select a type of trip.</div>
             </div>
 
             <div class="mb-3 d-flex align-items-center gap-3">
                 <label class="form-label mb-0">Need a flight?</label>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="flight" name="flight" {{#formData.flight}}checked{{/formData.flight}}>
-                    <label class="form-check-label" for="flight"></label>
                 </div>
             </div>
 
@@ -103,21 +121,13 @@
                 <label class="form-label mb-0">Is it international?</label>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="national" name="national" {{#formData.national}}checked{{/formData.national}}>
-                    <label class="form-check-label" for="national"></label>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="max_travellers" class="form-label">People:</label>
-                <input type="number" class="form-control" id="max_travellers" name="max_travellers" 
-                        required 
-                        min="1" 
-                        step="1" 
-                        placeholder="1"
-                        value="{{formData.max_travellers}}">
-                <div class="invalid-feedback">
-                    Must be at least 1 person.
-                </div>
+                <input type="number" class="form-control" id="max_travellers" name="max_travellers" required min="1" value="{{formData.max_travellers}}">
+                <div class="invalid-feedback">Must be at least 1 person.</div>
             </div>
             
             <button type="submit" class="btn button btn-dark" id="submitBtn">
@@ -134,176 +144,19 @@
     </div>
 </div>
 
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="errorModalLabel">Error</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body" id="errorModalBody">
-        An error occurred processing your request.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
+      <div class="modal-body" id="errorModalBody">An error occurred.</div>
+      <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
     </div>
   </div>
 </div>
 
+<script src="/js/script.js"></script>
+
 {{> footer}}
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('tripForm');
-    const nameInput = document.getElementById('name');
-    const nameFeedback = document.getElementById('nameFeedback');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const errorModalEl = document.getElementById('errorModal');
-    const errorModalBody = document.getElementById('errorModalBody');
-    // Initialize bootstrap modal
-    const errorModal = new bootstrap.Modal(errorModalEl);
-
-    // 1. Client-Side Validation Logic
-    function validateField(input) {
-        let isValid = true;
-        
-        // Reset valid status
-        input.classList.remove('is-invalid');
-        input.classList.remove('is-valid');
-
-        // Check HTML5 constraints (required, min, max, type)
-        if (!input.checkValidity()) {
-            isValid = false;
-        }
-
-        // Custom JS Checks
-        if (input.id === 'name') {
-            const val = input.value.trim();
-            // Start with capital letter
-            if (!/^[A-Z]/.test(val)) {
-                isValid = false;
-                nameFeedback.innerText = "Name must start with a capital letter.";
-            } else if (val.length < 3) {
-                isValid = false;
-                nameFeedback.innerText = "Name must be at least 3 characters.";
-            }
-        }
-        
-        if (input.id === 'description') {
-            if (input.value.length < 10 || input.value.length > 200) isValid = false;
-        }
-
-        if (input.id === 'duration') {
-            const val = parseInt(input.value);
-            if (val < 1 || val > 100) isValid = false;
-        }
-
-        if (!isValid) {
-            input.classList.add('is-invalid');
-        } else {
-            // Only add valid class if it's not empty (UI preference)
-            if(input.value) input.classList.add('is-valid');
-        }
-
-        return isValid;
-    }
-
-    // Attach "blur" event to all inputs for real-time validation
-    const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        input.addEventListener('blur', () => validateField(input));
-        input.addEventListener('input', () => {
-             // Remove error class as user types
-             if(input.classList.contains('is-invalid')) input.classList.remove('is-invalid');
-        });
-    });
-
-    // 2. AJAX Duplicate Name Check
-    nameInput.addEventListener('blur', async function() {
-        // First run regex validation
-        if (!validateField(nameInput)) return;
-
-        const nameVal = this.value.trim();
-        const tripIdInput = document.getElementById('tripId');
-        const excludeId = tripIdInput ? tripIdInput.value : '';
-
-        try {
-            const response = await fetch(`/api/check-trip-name?name=${encodeURIComponent(nameVal)}&excludeId=${excludeId}`);
-            const data = await response.json();
-
-            if (data.exists) {
-                nameInput.classList.remove('is-valid');
-                nameInput.classList.add('is-invalid');
-                nameFeedback.innerText = "This trip name already exists. Please choose another.";
-            } else {
-                nameInput.classList.remove('is-invalid');
-                nameInput.classList.add('is-valid');
-            }
-        } catch (error) {
-            console.error('Error validating name:', error);
-        }
-    });
-
-    // 3. AJAX Form Submission
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        // Run validation on all fields
-        let isFormValid = true;
-        inputs.forEach(input => {
-            if (input.type !== 'hidden' && input.type !== 'file') {
-                if (!validateField(input)) isFormValid = false;
-            }
-        });
-
-        // Double check name duplication logic synchronously (based on class state)
-        if (nameInput.classList.contains('is-invalid')) isFormValid = false;
-
-        if (!isFormValid) {
-            // Focus the first invalid element
-            const firstError = form.querySelector('.is-invalid');
-            if (firstError) firstError.focus();
-            return;
-        }
-
-        // Show Loading
-        loadingSpinner.style.display = 'flex';
-
-        const formData = new FormData(form);
-
-        try {
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData
-                // Note: Do not set Content-Type header when using FormData; fetch does it automatically with boundary
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Success: Redirect
-                window.location.href = result.redirectUrl;
-            } else {
-                // Server returned validation errors
-                loadingSpinner.style.display = 'none';
-                
-                let errorMsg = "<ul>";
-                if (result.errors && Array.isArray(result.errors)) {
-                    result.errors.forEach(err => errorMsg += `<li>${err}</li>`);
-                } else {
-                    errorMsg += "<li>Unknown error occurred.</li>";
-                }
-                errorMsg += "</ul>";
-                
-                errorModalBody.innerHTML = errorMsg;
-                errorModal.show();
-            }
-        } catch (error) {
-            loadingSpinner.style.display = 'none';
-            errorModalBody.innerText = "Network or Server Error: " + error.message;
-            errorModal.show();
-        }
-    });
-});
-</script>

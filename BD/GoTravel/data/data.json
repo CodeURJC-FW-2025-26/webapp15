@@ -241,5 +241,31 @@
     "national": true,
     "max_travellers": 6,
     "activities": []
+  },
+  {
+    "_id": "692eab0321a27f75dd9d3485",
+    "name": "Ciudad Camaron",
+    "description": "cjkbbwvsjdDBVKJADBCKJABFJW",
+    "duration": 45,
+    "image": "1764666142998_malaga.webp",
+    "price": 230,
+    "t_trip": "Culture",
+    "flight": true,
+    "national": false,
+    "max_travellers": 2,
+    "activities": []
+  },
+  {
+    "_id": "692ef365706b68800e7b18e6",
+    "name": "Pesca deportiva",
+    "description": "nb bj g hfxfhxfg",
+    "duration": 3,
+    "image": "1764684674033_WIN_20251010_13_58_57_Pro.jpg",
+    "price": 340,
+    "t_trip": "Adventure",
+    "flight": true,
+    "national": true,
+    "max_travellers": 2,
+    "activities": []
   }
 ]

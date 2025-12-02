@@ -24,13 +24,14 @@ const upload = multer({ storage: storage });
 export const router = express.Router();
 
 
+// --- API ROUTES ---
+
 router.get('/api/check-trip-name', async (req, res) => {
     try {
         const { name, excludeId } = req.query;
         if (!name) return res.json({ exists: false });
 
         const trip = await db.getTripByName(name);
-        
         
         if (trip) {
             if (excludeId && trip._id.toString() === excludeId) {
@@ -78,6 +79,7 @@ router.get('/api/trips', async (req, res) => {
 });
 
 
+// --- VISTAS PRINCIPALES ---
 
 router.get('/', async (req, res) => {
     try {
@@ -127,6 +129,8 @@ router.get('/', async (req, res) => {
 });
 
 
+// --- CREAR VIAJE (NEW) ---
+
 router.get('/new', (req, res) => {
     res.render('new_travel', {
         pageTitle: 'Add New Trip',
@@ -139,6 +143,7 @@ router.get('/new', (req, res) => {
     });
 });
 
+// Ruta POST /new corregida para devolver siempre JSON
 router.post('/new', upload.single('image'), async (req, res) => {
     const formData = req.body;
     const errors = [];
@@ -213,6 +218,8 @@ router.post('/new', upload.single('image'), async (req, res) => {
 });
 
 
+// --- DETALLES Y BORRADO ---
+
 router.get('/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -238,8 +245,6 @@ router.get('/trip/:id', async (req, res) => {
     }
 });
 
-
-// Delete trip 
 router.post('/delete/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -271,7 +276,9 @@ router.post('/delete/trip/:id', async (req, res) => {
     }
 });
 
-// Edit trip routes 
+
+// --- EDITAR VIAJE (EDIT) ---
+
 router.get('/edit/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -305,6 +312,7 @@ router.get('/edit/trip/:id', async (req, res) => {
     }
 });
 
+// Ruta POST /edit corregida para manejar borrado de imagen y respuesta JSON
 router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     const tripId = req.params.id;
     const formData = req.body;
@@ -348,9 +356,28 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
         try {
             const oldTrip = await db.getTrip(tripId);
             let imageName = oldTrip.image;
-            if (req.file) {
-                imageName = req.file.filename;
+
+            const isReplacing = !!req.file;
+            const isRemoving = formData.remove_image === 'true';
+
+            // Borrar imagen antigua del disco si se reemplaza o se elimina
+            if ((isReplacing || isRemoving) && oldTrip.image && oldTrip.image !== 'default.jpg') {
+                const oldImagePath = path.join(uploadDir, oldTrip.image);
+                try {
+                    await fs.unlink(oldImagePath);
+                } catch (err) {
+                    console.error("Warning: Could not delete old image file:", err);
+                }
             }
+
+            // Asignar nuevo nombre
+            if (isReplacing) {
+                imageName = req.file.filename;
+            } else if (isRemoving) {
+                imageName = 'default.jpg';
+            } 
+            // Si no, se mantiene la imagen original
+
             const updatedTrip = {
                 name: formData.name,
                 description: formData.description,
@@ -377,16 +404,16 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
 });
 
 
+// --- ACTIVIDADES ---
+
 router.post('/add-activity/:tripId', async (req, res) => {
         const tripId = req.params.tripId;
         const formData = req.body;
 
-        const errors = [];
-        if (!formData.name) errors.push('Name required'); 
-        
+        // Nota: Esta ruta es POST standard (no AJAX en tu código original), 
+        // por lo que renderiza confirmation_page
         
         try {
-        
             const newActivity = {
                 tripId: tripId,
                 name: formData.name,
@@ -405,29 +432,35 @@ router.post('/add-activity/:tripId', async (req, res) => {
 });
 
 router.post('/delete/activity/:id', async (req, res) => {
-
-    const activityId = req.params.id;
-    const activity = await db.getActivity(activityId);
-    await db.deleteActivity(activityId);
-    res.render('confirmation_page', { pageTitle: 'Deleted', message: 'Deleted', returnLink: `/trip/${activity.tripId}`});
+    try {
+        const activityId = req.params.id;
+        const activity = await db.getActivity(activityId);
+        await db.deleteActivity(activityId);
+        res.render('confirmation_page', { pageTitle: 'Deleted', message: 'Deleted', returnLink: `/trip/${activity.tripId}`});
+    } catch (e) { res.status(500).send("Error deleting activity"); }
 });
 
 router.get('/edit/activity/:id', async (req, res) => {
-
-    const activity = await db.getActivity(req.params.id);
-    activity.isGuideYes = (activity.guide_travel === 'YES');
-    activity.isGuideNo = (activity.guide_travel === 'NO');
-    res.render('edit_activity', { pageTitle: 'Edit', formData: activity });
+    try {
+        const activity = await db.getActivity(req.params.id);
+        activity.isGuideYes = (activity.guide_travel === 'YES');
+        activity.isGuideNo = (activity.guide_travel === 'NO');
+        res.render('edit_activity', { pageTitle: 'Edit', formData: activity });
+    } catch (e) { res.status(500).send("Error loading activity"); }
 });
 
 router.post('/edit/activity/:id', async (req, res) => {
-
-     const activityId = req.params.id;
-     const formData = req.body;
-     const activity = await db.getActivity(activityId);
-     await db.updateActivity(activityId, { name: formData.name, price: parseFloat(formData.price) });
-     res.render('confirmation_page', { pageTitle: 'Updated', message: 'Updated', returnLink: `/trip/${activity.tripId}`});
+     try {
+        const activityId = req.params.id;
+        const formData = req.body;
+        const activity = await db.getActivity(activityId);
+        await db.updateActivity(activityId, { name: formData.name, price: parseFloat(formData.price) });
+        res.render('confirmation_page', { pageTitle: 'Updated', message: 'Updated', returnLink: `/trip/${activity.tripId}`});
+     } catch (e) { res.status(500).send("Error updating activity"); }
 });
+
+
+// --- IMAGENES ---
 
 router.get('/trip/:id/image', async (req, res) => {
     try {
