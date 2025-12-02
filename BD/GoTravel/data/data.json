@@ -215,5 +215,31 @@
     "national": false,
     "max_travellers": 12,
     "activities": []
+  },
+  {
+    "_id": "692d6afdce32926e76a4aec5",
+    "name": "Kiev",
+    "description": "nice place to go and have fun",
+    "duration": 1,
+    "image": "1764584189955_malaga.webp",
+    "price": 800,
+    "t_trip": "Adventure",
+    "flight": true,
+    "national": true,
+    "max_travellers": 5,
+    "activities": []
+  },
+  {
+    "_id": "692e1bf27b0d62ccec40f582",
+    "name": "Benalmadena",
+    "description": "pescaito frito y fiesta , no hay mejor plan",
+    "duration": 3,
+    "image": "1764629490531_malaga.webp",
+    "price": 500,
+    "t_trip": "Relax",
+    "flight": true,
+    "national": true,
+    "max_travellers": 6,
+    "activities": []
   }
 ]
