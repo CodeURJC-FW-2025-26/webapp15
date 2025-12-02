@@ -193,14 +193,14 @@ In addition to that, I created the header for all three pages, designed the butt
 ## 3 Part
 
 ➡ **Raul Martin Sanchez**
-  - In this part of the proyect , I made changes in the add new trip page where I did the implementation of the form to be abble to save the information of the new travel on the database , implemented with  Mongo DB, also I have done the first version of the filtering by type in the main page and by name, furthermore I create the confirmation page ,also I did the part of mustache for the header and the footer and   for the parts where it is needed. In adition I did a few cahnges in the aesthetic of the main page and the background colors.
+  - 
     
   - **List of the 5 most significant commits:**
-  - [new travel form utilitys]()
-  - [first version of the filtering by type]()
-  - [footer added and style_main modification]()
-  - [section of images added]()
-  - [css changes to armonice the page]()
+  - [New travel form validation with AJAX](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/8f47d029f33f4212b18b4631cedafec10b8815ba)
+  - [Main page infinite scroll](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/2ff915593107af7715c519b359197e9316867df6)
+  - []()
+  - []()
+  - []()
     
  - **List of the 5 files in which I have participated the most:**
   - [detail.html](detail.html)
