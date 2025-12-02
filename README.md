@@ -198,7 +198,7 @@ In addition to that, I created the header for all three pages, designed the butt
   - **List of the 5 most significant commits:**
   - [New travel form validation with AJAX](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/8f47d029f33f4212b18b4631cedafec10b8815ba)
   - [Main page infinite scroll](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/2ff915593107af7715c519b359197e9316867df6)
-  - []()
+  - [Change in images upload](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/6d923e13126405d993cdd6c9778b5a537d4c670d)
   - []()
   - []()
     
