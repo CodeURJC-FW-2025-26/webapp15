@@ -246,7 +246,7 @@ router.get('/trip/:id', async (req, res) => {
             activities: actividades
         });
     } catch (error) {
-        console.error("Fail loading the deail page:", error);
+        console.error("Fail loading the detail page:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
             message: 'Fail loading the deail page.',
