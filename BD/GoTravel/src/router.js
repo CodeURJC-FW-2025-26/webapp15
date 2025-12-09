@@ -277,28 +277,28 @@ router.post('/delete/trip/:id', async (req, res) => {
 });
 
 
-// --- EDITAR VIAJE (EDIT) ---
+//Edit trip
 
 router.get('/edit/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
-        const viaje = await db.getTrip(tripId);
+        const trip = await db.getTrip(tripId);
 
-        if (!viaje) {
+        if (!trip) {
             res.status(404).send('Trip not found');
             return;
         }
 
         const t_trip_select = {
-            culture : viaje.t_trip === 'Culture',
-            adventure : viaje.t_trip === 'Adventure',
-            relax : viaje.t_trip === 'Relax'
+            culture : trip.t_trip === 'Culture',
+            adventure : trip.t_trip === 'Adventure',
+            relax : trip.t_trip === 'Relax'
         };
         res.render('new_travel', {
             pageTitle: 'Edit Trip',
             isEditing: true,
             tripId: tripId,
-            formData: viaje,
+            formData: trip,
             t_trip: t_trip_select,
             errors: []
         });
@@ -312,7 +312,6 @@ router.get('/edit/trip/:id', async (req, res) => {
     }
 });
 
-// Ruta POST /edit corregida para manejar borrado de imagen y respuesta JSON
 router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     const tripId = req.params.id;
     const formData = req.body;
