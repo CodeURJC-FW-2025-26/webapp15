@@ -95,72 +95,38 @@ async function seedDatabase() {
 
 
 
-async function sincronizarJson() {
-    try {
-        
-        const allTrips = await trips.find({}).toArray();
-        
-        const allActivities = await activities.find({}).toArray();
 
-        
-        const dataToSave = allTrips.map(trip => {
-            
-            const tripActivities = allActivities.filter(act => act.tripId === trip._id.toString());
-            
-            
-            const cleanedActivities = tripActivities.map(({ tripId, ...rest }) => rest);
-
-            return {
-                ...trip,
-                activities: cleanedActivities
-            };
-        });
-
-
-        await fs.writeFile(jsonFilePath, JSON.stringify(dataToSave, null, 2));
-        console.log("💾 data.json sincronizado con los cambios recientes de MongoDB.");
-
-    } catch (error) {
-        console.error("⚠️ Error actualizando data.json:", error);
-    }
-}
 
 
 
 export async function addTrip(trip) {
     const result = await trips.insertOne(trip);
-    await sincronizarJson(); 
     return result;
 }
 
 export async function addActivity(activity) {
     const result = await activities.insertOne(activity);
-    await sincronizarJson(); 
     return result;
 }
 
 export async function updateTrip(id, updatedFields) { 
     const result = await trips.updateOne({ _id: new ObjectId(id) }, { $set: updatedFields });
-    await sincronizarJson(); 
     return result;
 }
 
 export async function deleteTrip(id) {
     const result = await trips.deleteOne({ _id: new ObjectId(id) });
     await activities.deleteMany({ tripId: id });
-    await sincronizarJson(); 
     return result;
 }
 
 export async function updateActivity(id, updatedFields) { 
     const result = await activities.updateOne({ _id: new ObjectId(id) }, { $set: updatedFields });
-    await sincronizarJson(); 
     return result;
 }
 
 export async function deleteActivity(id) { 
     const result = await activities.deleteOne({ _id: new ObjectId(id) });
-    await sincronizarJson(); 
     return result;
 }
 
