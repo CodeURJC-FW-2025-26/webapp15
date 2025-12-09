@@ -23,6 +23,28 @@ const upload = multer({ storage: storage });
 
 export const router = express.Router();
 
+//API Routes
+router.get('/api/check-trip-name', async (req, res) => {
+    try {
+        const { name, excludeId } = req.query;
+        if (!name) return res.json({ exists: false });
+
+        const trip = await db.getTripByName(name);
+        
+        if (trip) {
+            if (excludeId && trip._id.toString() === excludeId) {
+                return res.json({ exists: false });
+            }
+            return res.json({ exists: true });
+        }
+        
+        res.json({ exists: false });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error checking name' });
+    }
+});
+
+
 // infinite scroll
 router.get('/api/trips', async (req, res) => {
     try {
@@ -124,10 +146,10 @@ router.get('/new', (req, res) => {
 
 
 router.post('/new', upload.single('image'), async (req, res) => {
+   
     const formData = req.body;
     const errors = [];
 
-    
     if (!formData.name) errors.push('The name (Main city) is obligatory.');
     if (!formData.description) errors.push('The description is obligatory.');
     if (!formData.duration) errors.push('The duration is obligatory.');
@@ -142,11 +164,16 @@ router.post('/new', upload.single('image'), async (req, res) => {
         errors.push('The name must contain at least 3 valid characters.');
     }
     
-    
     if (formData.name) {
-        const existingTrip = await db.getTripByName(formData.name);
-        if (existingTrip) {
-            errors.push('THere is a trip with the same name.');
+        try {
+            const existingTrip = await db.getTripByName(formData.name);
+            if (existingTrip) {
+                console.log(`⚠️ VALIDACIÓN FALLIDA: Ya existe un viaje llamado "${formData.name}"`);
+                errors.push('There is a trip with the same name.');
+            }
+        } catch (dbError) {
+            console.error("🔴 Error consultando la base de datos:", dbError);
+            errors.push('Database error checking name.');
         }
     }
 
@@ -157,30 +184,21 @@ router.post('/new', upload.single('image'), async (req, res) => {
     if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
         errors.push('The duration might be between 1 y 100 days.');
     }
+    
     if (formData.price && parseInt(formData.price, 10) < 0) {
         errors.push('The price might be positive.');
     }
+    
     if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
         errors.push('There may at least 1 person.');
     }
 
-    
     if (errors.length > 0) {
-        
-        const t_trip_select = {
-            adventure: formData.t_trip === 'Adventure',
-            culture: formData.t_trip === 'Culture',
-            relax: formData.t_trip === 'Relax'
-        };
-
-        res.render('confirmation_page', {
-            pageTitle: 'Validation Errors',
-            message: errors.join('. '),
-        });
+        console.log("❌ SE ENCONTRARON ERRORES DE VALIDACIÓN:");
+        console.log(errors);
+        return res.status(400).json({ success: false, errors: errors });
     } else {
-        
         try {
-            
             const imageName = req.file ? req.file.filename : 'default.jpg';
 
             const newTrip = {
@@ -190,28 +208,23 @@ router.post('/new', upload.single('image'), async (req, res) => {
                 image: imageName,
                 price: parseFloat(formData.price),
                 t_trip: formData.t_trip,
-                
                 flight: formData.flight === 'on',
                 national: formData.national === 'on',
                 max_travellers: parseInt(formData.max_travellers, 10)
             };
 
+            console.log("💾 Guardando en base de datos el objeto:", newTrip);
             const result = await db.addTrip(newTrip);
+            console.log("✅ VIAJE CREADO CON ÉXITO. ID:", result.insertedId);
             
-            res.render('confirmation_page', { 
-                pageTitle: 'Trip Created!',
-                message : `The trip "${newTrip.name}" has been created successfully.`,
-                returnLink: `/trip/${result.insertedId}`,
-                newId: result.insertedId
+            res.json({ 
+                success: true, 
+                redirectUrl: `/trip/${result.insertedId}` 
             });
 
         } catch (error) {
-            console.error("Fail saving the trip:", error);
-            res.status(500).render('confirmation_page', {
-                pageTitle: 'Error',
-                message: 'Fail saving the trip.',
-                ifError: true
-            });
+            console.error("🔴 ERROR CRÍTICO AL GUARDAR (CATCH):", error);
+            res.status(500).json({ success: false, errors: ['Internal Server Error saving trip: ' + error.message] });
         }
     }
 });
@@ -315,6 +328,7 @@ router.get('/edit/trip/:id', async (req, res) => {
 });
 router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     const tripId = req.params.id;
+
     const formData = req.body;
     const errors = [];
 
@@ -327,16 +341,23 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
 
     if (formData.name && !/^[A-Z]/.test(formData.name)) {
         errors.push('The name may start with capital letters');
-    }   
-    if (formData.name) {
-        const existingTrip = await db.getTripByName(formData.name);
-        if (existingTrip && existingTrip._id.toString() !== tripId ) {
-            errors.push('There is a trip with the same name.');
-        }
     }
     if (formData.name && formData.name.trim().length < 3) {
         errors.push('The name must contain at least 3 valid characters.');
     }
+
+    if (formData.name) {
+        try {
+            const existingTrip = await db.getTripByName(formData.name);
+            if (existingTrip && existingTrip._id.toString() !== tripId) {
+                console.log(`⚠️ Conflicto: Ya existe otro viaje llamado "${formData.name}"`);
+                errors.push('There is a trip with the same name.');
+            }
+        } catch (dbError) {
+            console.error("🔴 Error DB al comprobar nombre:", dbError);
+        }
+    }
+
     if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
         errors.push('The description might be between 10 and 200 characters.');
     }
@@ -349,18 +370,35 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
         errors.push('It may be at least 1 person.');
     }
+
     if (errors.length > 0) {
-        res.render('confirmation_page', {
-            pageTitle: 'Validation Errors',
-            message: errors.join('. '),
-        });
+        return res.status(400).json({ success: false, errors: errors });
     } else {
         try {
             const oldTrip = await db.getTrip(tripId);
-            let imageName = oldTrip.image;
-            if (req.file) {
-                imageName = req.file.filename;
+            if (!oldTrip) {
+                return res.status(404).json({ success: false, errors: ['Trip not found'] });
             }
+
+            let imageName = oldTrip.image; 
+
+            const isReplacing = !!req.file;
+            const isRemoving = formData.remove_image === 'true';
+
+            if ((isReplacing || isRemoving) && oldTrip.image && oldTrip.image !== 'default.jpg') {
+                const oldImagePath = path.join(uploadDir, oldTrip.image);
+                try {
+                    await fs.unlink(oldImagePath);
+                } catch (err) {
+                }
+            }
+
+            if (isReplacing) {
+                imageName = req.file.filename;
+            } else if (isRemoving) {
+                imageName = 'default.jpg';
+            }
+
             const updatedTrip = {
                 name: formData.name,
                 description: formData.description,
@@ -372,21 +410,18 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
                 national: formData.national === 'on',
                 max_travellers: parseInt(formData.max_travellers, 10)
             };
-            await db.updateTrip(tripId, updatedTrip);
 
-            res.render('confirmation_page', {
-                pageTitle: 'Trip Updated!',
-                message : `The trip ${updatedTrip.name} has been updated successfully.`,
-                newId: tripId,
-                returnLink: `/trip/${tripId}`
+            await db.updateTrip(tripId, updatedTrip);
+            console.log("✅ VIAJE ACTUALIZADO CORRECTAMENTE");
+
+            res.json({ 
+                success: true, 
+                redirectUrl: `/trip/${tripId}` 
             });
+
         } catch (error) {
-            console.error("Error updating trip:", error);
-            res.status(500).render('confirmation_page', {
-                pageTitle: 'Error',
-                message: 'Internal error updating trip.',
-                ifError: true
-            });
+            console.error("🔴 Error crítico editando viaje:", error);
+            res.status(500).json({ success: false, errors: ['Internal error updating trip'] });
         }
     }
 });
