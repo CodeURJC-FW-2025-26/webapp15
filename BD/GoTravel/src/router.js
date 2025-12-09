@@ -282,23 +282,23 @@ router.post('/delete/trip/:id', async (req, res) => {
 router.get('/edit/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
-        const trip = await db.getTrip(tripId);
+        const viaje = await db.getTrip(tripId);
 
-        if (!trip) {
+        if (!viaje) {
             res.status(404).send('Trip not found');
             return;
         }
 
         const t_trip_select = {
-            culture : trip.t_trip === 'Culture',
-            adventure : trip.t_trip === 'Adventure',
-            relax : trip.t_trip === 'Relax'
+            culture : viaje.t_trip === 'Culture',
+            adventure : viaje.t_trip === 'Adventure',
+            relax : viaje.t_trip === 'Relax'
         };
         res.render('new_travel', {
             pageTitle: 'Edit Trip',
             isEditing: true,
             tripId: tripId,
-            formData: trip,
+            formData: viaje,
             t_trip: t_trip_select,
             errors: []
         });
