@@ -15,7 +15,7 @@ const projectRoot = path.join(__dirname, '..');
 
 
 const UploadDir = path.join(projectRoot, 'uploads');
-if (!fs.existsSync(UploadDir)) {
+if (!fs.existsSync(UploadDir)) {s
     fs.mkdirSync(UploadDir);
     console.log(`Created uploads directory at ${UploadDir}`);
 }

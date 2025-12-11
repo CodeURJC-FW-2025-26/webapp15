@@ -32,9 +32,7 @@
             
             <a href="/edit/trip/{{trip._id}}" class="button btn btn-dark btn-lg">Edit the trip</a>
             
-            <form action="/delete/trip/{{trip._id}}" method="POST" style="display:inline;">
-    <button type="submit" class="btn btn-danger btn-lg">Delete the trip</button>
-        </form>
+            <button id="btnDelete" data-id="{{trip._id}}" class="btn btn-danger btn-lg">Delete the trip</button>
         </div>
     </div>
 

@@ -3,11 +3,8 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-
 const jsonFilePath = path.join(__dirname, '..', 'data', 'data.json');
 const imagesSourceDir = path.join(__dirname, '..', 'data', 'images');
 const uploadsDir = path.join(__dirname, '..', 'uploads');
@@ -92,11 +89,6 @@ async function seedDatabase() {
         console.error("Error cargando los datos iniciales:", error);
     }
 }
-
-
-
-
-
 
 
 export async function addTrip(trip) {
