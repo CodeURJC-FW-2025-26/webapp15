@@ -113,7 +113,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this trip? This action cannot be undone.
+                Do you want to delete this trip?.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -147,7 +147,7 @@
                 const idViaje = tripIdToDelete;
 
                 if (!idViaje) {
-                    alert("Error: Trip ID not found. Cannot proceed with deletion.");
+                    alert("This trip does not exist.");
                     
                     const modalInstance = bootstrap.Modal.getInstance(document.getElementById('deleteTripModal'));
                     if (modalInstance) modalInstance.hide();
