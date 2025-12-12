@@ -256,8 +256,8 @@ router.get('/trip/:id', async (req, res) => {
 });
 
 
-// delete trip 
-router.post('/delete/trip/:id', async (req, res) => {
+
+router.delete('/delete/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
 
@@ -276,19 +276,16 @@ router.post('/delete/trip/:id', async (req, res) => {
         
         await db.deleteTrip(tripId); 
 
-        
-        res.render('confirmation_page', { 
-            pageTitle: 'Trip Deleted',
-            message : `The trip ${trip.name} has been deleted successfully.`,
-            returnLink: '/',
+        res.json({ 
+            success: true, 
+            message: `The trip ${trip ? trip.name : ''} has been deleted successfully.`
         });
 
     } catch (error) {
         console.error("Fail deleting the trip:", error);
-        res.status(500).render('confirmation_page', {
-            pageTitle: 'Error',
-            message: 'Internal error loading the trip.',
-            ifError: true
+        res.status(500).json({
+            success: false,
+            message: 'Internal error deleting the trip.'
         });
     }
 });
