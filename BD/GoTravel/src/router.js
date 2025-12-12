@@ -23,7 +23,7 @@ const upload = multer({ storage: storage });
 
 export const router = express.Router();
 
-//API Routes
+// --- API Routes ---
 router.get('/api/check-trip-name', async (req, res) => {
     try {
         const { name, excludeId } = req.query;
@@ -44,8 +44,6 @@ router.get('/api/check-trip-name', async (req, res) => {
     }
 });
 
-
-// infinite scroll
 router.get('/api/trips', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -66,7 +64,6 @@ router.get('/api/trips', async (req, res) => {
         const viajes = await db.getTrips(filtro, skip, limit);
         const totalItems = await db.countTrips(filtro);
         const totalPages = Math.ceil(totalItems / limit);
-
         
         res.json({
             trips: viajes,
@@ -79,11 +76,11 @@ router.get('/api/trips', async (req, res) => {
     }
 });
 
+// --- Page Routes ---
 
-
+// Main Page
 router.get('/', async (req, res) => {
     try {
-        // first paint of six elements
         const page = parseInt(req.query.page) || 1;
         const limit = 6;
         const skip = (page - 1) * limit;
@@ -101,7 +98,6 @@ router.get('/', async (req, res) => {
         
         const viajes = await db.getTrips(filtro, skip, limit);
         
-        // filtering of the buttons
         const isCategoryActive = {
             Adventure: category === 'Adventure',
             Culture: category === 'Culture',
@@ -130,13 +126,12 @@ router.get('/', async (req, res) => {
     }
 });
 
-
+// New Trip Form
 router.get('/new', (req, res) => {
     res.render('new_travel', {
         pageTitle: 'Add New Trip',
         isEditing: false,
         formData: {
-            
             name: '', description: '', duration: '', price: '', max_travellers: '',
             flight: false, national: false
         },
@@ -144,21 +139,20 @@ router.get('/new', (req, res) => {
     });
 });
 
-
+// Create New Trip
 router.post('/new', upload.single('image'), async (req, res) => {
-   
     const formData = req.body;
     const errors = [];
 
-    if (!formData.name) errors.push('The name (Main city) is obligatory.');
-    if (!formData.description) errors.push('The description is obligatory.');
-    if (!formData.duration) errors.push('The duration is obligatory.');
-    if (!formData.price) errors.push('The price is obligatory.');
-    if (!formData.t_trip) errors.push('The type of trip is obligatory');
-    if (!formData.max_travellers) errors.push('The number of people is obligatory.');
+    if (!formData.name) errors.push('The name (Main city) is required.');
+    if (!formData.description) errors.push('The description is required.');
+    if (!formData.duration) errors.push('The duration is required.');
+    if (!formData.price) errors.push('The price is required.');
+    if (!formData.t_trip) errors.push('The type of trip is required.');
+    if (!formData.max_travellers) errors.push('The number of travellers is required.');
     
     if (formData.name && !/^[A-Z]/.test(formData.name)) {
-        errors.push('The name may start whith capital leters.');
+        errors.push('The name must start with capital letters.');
     }
     if (formData.name && formData.name.trim().length < 3) {
         errors.push('The name must contain at least 3 valid characters.');
@@ -168,34 +162,27 @@ router.post('/new', upload.single('image'), async (req, res) => {
         try {
             const existingTrip = await db.getTripByName(formData.name);
             if (existingTrip) {
-                console.log(`⚠️ VALIDACIÓN FALLIDA: Ya existe un viaje llamado "${formData.name}"`);
-                errors.push('There is a trip with the same name.');
+                errors.push('There is already a trip with this name.');
             }
         } catch (dbError) {
-            console.error("🔴 Error consultando la base de datos:", dbError);
             errors.push('Database error checking name.');
         }
     }
 
     if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
-        errors.push('The description might be between 10 and 200 characters.');
+        errors.push('The description must be between 10 and 200 characters.');
     }
-
     if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
-        errors.push('The duration might be between 1 y 100 days.');
+        errors.push('The duration must be between 1 and 100 days.');
     }
-    
     if (formData.price && parseInt(formData.price, 10) < 0) {
-        errors.push('The price might be positive.');
+        errors.push('The price must be positive.');
     }
-    
     if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
-        errors.push('There may at least 1 person.');
+        errors.push('There must be at least 1 person.');
     }
 
     if (errors.length > 0) {
-        console.log("❌ SE ENCONTRARON ERRORES DE VALIDACIÓN:");
-        console.log(errors);
         return res.status(400).json({ success: false, errors: errors });
     } else {
         try {
@@ -213,9 +200,7 @@ router.post('/new', upload.single('image'), async (req, res) => {
                 max_travellers: parseInt(formData.max_travellers, 10)
             };
 
-            console.log("💾 Guardando en base de datos el objeto:", newTrip);
             const result = await db.addTrip(newTrip);
-            console.log("✅ VIAJE CREADO CON ÉXITO. ID:", result.insertedId);
             
             res.json({ 
                 success: true, 
@@ -223,13 +208,13 @@ router.post('/new', upload.single('image'), async (req, res) => {
             });
 
         } catch (error) {
-            console.error("🔴 ERROR CRÍTICO AL GUARDAR (CATCH):", error);
+            console.error("Error saving trip:", error);
             res.status(500).json({ success: false, errors: ['Internal Server Error saving trip: ' + error.message] });
         }
     }
 });
 
-
+// Trip Details
 router.get('/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -249,48 +234,55 @@ router.get('/trip/:id', async (req, res) => {
         console.error("Fail loading the detail page:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
-            message: 'Fail loading the deail page.',
+            message: 'Fail loading the detail page.',
             ifError: true
         });
     }
 });
 
-
-
 router.delete('/delete/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
-
         const trip = await db.getTrip(tripId); 
 
+       
+        if (!trip) {
+            return res.status(404).json({
+                success: false,
+                message: 'Trip not found.' 
+            });
+        }
+
+       
         if (trip && trip.image && trip.image !== 'default.jpg') {
             const imagePath = path.join(uploadDir, trip.image);
-            
             try {
+                
                 await fs.unlink(imagePath);
-                console.log("Image deleted: ", imagePath);
             } catch (err) {
                 console.error("Error deleting image file:", err);
             }
         }
         
+       
         await db.deleteTrip(tripId); 
 
         res.json({ 
             success: true, 
-            message: `The trip ${trip ? trip.name : ''} has been deleted successfully.`
+            
+            message: `The trip ${trip.name} has been deleted successfully.`
         });
 
     } catch (error) {
         console.error("Fail deleting the trip:", error);
         res.status(500).json({
             success: false,
+         
             message: 'Internal error deleting the trip.'
         });
     }
 });
-
-// Edit trip routes 
+// Edit Trip (GET)
 router.get('/edit/trip/:id', async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -315,7 +307,6 @@ router.get('/edit/trip/:id', async (req, res) => {
             errors: []
         });
     } catch (error) {
-        console.error("Error loading edit trip page:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
             message: 'Internal error loading edit trip page.',
@@ -323,13 +314,14 @@ router.get('/edit/trip/:id', async (req, res) => {
         });
     }
 });
+
+// Edit Trip (POST)
 router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     const tripId = req.params.id;
-
     const formData = req.body;
     const errors = [];
 
-    if (!formData.name) errors.push('The name (Main city) is required.');
+    if (!formData.name) errors.push('The name is required.');
     if (!formData.description) errors.push('The description is required.');
     if (!formData.duration) errors.push('The duration is required.');
     if (!formData.price) errors.push('The price is required.');
@@ -347,25 +339,24 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
         try {
             const existingTrip = await db.getTripByName(formData.name);
             if (existingTrip && existingTrip._id.toString() !== tripId) {
-                console.log(`⚠️ Conflicto: Ya existe otro viaje llamado "${formData.name}"`);
-                errors.push('There is a trip with the same name.');
+                errors.push('There is already another trip with this name.');
             }
         } catch (dbError) {
-            console.error("🔴 Error DB al comprobar nombre:", dbError);
+            console.error("DB Error checking name:", dbError);
         }
     }
 
     if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
-        errors.push('The description might be between 10 and 200 characters.');
+        errors.push('The description must be between 10 and 200 characters.');
     }
     if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
-        errors.push('The duration may be between 1 and 100 days.');
+        errors.push('The duration must be between 1 and 100 days.');
     }
     if (formData.price && parseInt(formData.price, 10) < 0) {
-        errors.push('The price cant be negative.');
+        errors.push('The price cannot be negative.');
     }
     if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
-        errors.push('It may be at least 1 person.');
+        errors.push('There must be at least 1 person.');
     }
 
     if (errors.length > 0) {
@@ -378,7 +369,6 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
             }
 
             let imageName = oldTrip.image; 
-
             const isReplacing = !!req.file;
             const isRemoving = formData.remove_image === 'true';
 
@@ -386,8 +376,7 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
                 const oldImagePath = path.join(uploadDir, oldTrip.image);
                 try {
                     await fs.unlink(oldImagePath);
-                } catch (err) {
-                }
+                } catch (err) {}
             }
 
             if (isReplacing) {
@@ -409,25 +398,24 @@ router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
             };
 
             await db.updateTrip(tripId, updatedTrip);
-            console.log("✅ VIAJE ACTUALIZADO CORRECTAMENTE");
-
+            
             res.json({ 
                 success: true, 
                 redirectUrl: `/trip/${tripId}` 
             });
 
         } catch (error) {
-            console.error("🔴 Error crítico editando viaje:", error);
             res.status(500).json({ success: false, errors: ['Internal error updating trip'] });
         }
     }
 });
 
-// add activity
+// Add Activity
 router.post('/add-activity/:tripId', async (req, res) => {
         const tripId = req.params.tripId;
         const formData = req.body;
         const errors = [];
+        
         if (!formData.name || formData.name.trim() === '') {
             errors.push('The name of the activity is required.');
         }
@@ -449,14 +437,10 @@ router.post('/add-activity/:tripId', async (req, res) => {
             }
         } catch (error) {
             errors.push('Error checking existing activity.');
-            console.error("Error checking existing activity:", error);
         }
 
         if (errors.length > 0) {
             try {
-                const viaje = await db.getTrip(tripId);
-                const actividades = await db.getActivitiesByTripId(tripId);
-
                 res.render('confirmation_page', {
                     pageTitle: 'Validation Errors',
                     message: errors.join('. '),
@@ -486,7 +470,6 @@ router.post('/add-activity/:tripId', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Fail at adding activity:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
             message: 'Fail at adding activity.',
@@ -495,7 +478,7 @@ router.post('/add-activity/:tripId', async (req, res) => {
     }
 });
 
-// eliminate activity
+// Delete Activity
 router.post('/delete/activity/:id', async (req, res) => {
     try {
         const activityId = req.params.id;
@@ -511,7 +494,6 @@ router.post('/delete/activity/:id', async (req, res) => {
             returnLink: `/trip/${activity.tripId}`
         });
     } catch (error) {
-        console.error("Error deleting activity:", error);
         res.status(500).render('confirmation_page', {
             pageTitle: 'Error',
             message: 'Internal error deleting activity.',
@@ -520,6 +502,7 @@ router.post('/delete/activity/:id', async (req, res) => {
     }
 });
 
+// Edit Activity (GET)
 router.get('/edit/activity/:id', async (req, res) => {
     try {
         const activity = await db.getActivity(req.params.id);
@@ -538,23 +521,17 @@ router.get('/edit/activity/:id', async (req, res) => {
         res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading activity edit page.', ifError: true });
     }
 });
+
+// Edit Activity (POST)
 router.post('/edit/activity/:id', async (req, res) => {
     const activityId = req.params.id;
     const formData = req.body;
     const errors = [];
 
-    if (!formData.name || formData.name.trim() === '') {
-        errors.push('The name of the activity is required.');
-    }
-    if (!formData.duration) {
-        errors.push('The duration of the activity is required.');
-    }
-    if (!formData.price) {
-        errors.push('The price of the activity is required.');
-    }
-    if (!formData.description || formData.description.trim() === '') {
-        errors.push('The description of the activity is required.');
-    }
+    if (!formData.name || formData.name.trim() === '') errors.push('The name is required.');
+    if (!formData.duration) errors.push('The duration is required.');
+    if (!formData.price) errors.push('The price is required.');
+    if (!formData.description || formData.description.trim() === '') errors.push('The description is required.');
 
     if (errors.length > 0) {
         try {
@@ -569,7 +546,7 @@ router.post('/edit/activity/:id', async (req, res) => {
                 errors: errors
             });
         } catch (error) {
-            return res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading activity edit page.', ifError: true } );
+            return res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading edit page.', ifError: true } );
         }
     }
 
@@ -600,18 +577,15 @@ router.get('/trip/:id/image', async (req, res) => {
         const trip = await db.getTrip(req.params.id);
         if (trip && trip.image) {
             const imagePath = path.join(uploadDir, trip.image);
-
             res.sendFile(imagePath, (err) => {
                 if (err) {
-                    console.error("Error sending image file:", err.message);
                     res.status(404).send('Image not found on disk');
                 }
             });
         } else {
-            res.status(404).send('Image not found on the database');
+            res.status(404).send('Image not found on database');
         }
     } catch (error) {
-        console.error("Error retrieving trip image:", error);
         res.status(500).send('Internal server error');
     }
 });
