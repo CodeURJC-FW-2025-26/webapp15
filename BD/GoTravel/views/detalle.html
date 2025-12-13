@@ -28,7 +28,7 @@
                     data-id="{{trip._id}}" 
                     class="btn btn-danger btn-lg" 
                     data-bs-toggle="modal" 
-                    data-bs-target="#deleteTripModal">
+                    data-bs-target="#deleteEntities">
                 Delete the trip
             </button>
         </div>
@@ -47,9 +47,15 @@
                 </ol>
                 <p class="item">{{description}}</p>
                 <div class="d-flex justify-content-center">
-                    <a href="/edit/activity/{{_id}}" class="button button2 btn btn-dark me-2">Edit the activity</a>
+                    <a href="/edit/activity/{{_id}}" class="btn btn-danger btn-lg">Edit the activity</a>
                     <form action="/delete/activity/{{_id}}" method="POST" style="display: inline;">
-                        <button type="submit" class="button button2 btn btn-dark">Delete the activity</button>
+                        <button id="btnDeleteTrigger" 
+                    data-id="{{activity._id}}" 
+                    class="btn btn-danger btn-lg" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#deleteEntities">
+                Delete the trip
+            </button>
                     </form>
                 </div>
             </div>
@@ -105,11 +111,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="deleteTripModal" tabindex="-1" aria-labelledby="deleteTripModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteTripModal" tabindex="-1" aria-labelledby="DeleteEntities" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="deleteTripModalLabel">Confirm Deletion</h5>
+                <h5 class="modal-title" id="DeleteEntities">Confirm Deletion</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
