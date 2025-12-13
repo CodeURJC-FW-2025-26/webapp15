@@ -4,6 +4,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises'; 
+import e from 'express';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +21,60 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+async function validateTripForm(formData, tripToExclude = null) {
+    const errors = [];
+    // Validation logic here...
+    if (!formData.name) errors.push('Name is required.');
+    if (!formData.description) errors.push('Description is required.');
+    if (!formData.duration) errors.push('Duration is required.');
+    if (!formData.price) errors.push('Price is required.');
+    if (!formData.t_trip) errors.push('Type of trip is required.');
+    if (!formData.max_travellers) errors.push('Max travellers is required.');
+
+    if (formData.name && !/^[A-Z]/.test(formData.name)) {
+        errors.push('The name must start with capital letters.');
+    }
+    if (formData.name && formData.name.trim().length < 3) {
+        errors.push('The name must contain at least 3 valid characters.');
+    }
+    if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
+        errors.push('The description must be between 10 and 200 characters.');
+    }
+    if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
+        errors.push('The duration must be between 1 and 100 days.');
+    }
+    if (formData.price && parseInt(formData.price, 10) < 0) {
+        errors.push('The price must be positive.');
+    }
+    if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
+        errors.push('There must be at least 1 person.');
+    }
+
+    if (formData.name) {
+        try {
+            const existingTrip = await db.getTripByName(formData.name);
+            if (existingTrip) {
+                if (!tripToExclude || existingTrip._id.toString() !== tripToExclude) {
+                    errors.push('There is already a trip with this name.');
+                }
+            }
+        } catch (dbError) {
+            errors.push('Database error checking name.');
+        }
+    }
+    return errors;
+}
+async function deleteImageFile(imageName) {
+    if (imageName && imageName !== 'default.jpg') {
+        const imagePath = path.join(uploadDir, imageName);
+        try {
+            await fs.unlink(imagePath);
+        } catch (err) {
+            console.error("Error deleting image file:", err);
+        }   
+    }
+}
 
 export const router = express.Router();
 
@@ -142,46 +197,7 @@ router.get('/new', (req, res) => {
 // Create New Trip
 router.post('/new', upload.single('image'), async (req, res) => {
     const formData = req.body;
-    const errors = [];
-
-    if (!formData.name) errors.push('The name (Main city) is required.');
-    if (!formData.description) errors.push('The description is required.');
-    if (!formData.duration) errors.push('The duration is required.');
-    if (!formData.price) errors.push('The price is required.');
-    if (!formData.t_trip) errors.push('The type of trip is required.');
-    if (!formData.max_travellers) errors.push('The number of travellers is required.');
-    
-    if (formData.name && !/^[A-Z]/.test(formData.name)) {
-        errors.push('The name must start with capital letters.');
-    }
-    if (formData.name && formData.name.trim().length < 3) {
-        errors.push('The name must contain at least 3 valid characters.');
-    }
-    
-    if (formData.name) {
-        try {
-            const existingTrip = await db.getTripByName(formData.name);
-            if (existingTrip) {
-                errors.push('There is already a trip with this name.');
-            }
-        } catch (dbError) {
-            errors.push('Database error checking name.');
-        }
-    }
-
-    if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
-        errors.push('The description must be between 10 and 200 characters.');
-    }
-    if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
-        errors.push('The duration must be between 1 and 100 days.');
-    }
-    if (formData.price && parseInt(formData.price, 10) < 0) {
-        errors.push('The price must be positive.');
-    }
-    if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
-        errors.push('There must be at least 1 person.');
-    }
-
+    const errors = await validateTripForm(formData);
     if (errors.length > 0) {
         return res.status(400).json({ success: false, errors: errors });
     } else {
@@ -252,19 +268,7 @@ router.delete('/delete/trip/:id', async (req, res) => {
                 message: 'Trip not found.' 
             });
         }
-
-       
-        if (trip && trip.image && trip.image !== 'default.jpg') {
-            const imagePath = path.join(uploadDir, trip.image);
-            try {
-                
-                await fs.unlink(imagePath);
-            } catch (err) {
-                console.error("Error deleting image file:", err);
-            }
-        }
-        
-       
+        await deleteImageFile(trip.image);
         await db.deleteTrip(tripId); 
 
         res.json({ 
@@ -319,46 +323,7 @@ router.get('/edit/trip/:id', async (req, res) => {
 router.post('/edit/trip/:id', upload.single('image'), async (req, res) => {
     const tripId = req.params.id;
     const formData = req.body;
-    const errors = [];
-
-    if (!formData.name) errors.push('The name is required.');
-    if (!formData.description) errors.push('The description is required.');
-    if (!formData.duration) errors.push('The duration is required.');
-    if (!formData.price) errors.push('The price is required.');
-    if (!formData.t_trip) errors.push('The type of trip is required.');
-    if (!formData.max_travellers) errors.push('The amount of travellers is required.');
-
-    if (formData.name && !/^[A-Z]/.test(formData.name)) {
-        errors.push('The name may start with capital letters');
-    }
-    if (formData.name && formData.name.trim().length < 3) {
-        errors.push('The name must contain at least 3 valid characters.');
-    }
-
-    if (formData.name) {
-        try {
-            const existingTrip = await db.getTripByName(formData.name);
-            if (existingTrip && existingTrip._id.toString() !== tripId) {
-                errors.push('There is already another trip with this name.');
-            }
-        } catch (dbError) {
-            console.error("DB Error checking name:", dbError);
-        }
-    }
-
-    if (formData.description && (formData.description.length < 10 || formData.description.length > 200)) {
-        errors.push('The description must be between 10 and 200 characters.');
-    }
-    if (formData.duration && (parseInt(formData.duration, 10) < 1 || parseInt(formData.duration, 10) > 100)) {
-        errors.push('The duration must be between 1 and 100 days.');
-    }
-    if (formData.price && parseInt(formData.price, 10) < 0) {
-        errors.push('The price cannot be negative.');
-    }
-    if (formData.max_travellers && parseInt(formData.max_travellers, 10) < 1) {
-        errors.push('There must be at least 1 person.');
-    }
-
+    const errors = await validateTripForm(formData, tripId);
     if (errors.length > 0) {
         return res.status(400).json({ success: false, errors: errors });
     } else {

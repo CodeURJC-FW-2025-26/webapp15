@@ -103,9 +103,9 @@
                 <label for="t_trip" class="form-label">Type of trip:</label>
                 <select class="form-select" id="t_trip" name="t_trip" required>
                     <option value="">Select a type</option>
-                    <option value="Adventure" {{#formData.t_trip.adventure}}selected{{/formData.t_trip.adventure}}>Adventure</option>
-                    <option value="Culture" {{#formData.t_trip.culture}}selected{{/formData.t_trip.culture}}>Culture</option>
-                    <option value="Relax" {{#formData.t_trip.relax}}selected{{/formData.t_trip.relax}}>Relax</option>
+                    <option value="Adventure" {{#t_trip.adventure}}selected{{/t_trip.adventure}}>Adventure</option>
+                    <option value="Culture" {{#t_trip.culture}}selected{{/t_trip.culture}}>Culture</option>
+                    <option value="Relax" {{#t_trip.relax}}selected{{/t_trip.relax}}>Relax</option>
                 </select>
                 <div class="invalid-feedback">Please select a type of trip.</div>
             </div>
