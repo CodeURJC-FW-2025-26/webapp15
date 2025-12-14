@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -49,6 +49,10 @@ async function loadData() {
             // Separamos las actividades del resto de datos del viaje
             const { activities, ...tripData } = item;
 
+            if (tripData._id) {
+                tripData._id = new ObjectId(tripData._id);
+            }
+
             // Insertar Viaje
             const result = await tripsCollection.insertOne(tripData);
             const newTripId = result.insertedId;
@@ -57,6 +61,7 @@ async function loadData() {
             if (activities && activities.length > 0) {
                 const activitiesWithId = activities.map(act => ({
                     ...act,
+                    _id: new ObjectId(act._id),
                     tripId: newTripId.toString()
                 }));
                 await activitiesCollection.insertMany(activitiesWithId);

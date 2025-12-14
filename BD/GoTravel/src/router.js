@@ -453,17 +453,9 @@ router.post('/delete/activity/:id', async (req, res) => {
         }
         await db.deleteActivity(activityId);
 
-        res.render('confirmation_page', {
-            pageTitle: 'Activity Deleted',
-            message : `The activity "${activity.name}" has been deleted successfully.`,
-            returnLink: `/trip/${activity.tripId}`
-        });
+        res.json({success: true});
     } catch (error) {
-        res.status(500).render('confirmation_page', {
-            pageTitle: 'Error',
-            message: 'Internal error deleting activity.',
-            ifError: true
-        });
+        res.status(500).json({ success: false, message: 'Internal error deleting activity.' });
     }
 });
 
@@ -488,7 +480,7 @@ router.get('/edit/activity/:id', async (req, res) => {
 });
 
 // Edit Activity (POST)
-router.post('/edit/activity/:id', async (req, res) => {
+router.post('/edit/activity/:id', express.json() ,async (req, res) => {
     const activityId = req.params.id;
     const formData = req.body;
     const errors = [];
@@ -499,20 +491,7 @@ router.post('/edit/activity/:id', async (req, res) => {
     if (!formData.description || formData.description.trim() === '') errors.push('The description is required.');
 
     if (errors.length > 0) {
-        try {
-            const activity = await db.getActivity(activityId);
-            activity.isGuideYes = (formData.guide_travel === 'YES');
-            activity.isGuideNo = (formData.guide_travel === 'NO');
-            const formWithErrors = { ...activity, ...formData };
-
-            return res.render('edit_activity', {
-                pageTitle: `Edit Activity: ${activity.name}`,
-                formData: formWithErrors,
-                errors: errors
-            });
-        } catch (error) {
-            return res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading edit page.', ifError: true } );
-        }
+        return res.status(400).json({ success: false, errors: errors });
     }
 
     try {
@@ -524,16 +503,12 @@ router.post('/edit/activity/:id', async (req, res) => {
             guide_travel: formData.guide_travel
         };
 
-        const activity = await db.getActivity(activityId);
         await db.updateActivity(activityId, updatedFields);
 
-        res.render('confirmation_page', {
-            pageTitle: 'Activity Updated!',
-            message : `The activity "${updatedFields.name}" has been updated successfully.`,
-            returnLink: `/trip/${activity.tripId}`
-        });
+        res.json({ success: true});
     } catch (error) {
-        res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error updating activity.', ifError: true } );
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal error updating activity.' });
     }
 });
 
