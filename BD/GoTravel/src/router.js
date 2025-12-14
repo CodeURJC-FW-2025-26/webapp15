@@ -24,7 +24,6 @@ const upload = multer({ storage: storage });
 
 async function validateTripForm(formData, tripToExclude = null) {
     const errors = [];
-    // Validation logic here...
     if (!formData.name) errors.push('Name is required.');
     if (!formData.description) errors.push('Description is required.');
     if (!formData.duration) errors.push('Duration is required.');

@@ -89,23 +89,19 @@
     document.addEventListener("DOMContentLoaded", function() {
         let page = 1; 
         let isLoading = false;
-        let hasMore = true; // Asumimos true al principio si hay contenido
+        let hasMore = true; 
 
-        // Leer parámetros de búsqueda actuales de la URL (si los hay)
         const urlParams = new URLSearchParams(window.location.search);
         const searchQuery = urlParams.get('searchQuery') || '';
         const category = urlParams.get('category') || '';
         
-        // Elementos del DOM
+
         const container = document.getElementById('trip-results');
         const loader = document.getElementById('loading-spinner');
         const noMoreMsg = document.getElementById('no-more-trips');
 
-        // Función que genera el HTML de una tarjeta igual que Mustache
         function createTripCard(trip) {
-            // Recortamos la descripción si es larga, igual que en CSS/Mustache
-            // (En mustache pusiste {{description}}..., aquí lo simulamos un poco si quieres, 
-            // o imprimimos el texto tal cual llega de la BD)
+
             return `
             <div class="col-lg-4 col-md-6 col-sm-12 fade-in"> 
                 <div class="card h-100 shadow-sm">
@@ -127,10 +123,10 @@
             
             isLoading = true;
             loader.style.display = 'block';
-            page++; // Pedimos la siguiente página
+            page++;
 
             try {
-                // Fetch a la nueva API
+                
                 const url = `/api/trips?page=${page}&searchQuery=${encodeURIComponent(searchQuery)}&category=${encodeURIComponent(category)}`;
                 const res = await fetch(url);
                 
@@ -153,18 +149,18 @@
 
             } catch (error) {
                 console.error('Error loading more trips:', error);
-                hasMore = false; // Evitar loops infinitos de error
+                hasMore = false; 
             } finally {
                 isLoading = false;
                 loader.style.display = 'none';
             }
         }
 
-        // Listener de Scroll
+        
         window.addEventListener('scroll', () => {
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
             
-            // Si estamos a 100px del final de la página
+            
             if (scrollTop + clientHeight >= scrollHeight - 100) {
                 loadMoreTrips();
             }
