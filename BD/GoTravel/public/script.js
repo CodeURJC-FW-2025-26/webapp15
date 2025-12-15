@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const errorModalBody = document.getElementById('errorModalBody');
 
-    const currentForm = document.querySelector('form');
-
+    const currentForm = document.querySelector('form:not(.search-form)');
+    
     const dropZone = document.getElementById('dropZone');
 
     if (dropZone) {
