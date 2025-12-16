@@ -569,5 +569,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    });         
+    });
+}        
 }); 
