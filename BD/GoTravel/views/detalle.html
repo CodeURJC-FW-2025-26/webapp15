@@ -35,7 +35,7 @@
     </div>
 
     <h2 class="mb-4 text-center">Activities</h2>
-    <div class="row g-4"> 
+    <div class="row g-4" id="activitiesContainer"> 
         {{#activities}}
         <div class="col-12 col-md-6 col-sm-2" >
             <div class="p-4 bg-white rounded shadow h-100" id="activity-card-{{_id}}">
@@ -78,21 +78,35 @@
 <div class="form-align">
     <div class="form-container">
         <h2>New activity</h2>
-        <form method="POST" action="/add-activity/{{trip._id}}">
-            <label>Name of the activity:</label>
-            <input type="text" name="name" required>
-            <label>Time span:</label>
-            <input type="number" name="duration" required>
-            <label>Fee(€):</label>
-            <input type="number" name="price" required>
-            <label>Description:</label>
-            <textarea name="description" rows="4" required></textarea>
-            <label>Guide:</label>
-            <select name="guide_travel" required>
-                <option value="YES">YES</option>
-                <option value="NO">NO</option>
-            </select>
-            <button type="submit" class="btn button btn-dark">Create</button>
+        <form id="addActivityForm" data-trip-id="{{trip._id}}" novalidate>
+            <div class="mb-3">
+                <label>Name of the activity: </label>
+                <input type="text" name="name" class="form-control" required>
+                <div class="text-danger small error-msg" style="display:none;"></div>
+            </div>
+            <div class="mb-3">
+                <label>Time span (hours): </label>
+                <input type="number" name="duration" class="form-control" min="0" required>
+                <div class="text-danger small error-msg" style="display:none;"></div>
+            </div>
+            <div class="mb-3">
+                <label>Fee(€): </label>
+                <input type="number" name="price" class="form-control" min="0" required>
+                <div class="text-danger small error-msg" style="display:none;"></div>
+            </div>
+            <div class="mb-3">
+                <label>Description: </label>
+                <textarea name="description" class="form-control" rows="4" required></textarea>
+                <div class="text-danger small error-msg" style="display:none;"></div>
+            </div>
+            <div class="mb-3">
+                <label>Guide: </label>
+                <select name="guide_travel" class="form-select" required>
+                    <option value="NO">NO</option>
+                    <option value="YES">YES</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Add Activity</button>
         </form>
     </div>
 </div>

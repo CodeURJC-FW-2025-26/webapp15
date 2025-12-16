@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises'; 
 import e from 'express';
+import { error } from 'console';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -107,16 +108,16 @@ router.get('/api/trips', async (req, res) => {
         const searchTerm = req.query.searchQuery || '';
         const category = req.query.category || '';
 
-        let filtro = {};
+        let filter = {};
         if (searchTerm) {
-            filtro.name = { $regex: new RegExp(searchTerm, 'i') };
+            filter.name = { $regex: new RegExp(searchTerm, 'i') };
         }
         if (category) {
-            filtro.t_trip = category; 
+            filter.t_trip = category; 
         }
 
-        const viajes = await db.getTrips(filtro, skip, limit);
-        const totalItems = await db.countTrips(filtro);
+        const viajes = await db.getTrips(filter, skip, limit);
+        const totalItems = await db.countTrips(filter);
         const totalPages = Math.ceil(totalItems / limit);
         
         res.json({
@@ -142,15 +143,15 @@ router.get('/', async (req, res) => {
         const searchTerm = req.query.searchQuery || '';
         const category = req.query.category || '';
 
-        let filtro = {};
+        let filter = {};
         if (searchTerm) {
-            filtro.name = { $regex: new RegExp(searchTerm, 'i') };
+            filter.name = { $regex: new RegExp(searchTerm, 'i') };
         }
         if (category) {
-            filtro.t_trip = category; 
+            filter.t_trip = category; 
         }
         
-        const viajes = await db.getTrips(filtro, skip, limit);
+        const viajes = await db.getTrips(filter, skip, limit);
         
         const isCategoryActive = {
             Adventure: category === 'Adventure',
@@ -404,16 +405,10 @@ router.post('/add-activity/:tripId', async (req, res) => {
         }
 
         if (errors.length > 0) {
-            try {
-                res.render('confirmation_page', {
-                    pageTitle: 'Validation Errors',
-                    message: errors.join('. '),
-                    ifError: true
-                });
-                    return;
-            } catch (error) {
-                return res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading trip detail page.', ifError: true } );
-            }
+            return res.status(400).json({
+                success: false,
+                message: errors.join('. ')
+            });
         }
         try {
         const newActivity = {
@@ -425,19 +420,21 @@ router.post('/add-activity/:tripId', async (req, res) => {
             guide_travel: formData.guide_travel
         };
 
-        await db.addActivity(newActivity);
+        const result = await db.addActivity(newActivity);
 
-        res.render('confirmation_page', {
-            pageTitle: 'Activity Added!',
-            message : `The activity "${newActivity.name}" has been added successfully.`,
-            returnLink: `/trip/${tripId}`
+        res.json({
+            success: true,
+            activity: {
+                ...newActivity,
+                _id: result.insertedId
+            }
         });
 
     } catch (error) {
-        res.status(500).render('confirmation_page', {
-            pageTitle: 'Error',
-            message: 'Fail at adding activity.',
-            ifError: true
+        console.error("Error adding activity:", error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal error adding activity.'
         });
     }
 });

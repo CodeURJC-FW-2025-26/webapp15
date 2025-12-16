@@ -9,7 +9,91 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const errorModalBody = document.getElementById('errorModalBody');
 
-    const currentForm = document.querySelector('form:not(.search-form)');
+    const currentForm = document.querySelector('form:not(.search-form):not(#addActivityForm)');
+
+    //Validation activities function
+    const validateActivities = (input) => {
+        const errorDiv = input.parentElement.querySelector('.error-msg');
+        let isValid = true;
+        let msg = '';
+        const val = input.value.trim();
+        const name = input.name;
+
+        //Name validation
+        if (input.name === 'name') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Name is required.';
+            }
+            else if (val[0] !== val[0].toUpperCase()) {
+                isValid = false;
+                msg = 'Start with capital letter.';
+            }
+            else if (val.length < 3) {
+                isValid = false;
+                msg = 'Min 3 chars.';
+            }
+        }
+
+        //Price validation
+        if (input.name === 'price') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Price is required.';
+            }
+            else if (parseFloat(val) <= 0) {
+                isValid = false;
+                msg = 'Price must be greater than 0.';
+            }
+        }
+
+        //Duration validation
+        if (input.name === 'duration') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Duration is required.';
+            }
+            else if (parseFloat(val) <= 0) {
+                isValid = false;
+                msg = 'Duration must be grater than 0.';
+            }
+        }
+
+        //Description validation
+        if (input.name === 'description') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Description is required.';
+            }
+            else if (val.length < 10) {
+                isValid = false;
+                msg = 'Min 10 chars.';
+            }
+            else if (val.length > 300) {
+                isValid = false;
+                msg = 'Max 300 chars.';
+            }
+            else if (val[0] !== val[0].toUpperCase()) {
+                isValid = false;
+                msg = 'Start with capital letter.';
+            }
+        }
+
+        if (errorDiv) {
+            if (!isValid) {
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+                errorDiv.innerText = msg;
+                errorDiv.style.display = 'block';
+            } else {
+                input.classList.remove('is-invalid');
+                input.classList.add('is-valid');
+                errorDiv.style.display = 'none';
+                errorDiv.innerText = '';
+            } 
+        } 
+        return isValid;
+    };
     
     const dropZone = document.getElementById('dropZone');
 
@@ -242,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnConfirmDeleteActivity.addEventListener('click', async function() {
             if (!activityIdToDelete) return;
             this.disabled = true;
+            if (loadingSpinner) loadingSpinner.style.display = 'flex';
 
             try {
                 const response = await fetch(`/delete/activity/${activityIdToDelete}`, {
@@ -250,7 +335,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const data = await response.json();
                 if (data.success) {
-                    window.location.reload();
+                    const modalEL = document.getElementById('deleteActivityModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalEL);
+                    modalInstance.hide();
+
+                    const cardToDelete = document.getElementById(`activity-card-${activityIdToDelete}`);
+                    if (cardToDelete) {
+                        cardToDelete.closest('.col-12').remove();
+                    }
                 } else {
                     alert("Error deleting activity " + (data.message || 'Unknown error'));
                 }
@@ -259,6 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Connection error trying to delete activity.");
             } finally {
                 this.disabled = false;
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
                 const modalEL = document.getElementById('deleteActivityModal');
                 if (modalEL) {
                     const modal = bootstrap.Modal.getInstance(modalEL);
@@ -358,14 +451,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalHTMl = card.innerHTML;
 
             card.innerHTML = `
-                <form id="editForm-${id}" class="h-100 d-flex flex-column">
-                    <input type="text" name="name" class="form-control mb-2" value="${name}" placeholder="Name" required>
+                <form id="editForm-${id}" class="h-100 d-flex flex-column" novalidate>
+
+                    <div class="mb-2">
+                        <input type="text" name="name" class="form-control" value="${name}" placeholder="Name" required>
+                        <div class="text-danger small error-msg" style="display:none;"></div>
+                    </div>
                     <div class="row mb-2">
                         <div class="col">
                             <input type="number" name="price" class="form-control" value="${price}" placeholder="Price" min="0" required>
+                            <div class="text-danger small error-msg" style="display:none;"></div>
                         </div>
                         <div class="col">
                             <input type="number" name="duration" class="form-control" value="${duration}" placeholder="Duration (hrs)" min="0" required>
+                            <div class="text-danger small error-msg" style="display:none;">
                         </div>
                     </div>
                     <select name="guide_travel" class="form-select mb-2">
@@ -373,6 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <option value="NO" ${guide === 'NO' ? 'selected' : ''}>Guide: NO</option>
                     </select>
                     <textarea name="description" class="form-control mb-2" rows="3" placeholder="Description" required>${description}</textarea>
+                    <div class="text-danger small error-msg" style="display:none;"></div>
 
                     <div class="mt-auto d-flex justify-content-center gap-2">
                         <button type="button" class="btn btn-secondary btn-sm btnCancelEdit">Cancel</button>
@@ -383,11 +483,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const form= document.getElementById(`editForm-${id}`);
             const cancelBtn = card.querySelector('.btnCancelEdit');
+
+            const inputs = form.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => validateActivities(input));
+                input.addEventListener('blur', () => validateActivities(input));
+            });
+
             cancelBtn.addEventListener('click', () => {
+                card.innerHTML = originalHTMl;
                 window.location.reload();
             });
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                let isFormValid = true;
+                inputs.forEach(input => {
+                    if (!validateActivities(input)) isFormValid = false;
+                });
+
+                if (!isFormValid) {
+                    e.stopPropagation();
+                    return;
+                }
 
                 const submitBtn = form.querySelector('button[type="submit"]');
                 submitBtn.disabled = true;
@@ -406,7 +524,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     const result = await response.json();
 
                     if (result.success) {
-                        window.location.reload();
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Save';
+
+                        card.innerHTML = `
+                            <h3 class="text-center">${dataToSend.name}</h3>
+                            <ol>
+                                <li><strong>Fee: </strong> $${dataToSend.price}</li>
+                                <li><strong>Duration: </strong> ${dataToSend.duration} hours</li>
+                                <li><strong>Guide: </strong> ${dataToSend.guide_travel}</li>
+                            </ol>
+                            <p class="item">${dataToSend.description}</p>
+                            <div class="d-flex justify-content-center gap-2 mt-3">
+                                <button type="button" class="btn btn-warning btn-lg btnEditActivity"
+                                    data-id="${id}" data-name="${dataToSend.name}"
+                                    data-price="${dataToSend.price}" data-duration="${dataToSend.duration}"
+                                    data-guide="${dataToSend.guide_travel}" data-description="${dataToSend.description}">
+                                    Edit Activity
+                                </button>
+                                <button type="button" class="btn btn-danger btn-lg btnOpenDeleteActivityModal"
+                                    data-id="${id}" data-bs-toggle="modal" data-bs-target="#deleteActivityModal">
+                                    Delete Activity
+                                </button>
+                            </div>
+                        `;
+                        const newEditBtn = card.querySelector('.btnEditActivity');
+                        newEditBtn.addEventListener('click', function() {
+                            alert("Activity updated. Please refresh the page to edit again.");
+                        });
+                        const newDeleteBtn = card.querySelector('.btnOpenDeleteActivityModal');
+                        newDeleteBtn.addEventListener('click', function() {
+                            activityIdToDelete = this.getAttribute('data-id');
+                        });
                     } else {
                         alert("Error updating activity: " + (result.message || 'Unknown error'));
                         submitBtn.disabled = false;
@@ -421,5 +570,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });         
-    }
-});
+}); 
