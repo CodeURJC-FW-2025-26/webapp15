@@ -12,6 +12,8 @@ const __dirname = path.dirname(__filename);
 
 const uploadDir = path.join(__dirname, '..', 'uploads');
 
+const examplesDir = path.join(__dirname, '..', 'data', 'images');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadDir);
@@ -67,11 +69,12 @@ async function validateTripForm(formData, tripToExclude = null) {
 }
 async function deleteImageFile(imageName) {
     if (imageName && imageName !== 'default.jpg') {
-        const imagePath = path.join(uploadDir, imageName);
+        const imagePath = path.join(uploadDir, imageName); 
         try {
+            await fs.access(imagePath);
             await fs.unlink(imagePath);
         } catch (err) {
-            console.error("Error deleting image file:", err);
+            console.log("Imae not found in uploads, it could be an exmple one (data).");
         }   
     }
 }
@@ -511,16 +514,24 @@ router.post('/edit/activity/:id', express.json() ,async (req, res) => {
 router.get('/trip/:id/image', async (req, res) => {
     try {
         const trip = await db.getTrip(req.params.id);
-        if (trip && trip.image) {
-            const imagePath = path.join(uploadDir, trip.image);
-            res.sendFile(imagePath, (err) => {
-                if (err) {
-                    res.status(404).send('Image not found on disk');
-                }
-            });
-        } else {
-            res.status(404).send('Image not found on database');
+        
+        if (!trip || !trip.image) {
+            return res.status(404).send('Image not set in database');
         }
+
+        const uploadPath = path.join(uploadDir, trip.image);
+        const examplePath = path.join(examplesDir, trip.image);
+
+        res.sendFile(uploadPath, (err) => {
+            if (err) {
+                res.sendFile(examplePath, (err2) => {
+                    if (err2) {
+                        res.status(404).send('Image not found in uploads or data');
+                    }
+                });
+            }
+        });
+
     } catch (error) {
         res.status(500).send('Internal server error');
     }
