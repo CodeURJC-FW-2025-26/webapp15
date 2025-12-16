@@ -25,7 +25,7 @@ let activities;
 async function initDatabase() {
     try {
         await client.connect();
-        console.log("🟢 Conectado a MongoDB");
+        console.log(" Conecting with MongoDB");
 
         db = client.db(dbName);
         trips = db.collection(tripsCollectionName);
@@ -35,14 +35,14 @@ async function initDatabase() {
         const count = await trips.countDocuments();
         
         if (count === 0) {
-            console.log("⚠️ Base de datos vacía. Ejecutando carga automática desde data.json...");
+            console.log("Empty data base. Loading from data.json...");
             await seedDatabase(); 
         } else {
-            console.log("✅ La base de datos ya tiene datos. Iniciando servidor...");
+            console.log(" Initialicing server...");
         }
 
     } catch (e) {
-        console.error("🔴 Error conectando a MongoDB:", e);
+        console.error(" Fail conecting with MongoDB:", e);
         process.exit(1);
     }
 }
@@ -74,19 +74,19 @@ async function seedDatabase() {
                 await activities.insertMany(activitiesWithId);
             }
         }
-        console.log(`📥 Datos cargados automáticamente: ${data.length} viajes.`);
+        console.log(`Info loaded: ${data.length} viajes.`);
 
         
         try {
             await fs.mkdir(uploadsDir, { recursive: true });
             await fs.cp(imagesSourceDir, uploadsDir, { recursive: true });
-            console.log("🖼️  Imágenes copiadas a uploads.");
+            console.log("Images uploaded.");
         } catch (error) {
-            console.warn("⚠️ No se pudieron copiar las imágenes.");
+            console.warn("Images not uploaded , fail.");
         }
 
     } catch (error) {
-        console.error("Error cargando los datos iniciales:", error);
+        console.error("Fail loading the example info:", error);
     }
 }
 

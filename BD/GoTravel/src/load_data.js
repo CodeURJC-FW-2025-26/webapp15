@@ -16,16 +16,16 @@ const dbName = "gotravel";
 
 async function loadData() {
     try {
-        console.log("--- INICIANDO CARGA DE DATOS ---");
+        console.log("---LOADING INFO ---");
 
         try {
             await fs.access(jsonFilePath);
         } catch (error) {
-            throw new Error(`No se encuentra el archivo en: ${jsonFilePath}`);
+            throw new Error(`File not found: ${jsonFilePath}`);
         }
 
         await client.connect();
-        console.log("Conectado a MongoDB.");
+        console.log("Conecting with MongoDB.");
         
         const db = client.db(dbName);
         const tripsCollection = db.collection('trips');
@@ -33,7 +33,7 @@ async function loadData() {
 
         await tripsCollection.deleteMany({});
         await activitiesCollection.deleteMany({});
-        console.log("Base de datos limpiada.");
+        console.log("Data base cleaned");
 
         const fileContent = await fs.readFile(jsonFilePath, 'utf-8');
         const data = JSON.parse(fileContent);
@@ -55,23 +55,23 @@ async function loadData() {
                 await activitiesCollection.insertMany(activitiesWithId);
             }
         }
-        console.log(`Datos insertados: ${data.length} viajes completados.`);
+        console.log(`Info inserted: ${data.length} travels completed.`);
 
         try {
             await fs.rm(uploadsDir, { recursive: true, force: true });
             await fs.mkdir(uploadsDir);
 
             await fs.cp(imagesSourceDir, uploadsDir, { recursive: true });
-            console.log("Imágenes copiadas a la carpeta uploads.");
+            console.log("Images loaded.");
         } catch (err) {
-            console.log("Aviso: No se pudieron copiar las imágenes (¿Existe la carpeta data/images?).");
+            console.log("It was imposible to load the imges (¿It exists data/images?).");
         }
 
     } catch (error) {
         console.error("ERROR:", error.message);
     } finally {
         await client.close();
-        console.log("--- FIN ---");
+        console.log("--- END ---");
         process.exit();
     }
 }
