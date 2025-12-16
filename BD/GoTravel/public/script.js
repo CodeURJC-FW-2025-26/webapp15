@@ -367,6 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnConfirmDeleteActivity.addEventListener('click', async function() {
             if (!activityIdToDelete) return;
             this.disabled = true;
+            if (loadingSpinner) loadingSpinner.style.display = 'flex';
 
             try {
                 const response = await fetch(`/delete/activity/${activityIdToDelete}`, {
@@ -375,7 +376,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const data = await response.json();
                 if (data.success) {
-                    window.location.reload();
+                    const modalEL = document.getElementById('deleteActivityModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalEL);
+                    modalInstance.hide();
+
+                    const cardToDelete = document.getElementById(`activity-card-${activityIdToDelete}`);
+                    if (cardToDelete) {
+                        cardToDelete.closest('.col-12').remove();
+                    }
                 } else {
                     alert("Error deleting activity " + (data.message || 'Unknown error'));
                 }
@@ -384,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Connection error trying to delete activity.");
             } finally {
                 this.disabled = false;
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
                 const modalEL = document.getElementById('deleteActivityModal');
                 if (modalEL) {
                     const modal = bootstrap.Modal.getInstance(modalEL);
@@ -483,7 +492,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     const result = await response.json();
 
                     if (result.success) {
-                        window.location.reload();
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Save';
+
+                        card.innerHTML = `
+                            <h3 class="text-center">${dataToSend.name}</h3>
+                            <ol>
+                                <li><strong>Fee: </strong> $${dataToSend.price}</li>
+                                <li><strong>Duration: </strong> ${dataToSend.duration} hours</li>
+                                <li><strong>Guide: </strong> ${dataToSend.guide_travel}</li>
+                            </ol>
+                            <p class="item">${dataToSend.description}</p>
+                            <div class="d-flex justify-content-center gap-2 mt-3">
+                                <button type="button" class="btn btn-warning btn-lg btnEditActivity"
+                                    data-id="${id}" data-name="${dataToSend.name}"
+                                    data-price="${dataToSend.price}" data-duration="${dataToSend.duration}"
+                                    data-guide="${dataToSend.guide_travel}" data-description="${dataToSend.description}">
+                                    Edit Activity
+                                </button>
+                                <button type="button" class="btn btn-danger btn-lg btnOpenDeleteActivityModal"
+                                    data-id="${id}" data-bs-toggle="modal" data-bs-target="#deleteActivityModal">
+                                    Delete Activity
+                                </button>
+                            </div>
+                        `;
+                        const newEditBtn = card.querySelector('.btnEditActivity');
+                        newEditBtn.addEventListener('click', function() {
+                            alert("Activity updated. Please refresh the page to edit again.");
+                        });
+                        const newDeleteBtn = card.querySelector('.btnOpenDeleteActivityModal');
+                        newDeleteBtn.addEventListener('click', function() {
+                            activityIdToDelete = this.getAttribute('data-id');
+                        });
                     } else {
                         alert("Error updating activity: " + (result.message || 'Unknown error'));
                         submitBtn.disabled = false;
