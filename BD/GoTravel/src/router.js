@@ -108,16 +108,16 @@ router.get('/api/trips', async (req, res) => {
         const searchTerm = req.query.searchQuery || '';
         const category = req.query.category || '';
 
-        let filtro = {};
+        let filter = {};
         if (searchTerm) {
-            filtro.name = { $regex: new RegExp(searchTerm, 'i') };
+            filter.name = { $regex: new RegExp(searchTerm, 'i') };
         }
         if (category) {
-            filtro.t_trip = category; 
+            filter.t_trip = category; 
         }
 
-        const viajes = await db.getTrips(filtro, skip, limit);
-        const totalItems = await db.countTrips(filtro);
+        const viajes = await db.getTrips(filter, skip, limit);
+        const totalItems = await db.countTrips(filter);
         const totalPages = Math.ceil(totalItems / limit);
         
         res.json({
@@ -143,15 +143,15 @@ router.get('/', async (req, res) => {
         const searchTerm = req.query.searchQuery || '';
         const category = req.query.category || '';
 
-        let filtro = {};
+        let filter = {};
         if (searchTerm) {
-            filtro.name = { $regex: new RegExp(searchTerm, 'i') };
+            filter.name = { $regex: new RegExp(searchTerm, 'i') };
         }
         if (category) {
-            filtro.t_trip = category; 
+            filter.t_trip = category; 
         }
         
-        const viajes = await db.getTrips(filtro, skip, limit);
+        const viajes = await db.getTrips(filter, skip, limit);
         
         const isCategoryActive = {
             Adventure: category === 'Adventure',
