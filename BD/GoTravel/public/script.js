@@ -9,7 +9,91 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const errorModalBody = document.getElementById('errorModalBody');
 
-    const currentForm = document.querySelector('form:not(.search-form)');
+    const currentForm = document.querySelector('form:not(.search-form):not(#addActivityForm)');
+
+    //Validation activities function
+    const validateActivities = (input) => {
+        const errorDiv = input.parentElement.querySelector('.error-msg');
+        let isValid = true;
+        let msg = '';
+        const val = input.value.trim();
+        const name = input.name;
+
+        //Name validation
+        if (input.name === 'name') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Name is required.';
+            }
+            else if (val[0] !== val[0].toUpperCase()) {
+                isValid = false;
+                msg = 'Start with capital letter.';
+            }
+            else if (val.length < 3) {
+                isValid = false;
+                msg = 'Min 3 chars.';
+            }
+        }
+
+        //Price validation
+        if (input.name === 'price') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Price is required.';
+            }
+            else if (parseFloat(val) <= 0) {
+                isValid = false;
+                msg = 'Price must be greater than 0.';
+            }
+        }
+
+        //Duration validation
+        if (input.name === 'duration') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Duration is required.';
+            }
+            else if (parseFloat(val) <= 0) {
+                isValid = false;
+                msg = 'Duration must be grater than 0.';
+            }
+        }
+
+        //Description validation
+        if (input.name === 'description') {
+            if (val === '') {
+                isValid = false;
+                msg = 'Description is required.';
+            }
+            else if (val.length < 10) {
+                isValid = false;
+                msg = 'Min 10 chars.';
+            }
+            else if (val.length > 300) {
+                isValid = false;
+                msg = 'Max 300 chars.';
+            }
+            else if (val[0] !== val[0].toUpperCase()) {
+                isValid = false;
+                msg = 'Start with capital letter.';
+            }
+        }
+
+        if (errorDiv) {
+            if (!isValid) {
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+                errorDiv.innerText = msg;
+                errorDiv.style.display = 'block';
+            } else {
+                input.classList.remove('is-invalid');
+                input.classList.add('is-valid');
+                errorDiv.style.display = 'none';
+                errorDiv.innerText = '';
+            } 
+        } 
+        return isValid;
+    };
     
     const dropZone = document.getElementById('dropZone');
 
@@ -359,81 +443,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const form= document.getElementById(`editForm-${id}`);
             const cancelBtn = card.querySelector('.btnCancelEdit');
 
-//Validation activities function
-            const validateActivities = (input) => {
-                const errorDiv = input.nextElementSibling;
-                let isValid = true;
-                let msg = '';
-                const val = input.value.trim();
-
-                //Name validation
-                if (input.name === 'name') {
-                    if (val === '') {
-                        isValid = false;
-                        msg = 'Name is required.';
-                    }
-                    else if (val[0] !== val[0].toUpperCase()) {
-                        isValid = false;
-                        msg = 'Start with capital letter.';
-                    }
-                    else if (val.length < 3) {
-                        isValid = false;
-                        msg = 'Min 3 chars.';
-                    }
-                }
-
-                //Price validation
-                if (input.name === 'price') {
-                    if (val === '') {
-                        isValid = false;
-                        msg = 'Price is required.';
-                    }
-                    else if (parseFloat(val) < 0) {
-                        isValid = false;
-                        msg = 'Price cannot be negative.';
-                    }
-                }
-
-                //Duration validation
-                if (input.name === 'duration') {
-                    if (val === '') {
-                        isValid = false;
-                        msg = 'Duration is required.';
-                    }
-                    else if (parseFloat(val) < 0) {
-                        isValid = false;
-                        msg = 'Duration cannot be negative.';
-                    }
-                }
-
-                //Description validation
-                if (input.name === 'description') {
-                    if (val === '') {
-                        isValid = false;
-                        msg = 'Description is required.';
-                    }
-                    else if (val.length < 10) {
-                        isValid = false;
-                        msg = 'Min 10 chars.';
-                    }
-                }
-
-                if (errorDiv && errorDiv.classList.contains('error-msg')) {
-                    if (!isValid) {
-                        input.classList.add('is-invalid');
-                        input.classList.remove('is-valid');
-                        errorDiv.innerText = msg;
-                        errorDiv.style.display = 'block';
-                    } else {
-                        input.classList.remove('is-invalid');
-                        input.classList.add('is-valid');
-                        errorDiv.style.display = 'none';
-                    }
-                }
-
-                return isValid;
-            }
-
             const inputs = form.querySelectorAll('input, textarea');
             inputs.forEach(input => {
                 input.addEventListener('input', () => validateActivities(input));
@@ -488,5 +497,86 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    });         
+    }); 
+    
+    //Create activity 
+    const addActivityForm = document.getElementById('addActivityForm');
+    if (addActivityForm) {
+        const inputsAdd = addActivityForm.querySelectorAll('input, textarea');
+
+        inputsAdd.forEach(input => {
+            input.addEventListener('input', () => validateActivities(input));
+            input.addEventListener('blur', () => validateActivities(input));
+        });
+
+        addActivityForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            let isFormValid = true;
+            inputsAdd.forEach(input => {
+                if (!validateActivities(input)) isFormValid = false;
+            });
+
+            if (!isFormValid) return;
+
+            const submitBtn = addActivityForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            if (loadingSpinner) loadingSpinner.style.display = 'flex';
+
+            const formData = new FormData(addActivityForm);
+            const dataToSend = Object.fromEntries(formData.entries());
+            const tripId = addActivityForm.dataset.tripId;
+
+            try {
+                const response = await fetch(`/add-activity/${tripId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dataToSend)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    addActivityForm.reset();
+                    inputsAdd.forEach(i => i.classList.remove('is-valid'));
+
+                    const activitiesContainer = document.getElementById('activitiesContainer');
+
+                    const newCardHTML = `
+                    <div class="col-12 col-md-6 col-sm-2" >
+                        <div class="p-4 bg-white rounded shadow h-100" id="activity-card-${result.activity._id}">
+                            <h3 class="text-center">${result.activity.name}</h3>
+                            <ol>
+                                <li><strong>Fee: </strong> $${result.activity.price}</li>
+                                <li><strong>Duration: </strong> ${result.activity.duration} hours</li>
+                                <li><strong>Guide: </strong> ${result.activity.guide_travel}</li>
+                            </ol>
+                            <p class="item">${result.activity.description}</p>
+                            <div class="d-flex justify-content-center gap-2 mt-3">
+                                <button type="button" class="btn btn-warning btn-lg btnEditActivity"
+                                    data-id="${result.activity._id}" data-name="${result.activity.name}"
+                                    data-price="${result.activity.price}" data-duration="${result.activity.duration}"
+                                    data-guide="${result.activity.guide_travel}" data-description="${result.activity.description}">
+                                    Edit Activity
+                                </button>
+                                <button type="button" class="btn btn-danger btn-lg btnOpenDeleteActivityModal"
+                                    data-id="${result.activity._id}" data-bs-toggle="modal" data-bs-target="#deleteActivityModal">
+                                    Delete Activity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    activitiesContainer.insertAdjacentHTML('beforeend', newCardHTML);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    alert("Error adding activity: " + (result.message));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Connection error trying to add activity.");
+            } finally {
+                submitBtn.disabled = false;
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
+            }
+        });
+    }
 }); 

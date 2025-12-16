@@ -15,7 +15,7 @@ const projectRoot = path.join(__dirname, '..');
 
 
 const UploadDir = path.join(projectRoot, 'uploads');
-if (!fs.existsSync(UploadDir)) {s
+if (!fs.existsSync(UploadDir)) {
     fs.mkdirSync(UploadDir);
     console.log(`Created uploads directory at ${UploadDir}`);
 }
@@ -38,7 +38,7 @@ app.engine('html', mustacheExpress(partialsDir));
 app.set('views', path.join(projectRoot, 'views'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(express.json());
 
 app.use('/', router);
 
