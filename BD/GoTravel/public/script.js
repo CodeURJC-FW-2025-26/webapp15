@@ -309,48 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const btnDelete = document.getElementById('btnDelete');
-
-        if (btnDelete) {
-            btnDelete.addEventListener('click', async () => {
-                if (!confirm("¿Estás seguro de que quieres borrar este viaje?")) return;
-
-                if (loadingSpinner) loadingSpinner.style.display = 'flex';
-                btnDelete.disabled = true;
-
-                const id = btnDelete.dataset.id;
-
-                try {
-                    const response = await fetch(`/delete/trip/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    const contentType = response.headers.get("content-type");
-                    if (!contentType || !contentType.includes("application/json")) {
-                        throw new Error("El servidor devolvió HTML (error en router.js)");
-                    }
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        window.location.href = '/';
-                    } else {
-                        alert("Error: " + data.message);
-                    }
-
-                } catch (error) {
-                    console.error(error);
-                    alert("Error de conexión: " + error.message);
-                } finally {
-                    if (loadingSpinner) loadingSpinner.style.display = 'none';
-                    btnDelete.disabled = false;
-                }
-            });
-        }
-    }
 //Delete activity modal
     let activityIdToDelete = null;
     const btnConfirmDeleteActivity = document.getElementById('btnConfirmDeleteActivity');
@@ -537,8 +495,81 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    }); 
+    });
+    }
     
+      //Delete trip modal
+    
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const deleteTriggerBtn = document.getElementById('btnDeleteTrigger');
+
+        if (confirmDeleteBtn && deleteTriggerBtn) {
+            
+            
+            let tripIdToDelete = null;
+
+            deleteTriggerBtn.addEventListener('click', function() {
+             
+                tripIdToDelete = this.getAttribute('data-id'); 
+            });
+
+
+            confirmDeleteBtn.addEventListener('click', async function(e) {
+                e.preventDefault(); 
+                
+                const idViaje = tripIdToDelete;
+
+                if (!idViaje) {
+                    alert("This trip does not exist.");
+                    
+                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('deleteTripModal'));
+                    if (modalInstance) modalInstance.hide();
+                    return;
+                }
+
+                
+                const modalElement = document.getElementById('deleteTripModal');
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) modalInstance.hide();
+
+
+               
+                const loader = document.getElementById('loadingSpinner');
+                if (loader) loader.style.display = 'flex';
+                this.disabled = true; 
+                try {
+                   
+                    const response = await fetch(`/delete/trip/${idViaje}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({})); 
+                        throw new Error(errorData.message || "Error processing request");
+                    }
+
+                   
+                    window.location.href = '/';
+
+                } catch (error) {
+                  
+                    if (loader) loader.style.display = 'none';
+                    this.disabled = false;
+                    
+                    const errorModalBody = document.getElementById('errorModalBody');
+                    if(errorModalBody) errorModalBody.textContent = "An error occurred during deletion: " + error.message;
+                    
+                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                    errorModal.show();
+
+                    if (deleteTriggerBtn) deleteTriggerBtn.disabled = false;
+                }
+            });
+        }
+
     //Create activity 
     const addActivityForm = document.getElementById('addActivityForm');
     if (addActivityForm) {
@@ -619,4 +650,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-}); 
+
+});
