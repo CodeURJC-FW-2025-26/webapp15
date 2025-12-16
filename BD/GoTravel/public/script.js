@@ -309,7 +309,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-       
+        const btnDelete = document.getElementById('btnDelete');
+
+        if (btnDelete) {
+            btnDelete.addEventListener('click', async () => {
+                if (!confirm("¿Estás seguro de que quieres borrar este viaje?")) return;
+
+                if (loadingSpinner) loadingSpinner.style.display = 'flex';
+                btnDelete.disabled = true;
+
+                const id = btnDelete.dataset.id;
+
+                try {
+                    const response = await fetch(`/delete/trip/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const contentType = response.headers.get("content-type");
+                    if (!contentType || !contentType.includes("application/json")) {
+                        throw new Error("El servidor devolvió HTML (error en router.js)");
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.href = '/';
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    alert("Error de conexión: " + error.message);
+                } finally {
+                    if (loadingSpinner) loadingSpinner.style.display = 'none';
+                    btnDelete.disabled = false;
+                }
+            });
+        }
+    }
 //Delete activity modal
     let activityIdToDelete = null;
     const btnConfirmDeleteActivity = document.getElementById('btnConfirmDeleteActivity');
@@ -360,79 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    //delete trip modal
-
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const deleteTriggerBtn = document.getElementById('btnDeleteTrigger');
-
-        if (confirmDeleteBtn && deleteTriggerBtn) {
-            
-            
-            let tripIdToDelete = null;
-
-            deleteTriggerBtn.addEventListener('click', function() {
-             
-                tripIdToDelete = this.getAttribute('data-id'); 
-            });
-
-
-            confirmDeleteBtn.addEventListener('click', async function(e) {
-                e.preventDefault(); 
-                
-                const idViaje = tripIdToDelete;
-
-                if (!idViaje) {
-                    alert("This trip does not exist.");
-                    
-                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('deleteTripModal'));
-                    if (modalInstance) modalInstance.hide();
-                    return;
-                }
-
-                
-                const modalElement = document.getElementById('deleteTripModal');
-                const modalInstance = bootstrap.Modal.getInstance(modalElement);
-                if (modalInstance) modalInstance.hide();
-
-
-               
-                const loader = document.getElementById('loadingSpinner');
-                if (loader) loader.style.display = 'flex';
-                this.disabled = true; 
-                try {
-                   
-                    const response = await fetch(`/delete/trip/${idViaje}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({})); 
-                        throw new Error(errorData.message || "Error processing request");
-                    }
-
-                   
-                    window.location.href = '/';
-
-                } catch (error) {
-                  
-                    if (loader) loader.style.display = 'none';
-                    this.disabled = false;
-                    
-                    const errorModalBody = document.getElementById('errorModalBody');
-                    if(errorModalBody) errorModalBody.textContent = "An error occurred during deletion: " + error.message;
-                    
-                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-                    errorModal.show();
-
-                    if (deleteTriggerBtn) deleteTriggerBtn.disabled = false;
-                }
-            });
-        }
-    
 
 //Edit activity modal
     const editActivityButtons = document.querySelectorAll('.btnEditActivity');
@@ -569,6 +537,86 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    });
-}        
+    }); 
+    
+    //Create activity 
+    const addActivityForm = document.getElementById('addActivityForm');
+    if (addActivityForm) {
+        const inputsAdd = addActivityForm.querySelectorAll('input, textarea');
+
+        inputsAdd.forEach(input => {
+            input.addEventListener('input', () => validateActivities(input));
+            input.addEventListener('blur', () => validateActivities(input));
+        });
+
+        addActivityForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            let isFormValid = true;
+            inputsAdd.forEach(input => {
+                if (!validateActivities(input)) isFormValid = false;
+            });
+
+            if (!isFormValid) return;
+
+            const submitBtn = addActivityForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            if (loadingSpinner) loadingSpinner.style.display = 'flex';
+
+            const formData = new FormData(addActivityForm);
+            const dataToSend = Object.fromEntries(formData.entries());
+            const tripId = addActivityForm.dataset.tripId;
+
+            try {
+                const response = await fetch(`/add-activity/${tripId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dataToSend)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    addActivityForm.reset();
+                    inputsAdd.forEach(i => i.classList.remove('is-valid'));
+
+                    const activitiesContainer = document.getElementById('activitiesContainer');
+
+                    const newCardHTML = `
+                    <div class="col-12 col-md-6 col-sm-2" >
+                        <div class="p-4 bg-white rounded shadow h-100" id="activity-card-${result.activity._id}">
+                            <h3 class="text-center">${result.activity.name}</h3>
+                            <ol>
+                                <li><strong>Fee: </strong> $${result.activity.price}</li>
+                                <li><strong>Duration: </strong> ${result.activity.duration} hours</li>
+                                <li><strong>Guide: </strong> ${result.activity.guide_travel}</li>
+                            </ol>
+                            <p class="item">${result.activity.description}</p>
+                            <div class="d-flex justify-content-center gap-2 mt-3">
+                                <button type="button" class="btn btn-warning btn-lg btnEditActivity"
+                                    data-id="${result.activity._id}" data-name="${result.activity.name}"
+                                    data-price="${result.activity.price}" data-duration="${result.activity.duration}"
+                                    data-guide="${result.activity.guide_travel}" data-description="${result.activity.description}">
+                                    Edit Activity
+                                </button>
+                                <button type="button" class="btn btn-danger btn-lg btnOpenDeleteActivityModal"
+                                    data-id="${result.activity._id}" data-bs-toggle="modal" data-bs-target="#deleteActivityModal">
+                                    Delete Activity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    activitiesContainer.insertAdjacentHTML('beforeend', newCardHTML);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    alert("Error adding activity: " + (result.message));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Connection error trying to add activity.");
+            } finally {
+                submitBtn.disabled = false;
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
+            }
+        });
+    }
 }); 
