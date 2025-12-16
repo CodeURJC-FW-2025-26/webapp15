@@ -1,8 +1,8 @@
 [
   {
     "name": "Peru",
-    "description": "A romantic weekend in Paris.",
-    "duration": 3,
+    "description": "The heart of the Inca Empire.",
+    "duration": 9,
     "price": 1200,
     "image": "peru.webp",
     "max_travellers": 3,
@@ -11,18 +11,11 @@
     "t_trip": "Culture",
     "activities": [
       {
-        "name": "Main tour in Peru",
+        "name": "Machu Picchu Tour",
         "duration": 1,
-        "description": "A guided tour of Peru's highlights.",
-        "price": 50,
+        "description": "A guided tour of the ancient citadel.",
+        "price": 150,
         "guide_travel": "YES"
-      },
-      {
-        "name": "Teruel",
-        "description": "nk fkjt jvefkjne vj ",
-        "duration": 3,
-        "price": 34,
-        "guide_travel": "NO"
       }
     ]
   },
@@ -45,8 +38,8 @@
         "guide_travel": "NO"
       },
       {
-        "name": "cycling",
-        "description": "Going clycling across the contryside\r\n",
+        "name": "Cycling",
+        "description": "Cycling across the countryside.",
         "duration": 1,
         "price": 4,
         "guide_travel": "YES"
@@ -65,9 +58,9 @@
     "t_trip": "Culture",
     "activities": [
       {
-        "name": "Main tour in Germany",
+        "name": "Berlin Wall Tour",
         "duration": 3,
-        "description": "A guided tour of Germany's highlights.",
+        "description": "Historical tour of Berlin.",
         "price": 150,
         "guide_travel": "YES"
       }
@@ -75,7 +68,7 @@
   },
   {
     "name": "China",
-    "description": "Ancient empires.",
+    "description": "Ancient empires and modern cities.",
     "duration": 5,
     "price": 1800,
     "image": "china.jpg",
@@ -85,9 +78,9 @@
     "t_trip": "Culture",
     "activities": [
       {
-        "name": "Main tour in China",
+        "name": "Forbidden City",
         "duration": 4,
-        "description": "A guided tour of China's highlights.",
+        "description": "A guided tour of the imperial palace.",
         "price": 200,
         "guide_travel": "NO"
       }
@@ -105,24 +98,17 @@
     "t_trip": "Adventure",
     "activities": [
       {
-        "name": "Main tour in New York",
-        "duration": 7,
-        "description": "A guided tour of New York's highlights.",
+        "name": "Manhattan Helicopter Tour",
+        "duration": 1,
+        "description": "See the skyline from above.",
         "price": 350,
-        "guide_travel": "YES"
-      },
-      {
-        "name": "Madrid",
-        "description": "nv ndj af beajf vrjwnvrje",
-        "duration": 4,
-        "price": 3424,
         "guide_travel": "YES"
       }
     ]
   },
   {
     "name": "Portugal",
-    "description": "Iberic magic.",
+    "description": "Iberic magic and coastlines.",
     "duration": 5,
     "price": 2000,
     "image": "portugal.jpg",
@@ -132,9 +118,9 @@
     "t_trip": "Relax",
     "activities": [
       {
-        "name": "Main tour in Portugal",
+        "name": "Lisbon Tram Tour",
         "duration": 8,
-        "description": "A guided tour of Portugal's highlights.",
+        "description": "Explore the historic streets.",
         "price": 400,
         "guide_travel": "NO"
       }
@@ -142,7 +128,7 @@
   },
   {
     "name": "London",
-    "description": "The most important city in Europe.",
+    "description": "Royal history and modern vibes.",
     "duration": 8,
     "price": 2000,
     "image": "towerbridge.jpeg",
@@ -152,8 +138,8 @@
     "t_trip": "Culture",
     "activities": [
       {
-        "name": "Pesca deportiva",
-        "description": "una actividad chula",
+        "name": "Museum pass",
+        "description": "Access to British Museum and Tate Modern.",
         "duration": 2,
         "price": 230,
         "guide_travel": "YES"
@@ -161,87 +147,151 @@
     ]
   },
   {
-    "name": "Kirguistan",
-    "description": "ch whjbcih3rbchi3bchi3f",
-    "duration": 2,
-    "image": "1764325047628_WIN_20251010_13_58_57_Pro.jpg",
-    "price": 400,
+    "name": "Paris",
+    "description": "A romantic weekend in the city of light.",
+    "duration": 4,
+    "image": "paris.webp",
+    "price": 1400,
     "t_trip": "Culture",
     "flight": true,
-    "national": true,
-    "max_travellers": 4,
-    "activities": []
+    "national": false,
+    "max_travellers": 2,
+    "activities": [
+        {
+        "name": "Eiffel Tower Dinner",
+        "duration": 1,
+        "description": "Luxury dinner with a view.",
+        "price": 250,
+        "guide_travel": "NO"
+      }
+    ]
   },
   {
-    "name": "Pekin23",
-    "description": "dshjve ejhf nkf efkn fekt",
-    "duration": 4,
-    "image": "1764325226680_WIN_20251010_13_58_40_Pro.jpg",
-    "price": 345,
+    "name": "Thailand",
+    "description": "Tropical paradise and temples.",
+    "duration": 10,
+    "image": "tailandia.webp",
+    "price": 1600,
     "t_trip": "Relax",
     "flight": true,
-    "national": true,
-    "max_travellers": 2,
-    "activities": []
+    "national": false,
+    "max_travellers": 6,
+    "activities": [
+        {
+        "name": "Island Hopping",
+        "duration": 5,
+        "description": "Visit the beautiful islands by boat.",
+        "price": 300,
+        "guide_travel": "YES"
+      }
+    ]
   },
   {
-    "name": "Fuengirola",
-    "description": "un lugar muy chulo",
-    "duration": 4,
-    "image": "1764351072977_malaga.webp",
-    "price": 500,
-    "t_trip": "Relax",
-    "flight": false,
+    "name": "Mexico",
+    "description": "Pyramids, tacos and culture.",
+    "duration": 7,
+    "image": "mejico.webp",
+    "price": 1500,
+    "t_trip": "Adventure",
+    "flight": true,
     "national": false,
     "max_travellers": 12,
-    "activities": []
+    "activities": [
+         {
+        "name": "Chichen Itza",
+        "duration": 1,
+        "description": "Visit the Mayan ruins.",
+        "price": 100,
+        "guide_travel": "YES"
+      }
+    ]
   },
   {
-    "name": "Kiev",
-    "description": "nice place to go and have fun",
-    "duration": 1,
-    "image": "1764584189955_malaga.webp",
+    "name": "Prague",
+    "description": "The medieval fairytale city.",
+    "duration": 3,
+    "image": "praga.webp",
     "price": 800,
-    "t_trip": "Adventure",
+    "t_trip": "Culture",
     "flight": true,
     "national": true,
     "max_travellers": 5,
     "activities": []
   },
   {
-    "name": "Benalmadena",
-    "description": "pescaito frito y fiesta , no hay mejor plan",
+    "name": "Seville",
+    "description": "Flamenco, tapas and sun.",
     "duration": 3,
-    "image": "1764629490531_malaga.webp",
+    "image": "sevilla.webp",
     "price": 500,
-    "t_trip": "Relax",
-    "flight": true,
+    "t_trip": "Culture",
+    "flight": false,
     "national": true,
     "max_travellers": 6,
+    "activities": [
+         {
+        "name": "Plaza de España",
+        "duration": 2,
+        "description": "Walking tour.",
+        "price": 20,
+        "guide_travel": "YES"
+      }
+    ]
+  },
+  {
+    "name": "Cordoba",
+    "description": "The city of the Caliphs.",
+    "duration": 2,
+    "image": "cordoba.webp",
+    "price": 350,
+    "t_trip": "Culture",
+    "flight": true,
+    "national": true,
+    "max_travellers": 4,
+    "activities": [
+        {
+        "name": "Mosque-Cathedral",
+        "duration": 2,
+        "description": "Entrance and guide.",
+        "price": 50,
+        "guide_travel": "YES"
+      }
+    ]
+  },
+  {
+    "name": "Milan",
+    "description": "Fashion and design capital.",
+    "duration": 3,
+    "image": "milan.webp",
+    "price": 950,
+    "t_trip": "Culture",
+    "flight": true,
+    "national": true,
+    "max_travellers": 2,
     "activities": []
   },
   {
-    "name": "Ciudad Camaron",
-    "description": "cjkbbwvsjdDBVKJADBCKJABFJW",
-    "duration": 45,
-    "image": "1764666142998_malaga.webp",
-    "price": 230,
+    "name": "Warsaw",
+    "description": "History reborn.",
+    "duration": 4,
+    "image": "varsovia.webp",
+    "price": 700,
     "t_trip": "Culture",
     "flight": true,
     "national": false,
-    "max_travellers": 2,
+    "max_travellers": 4,
     "activities": []
   },
-  {
-    "name": "Pesca deportiva",
-    "description": "nb bj g hfxfhxfg",
-    "duration": 3,
-    "image": "1764684674033_WIN_20251010_13_58_57_Pro.jpg",
-    "price": 340,
-    "t_trip": "Adventure",
-    "flight": true,
+    {
+    "name": "Malaga",
+    "description": "Sun, beach and museums.",
+    "duration": 5,
+    "image": "malaga.webp",
+    "price": 600,
+    "t_trip": "Relax",
+    "flight": false,
     "national": true,
-    "max_travellers": 2,
+    "max_travellers": 8,
     "activities": []
   }
 ]
