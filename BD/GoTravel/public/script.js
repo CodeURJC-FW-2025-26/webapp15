@@ -326,14 +326,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalHTMl = card.innerHTML;
 
             card.innerHTML = `
-                <form id="editForm-${id}" class="h-100 d-flex flex-column">
-                    <input type="text" name="name" class="form-control mb-2" value="${name}" placeholder="Name" required>
+                <form id="editForm-${id}" class="h-100 d-flex flex-column" novalidate>
+
+                    <div class="mb-2">
+                        <input type="text" name="name" class="form-control" value="${name}" placeholder="Name" required>
+                        <div class="text-danger small error-msg" style="display:none;"></div>
+                    </div>
                     <div class="row mb-2">
                         <div class="col">
                             <input type="number" name="price" class="form-control" value="${price}" placeholder="Price" min="0" required>
+                            <div class="text-danger small error-msg" style="display:none;"></div>
                         </div>
                         <div class="col">
                             <input type="number" name="duration" class="form-control" value="${duration}" placeholder="Duration (hrs)" min="0" required>
+                            <div class="text-danger small error-msg" style="display:none;">
                         </div>
                     </div>
                     <select name="guide_travel" class="form-select mb-2">
@@ -341,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <option value="NO" ${guide === 'NO' ? 'selected' : ''}>Guide: NO</option>
                     </select>
                     <textarea name="description" class="form-control mb-2" rows="3" placeholder="Description" required>${description}</textarea>
+                    <div class="text-danger small error-msg" style="display:none;"></div>
 
                     <div class="mt-auto d-flex justify-content-center gap-2">
                         <button type="button" class="btn btn-secondary btn-sm btnCancelEdit">Cancel</button>
@@ -351,11 +358,104 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const form= document.getElementById(`editForm-${id}`);
             const cancelBtn = card.querySelector('.btnCancelEdit');
+
+//Validation activities function
+            const validateActivities = (input) => {
+                const errorDiv = input.nextElementSibling;
+                let isValid = true;
+                let msg = '';
+                const val = input.value.trim();
+
+                //Name validation
+                if (input.name === 'name') {
+                    if (val === '') {
+                        isValid = false;
+                        msg = 'Name is required.';
+                    }
+                    else if (val[0] !== val[0].toUpperCase()) {
+                        isValid = false;
+                        msg = 'Start with capital letter.';
+                    }
+                    else if (val.length < 3) {
+                        isValid = false;
+                        msg = 'Min 3 chars.';
+                    }
+                }
+
+                //Price validation
+                if (input.name === 'price') {
+                    if (val === '') {
+                        isValid = false;
+                        msg = 'Price is required.';
+                    }
+                    else if (parseFloat(val) < 0) {
+                        isValid = false;
+                        msg = 'Price cannot be negative.';
+                    }
+                }
+
+                //Duration validation
+                if (input.name === 'duration') {
+                    if (val === '') {
+                        isValid = false;
+                        msg = 'Duration is required.';
+                    }
+                    else if (parseFloat(val) < 0) {
+                        isValid = false;
+                        msg = 'Duration cannot be negative.';
+                    }
+                }
+
+                //Description validation
+                if (input.name === 'description') {
+                    if (val === '') {
+                        isValid = false;
+                        msg = 'Description is required.';
+                    }
+                    else if (val.length < 10) {
+                        isValid = false;
+                        msg = 'Min 10 chars.';
+                    }
+                }
+
+                if (errorDiv && errorDiv.classList.contains('error-msg')) {
+                    if (!isValid) {
+                        input.classList.add('is-invalid');
+                        input.classList.remove('is-valid');
+                        errorDiv.innerText = msg;
+                        errorDiv.style.display = 'block';
+                    } else {
+                        input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
+                        errorDiv.style.display = 'none';
+                    }
+                }
+
+                return isValid;
+            }
+
+            const inputs = form.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => validateActivities(input));
+                input.addEventListener('blur', () => validateActivities(input));
+            });
+
             cancelBtn.addEventListener('click', () => {
+                card.innerHTML = originalHTMl;
                 window.location.reload();
             });
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                let isFormValid = true;
+                inputs.forEach(input => {
+                    if (!validateActivities(input)) isFormValid = false;
+                });
+
+                if (!isFormValid) {
+                    e.stopPropagation();
+                    return;
+                }
 
                 const submitBtn = form.querySelector('button[type="submit"]');
                 submitBtn.disabled = true;
