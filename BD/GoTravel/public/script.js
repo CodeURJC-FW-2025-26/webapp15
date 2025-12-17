@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (val.length < 3) {
                 isValid = false;
                 msg = 'Min 3 chars.';
+            } 
+            else if (/\d/.test(val)) {
+                isValid = false;
+                msg = 'No numbers allowed.';
             }
         }
 
