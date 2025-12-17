@@ -226,3 +226,20 @@ In addition to that, I created the header for all three pages, designed the butt
   - [detalle.html](detalle.html)
   - [load_data.js](load_data.js)
   - [app.js](app.js)
+
+➡ **Stanislaw Cherkhavskyy Pater**
+-The button of deleting trips was sone entirely by me. The spinner which we have used a lot was also done by me, then we used it in all formularies and deletion buttons. Thus I also was the one who started the activity section making the bases and my partner contiuned. All this according to the 3 part details making it ajax and adding the new funtionalities. Also I made some small changes to different parts of the code, in different documents.
+
+  - **List of the 5 most significant commits:**
+  - [inserted delete trip code](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/61308afe784ce4767583ac934437bfc023484c91)
+  - [little changes](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/ee59ad4facc7e3c80bb4fb6ffbb0969a6679c0b8)
+  - [message when deleted](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/89fdf0fd4bc812f618cd2c85d9d3a374c7cd30c6)
+  - [AJAX inserted trip](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/102fbc1e964704cf83943a17f57cda35a7bf7ab3)
+  - [error subsanation](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/6d6804cc97938f27196dba75cf88c4e550ba4ec3)
+
+ - **List of the 5 files in which I have participated the most:**
+  - [script.js](script.js)
+  - [router.js](router.js)
+  - [detalle.html](detalle.html)
+  - [footer.html](footer.html)
+  - [database.js](database.js)
