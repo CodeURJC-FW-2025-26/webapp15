@@ -176,11 +176,7 @@ router.get('/', async (req, res) => {
 
     } catch (error) {
         console.error("Fail in loading the main page:", error);
-        res.status(500).render('confirmation_page', {
-            pageTitle: 'Error',
-            message: 'Internal error loading the main page.',
-            ifError: true
-        });
+        res.status(500).send('Internal error loading the main page.');
     }
 });
 
@@ -251,11 +247,7 @@ router.get('/trip/:id', async (req, res) => {
         });
     } catch (error) {
         console.error("Fail loading the detail page:", error);
-        res.status(500).render('confirmation_page', {
-            pageTitle: 'Error',
-            message: 'Fail loading the detail page.',
-            ifError: true
-        });
+        res.status(500).send('Internal error loading the trip details page.');
     }
 });
 
@@ -314,11 +306,7 @@ router.get('/edit/trip/:id', async (req, res) => {
             errors: []
         });
     } catch (error) {
-        res.status(500).render('confirmation_page', {
-            pageTitle: 'Error',
-            message: 'Internal error loading edit trip page.',
-            ifError: true
-        });
+        res.status(500).send('Internal error loading the edit trip page.');
     }
 });
 
@@ -448,7 +436,7 @@ router.post('/delete/activity/:id', async (req, res) => {
         const activityId = req.params.id;
         const activity = await db.getActivity(activityId);
         if (!activity) {
-            return res.status(404).render('confirmation_page', { pageTitle: 'Error', message: 'Activity not found', ifError: true });
+            return res.status(404).json({ success: false, message: 'Activity not found.' });
         }
         await db.deleteActivity(activityId);
 
@@ -458,25 +446,7 @@ router.post('/delete/activity/:id', async (req, res) => {
     }
 });
 
-// Edit Activity (GET)
-router.get('/edit/activity/:id', async (req, res) => {
-    try {
-        const activity = await db.getActivity(req.params.id);
-        if (!activity) {
-            return res.status(404).render('confirmation_page', { pageTitle: 'Error', message: 'Activity not found', ifError: true });
-        }
 
-        activity.isGuideYes = (activity.guide_travel === 'YES');
-        activity.isGuideNo = (activity.guide_travel === 'NO');
-
-        res.render('edit_activity', {
-            pageTitle: `Edit Activity: ${activity.name}`,
-            formData: activity
-        });
-    } catch (error) {
-        res.status(500).render('confirmation_page', { pageTitle: 'Error', message: 'Internal error loading activity edit page.', ifError: true });
-    }
-});
 
 // Edit Activity (POST)
 router.post('/edit/activity/:id', express.json() ,async (req, res) => {
