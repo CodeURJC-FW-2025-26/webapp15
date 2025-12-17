@@ -193,7 +193,7 @@ In addition to that, I created the header for all three pages, designed the butt
 ## 3 Part
 
 ➡ **Raul Martin Sanchez**
-  - 
+  - My aportation in this proyect was the responsability of coding the infinire scroll on the main page and the implementation of the new travel form using AJAX with the new validations in the front whith the validations of the front , also I did the logic responsable of the images upload when a new travel is created.Futhermore I have done a couple fixxings in the logic of the previous proyect .
     
   - **List of the 5 most significant commits:**
   - [New travel form validation with AJAX](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/8f47d029f33f4212b18b4631cedafec10b8815ba)
