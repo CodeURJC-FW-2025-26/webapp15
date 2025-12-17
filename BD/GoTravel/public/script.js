@@ -472,6 +472,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert("Connection error trying to update activity.");
                         submitBtn.disabled = false;
                         submitBtn.textContent = 'Save';
+                    } finally {
+                        if (loadingSpinner) loadingSpinner.style.display = 'none';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Save';
                     }
                 });
             });
