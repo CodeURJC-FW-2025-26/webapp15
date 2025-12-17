@@ -191,6 +191,14 @@ In addition to that, I created the header for all three pages, designed the butt
   - [app.js](app.js)
    
 ## 3 Part
+➡ **Ejecution instructions** You have to download the webapp15 folder and unzip the folter. When you have the code in your compiler (VS Code:recomendated), you have to open the terminal in your compiler and on the terminal you have to the GoTravel direction using *cd* , the you have to put the command *npm install multer* to be abble to load images to the trips and then you have to run the code in local host using the command *npm run watch*. Finally you have to go to your local host and try the code. The version of Mongo db is 8.2.1 and the version of Node.js is v24.11.0.
+
+➡ **File description**
+  -router.js:
+  -app.js:
+  -database.js: This file is the responsable of loading the example trips and activities.
+
+➡ [Video](https://youtu.be/fU8W7-kIav0)
 
 ➡ **Raul Martin Sanchez**
   - My aportation in this proyect was the responsability of coding the infinire scroll on the main page and the implementation of the new travel form using AJAX with the new validations in the front whith the validations of the front , also I did the logic responsable of the images upload when a new travel is created.Futhermore I have done a couple fixxings in the logic of the previous proyect .
@@ -245,6 +253,5 @@ In addition to that, I created the header for all three pages, designed the butt
   - [database.js](database.js)
 
 
-➡ [Video](https://youtu.be/fU8W7-kIav0)
 
   
