@@ -262,6 +262,10 @@ footer {
 
 .icon { font-size: 24px; }
 
+/* ---------------------------------------------------- */
+/* BLOQUE GRID CORREGIDO (IMAGEN IZQ - TEXTO DER)  */
+/* ---------------------------------------------------- */
+
 .list-group-item.rounded.shadow {
     width: 100vw; 
     position: relative;
@@ -275,68 +279,95 @@ footer {
     border: none !important;
     border-radius: 0 !important;
     padding: 0 !important;
+    
     display: grid;
+    /* Dos columnas iguales: Izquierda (Imagen), Derecha (Texto) */
     grid-template-columns: 50% 50%;
-    grid-template-rows: auto auto auto auto; 
-    align-content: center; 
+    
+    /* DEFINICIÓN DE FILAS:
+       1. Título
+       2. Info (Precio, días)
+       3. Badges (Etiquetas)
+       4. Espacio variable (1fr) para rellenar hueco si la imagen es muy alta
+       5. Botones (auto) -> Siempre al final, debajo de todo
+    */
+    grid-template-rows: min-content min-content min-content 1fr auto; 
+    
+    align-content: start; 
     min-height: calc(100vh - 85px); 
 }
+
 .list-group-item.rounded.shadow:hover {
     transform: none !important;
     background-color: #ffffff !important;
 }
 
-#imagen {
-    grid-column: 1;
-    grid-row: 1 / 4; 
+/* --- 1. IMAGEN A LA IZQUIERDA --- */
+.list-group-item.rounded.shadow > img {
+    grid-column: 1; /* Columna 1 (Izquierda) */
+    
+    /* La imagen ocupa desde la fila 1 hasta la 5 (NO entra en la 5)
+       Esto hace que se quede justo encima de la barra de botones */
+    grid-row: 1 / 5; 
+    
     width: 100%;
     height: 100%;
     object-fit: cover; 
     border-radius: 0 !important; 
     margin: 0 !important;
     display: block;
-    transition: transform 0.3s ease; 
 }
 
-#imagen:hover {
-    transform: scale(1.05); 
-}
+/* --- 2. TEXTO A LA DERECHA --- */
 
+/* Título */
 .list-group-item.rounded.shadow > h3 {
-    grid-column: 2;
-    grid-row: 1;
+    grid-column: 2; /* Columna 2 (Derecha) */
+    grid-row: 1;    /* Fila 1 */
+    
     font-weight: 800 !important;
     font-size: 4rem !important; 
     color: #1a202c !important;
     text-align: center !important;
     margin: 0 !important;
-    padding-top: 40px; 
-    align-self: end; 
+    padding-top: 30px; 
+    align-self: start;
+    line-height: 1.1;
 }
+
+/* Lista de info (Duration, Price, etc) */
 .list-group-item.rounded.shadow > ul {
-    grid-column: 2;
-    grid-row: 2;
+    grid-column: 2; /* Columna 2 (Derecha) */
+    grid-row: 2;    /* Fila 2 */
+    
     display: flex !important;
     flex-direction: column;
     align-items: center; 
     justify-content: center;
-    gap: 15px;
-    padding: 20px 0;
-    margin: 0 !important;
+    gap: 5px; 
+    padding: 0 !important; 
+    margin-top: 15px !important;
     list-style: none;
+    align-self: start;
 }
+
 .list-group-item.rounded.shadow > ul li {
     font-size: 1.4rem !important;
     color: #4a5568 !important;
     font-weight: 500;
 }
+
+/* Badges (Etiquetas) */
 .list-group-item.rounded.shadow > div.text-center {
-    grid-column: 2;
-    grid-row: 3;
+    grid-column: 2; /* Columna 2 (Derecha) */
+    grid-row: 3;    /* Fila 3 */
+    
     text-align: center !important;
     align-self: start; 
-    padding-bottom: 40px; 
+    padding-bottom: 0px; 
+    padding-top: 15px; 
 }
+
 .list-group-item.rounded.shadow > div.text-center .badge {
     padding: 10px 20px !important;
     font-size: 1rem !important;
@@ -344,18 +375,28 @@ footer {
     margin: 5px !important;
     display: inline-block;
 }
+
+/* --- 3. BOTONES ABAJO DEL TODO --- */
+
 .list-group-item.rounded.shadow > div.d-flex {
-    grid-column: 1 / -1; 
-    grid-row: 4; 
+    grid-column: 1 / -1; /* Ocupa TODO el ancho (Izquierda + Derecha) */
+    grid-row: 5;         /* Fila 5 (Última fila) */
+    
     display: flex;
     justify-content: center !important; 
     align-items: center;
     gap: 30px;
     width: 100%;
+    
+    /* Color de fondo de la barra de botones */
     background-color: rgb(206, 216, 116); 
+    
     padding: 60px 0; 
     margin: 0;
+    z-index: 10; 
+    position: relative;
 }
+
 .list-group-item.rounded.shadow .btn {
     border-radius: 50px !important; 
     padding: 15px 40px !important; 
@@ -384,23 +425,31 @@ footer {
     margin: 0;
 }
 
+/* --- MÓVIL (PANTALLAS PEQUEÑAS) --- */
 @media (max-width: 992px) {
     .list-group-item.rounded.shadow {
-        grid-template-columns: 1fr !important; 
+        grid-template-columns: 1fr !important; /* Una sola columna */
+        grid-template-rows: auto auto auto auto auto !important; /* Filas automáticas */
         margin-left: 0; 
         margin-right: 0;
         width: 100%;
         left: 0;
         margin-top: 0 !important;
     }
-    #imagen {
+    
+    /* En móvil: Imagen arriba del todo */
+    .list-group-item.rounded.shadow > img {
         grid-column: 1;
         grid-row: 1;
-        max-height: 40vh;
+        max-height: 40vh; /* Altura limitada en móvil */
     }
+    
+    /* El resto de elementos uno debajo de otro */
     .list-group-item.rounded.shadow > h3 { grid-row: 2; grid-column: 1; padding-top: 30px;}
     .list-group-item.rounded.shadow > ul { grid-row: 3; grid-column: 1; }
     .list-group-item.rounded.shadow > div.text-center { grid-row: 4; grid-column: 1; }
+    
+    /* Botones al final */
     .list-group-item.rounded.shadow > div.d-flex { 
         grid-row: 5; 
         padding: 40px 20px;
@@ -514,36 +563,25 @@ footer {
 /* --- ESTILOS DE CHECKBOX PERSONALIZADOS (ESTILO BOOTSTRAP) --- */
 
 .form-container .form-check-input {
-    /* Estilizamos el checkbox de Bootstrap sin anularlo (no usamos appearance: auto) */
-    
-    /* Tamaño aumentado a 25px */
     width: 25px;
     height: 25px;
-    
-    /* Ajustes de margen */
     margin-left: 15px;
     margin-top: 0;
-    
-    /* Estética base (borde suave) */
     border: 2px solid #cbd5e0;
     background-color: white;
     cursor: pointer;
 }
 
-/* Estado MARCADO (Checked) - Sobrescribimos el azul de Bootstrap por tu verde */
 .form-container .form-check-input:checked {
     background-color: rgb(42, 98, 42);
     border-color: rgb(42, 98, 42);
-    /* El "tick" blanco lo pone Bootstrap automáticamente */
 }
 
-/* Estado FOCUS (Cuando se selecciona con tabulador) */
 .form-container .form-check-input:focus {
-    box-shadow: 0 0 0 0.25rem rgba(42, 98, 42, 0.25); /* Resplandor verde suave */
+    box-shadow: 0 0 0 0.25rem rgba(42, 98, 42, 0.25);
     border-color: rgb(42, 98, 42);
 }
 
-/* Alineación vertical perfecta del texto con el checkbox */
 .form-container .d-flex {
     margin-bottom: 15px;
     min-height: 40px; 
