@@ -309,95 +309,84 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-//Delete activity modal
-    let activityIdToDelete = null;
-    const btnConfirmDeleteActivity = document.getElementById('btnConfirmDeleteActivity');
+        const btnDelete = document.getElementById('btnDelete');
 
-    const deleteActivityButtons = document.querySelectorAll('.btnOpenDeleteActivityModal');
+        if (btnDelete) {
+            btnDelete.addEventListener('click', async () => {
+                if (!confirm("¿Estás seguro de que quieres borrar este viaje?")) return;
 
-    deleteActivityButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            activityIdToDelete = this.getAttribute('data-id');
-        });
-    });
+                if (loadingSpinner) loadingSpinner.style.display = 'flex';
+                btnDelete.disabled = true;
 
-    if (btnConfirmDeleteActivity) {
-        btnConfirmDeleteActivity.addEventListener('click', async function() {
-            if (!activityIdToDelete) return;
-            this.disabled = true;
-            if (loadingSpinner) loadingSpinner.style.display = 'flex';
+                const id = btnDelete.dataset.id;
 
-            try {
-                const response = await fetch(`/delete/activity/${activityIdToDelete}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const data = await response.json();
-                if (data.success) {
-                    const modalEL = document.getElementById('deleteActivityModal');
-                    const modalInstance = bootstrap.Modal.getInstance(modalEL);
-                    modalInstance.hide();
+                try {
+                    const response = await fetch(`/delete/trip/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-                    const cardToDelete = document.getElementById(`activity-card-${activityIdToDelete}`);
-                    if (cardToDelete) {
-                        cardToDelete.closest('.col-12').remove();
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.href = '/';
+                    } else {
+                        alert("Error: " + data.message);
                     }
-                } else {
-                    alert("Error deleting activity " + (data.message || 'Unknown error'));
+
+                } catch (error) {
+                    console.error(error);
+                    alert("Error de conexión: " + error.message);
+                } finally {
+                    if (loadingSpinner) loadingSpinner.style.display = 'none';
+                    btnDelete.disabled = false;
                 }
-            } catch (error) {
-                console.error(error);
-                alert("Connection error trying to delete activity.");
-            } finally {
-                this.disabled = false;
-                if (loadingSpinner) loadingSpinner.style.display = 'none';
-                const modalEL = document.getElementById('deleteActivityModal');
-                if (modalEL) {
-                    const modal = bootstrap.Modal.getInstance(modalEL);
-                    if (modal) modal.hide();
-                }
-            }
-        });
+            });
+        }
     }
+//Activity modals
+    let activityIdToDelete = null;
+    const activityListener = (card) => {
+        if (!card) return;
 
-//Edit activity modal
-    const editActivityButtons = document.querySelectorAll('.btnEditActivity');
+        //Edit button
+        const btnEdit = card.querySelector('.btnEditActivity');
+        if (btnEdit) {
+            btnEdit.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const currentData = {
+                    name: this.dataset.name,
+                    price: this.dataset.price,
+                    duration: this.dataset.duration,
+                    description: this.dataset.description,
+                    guide_travel: this.dataset.guide
+                };
 
-    editActivityButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id=this.dataset.id;
-            const name=this.dataset.name;
-            const price=this.dataset.price;
-            const duration=this.dataset.duration;
-            const description=this.dataset.description;
-            const guide=this.dataset.guide;
+                const originalViewHTML = card.innerHTML;
 
-            const card = document.getElementById(`activity-card-${id}`);
-
-            const originalHTMl = card.innerHTML;
-
-            card.innerHTML = `
-                <form id="editForm-${id}" class="h-100 d-flex flex-column" novalidate>
-
+                const originalHTML = `
+                <form id="editActivityForm-${id}" class="h-100 d-flex flex-column novalidate">
                     <div class="mb-2">
-                        <input type="text" name="name" class="form-control" value="${name}" placeholder="Name" required>
+                        <input type="text" name="name" class="form-control" value="${currentData.name}" required placeholder="Name">
                         <div class="text-danger small error-msg" style="display:none;"></div>
                     </div>
                     <div class="row mb-2">
                         <div class="col">
-                            <input type="number" name="price" class="form-control" value="${price}" placeholder="Price" min="0" required>
+                            <input type="number" name="price" class="form-control" value="${currentData.price}" required placeholder="Price" min="0">
                             <div class="text-danger small error-msg" style="display:none;"></div>
                         </div>
                         <div class="col">
-                            <input type="number" name="duration" class="form-control" value="${duration}" placeholder="Duration (hrs)" min="0" required>
-                            <div class="text-danger small error-msg" style="display:none;">
+                            <input type="number" name="duration" class="form-control" value="${currentData.duration}" required placeholder="Duration (hours)" min="0">
+                            <div class="text-danger small error-msg" style="display:none;"></div>
                         </div>
                     </div>
-                    <select name="guide_travel" class="form-select mb-2">
-                        <option value="YES" ${guide === 'YES' ? 'selected' : ''}>Guide: YES</option>
-                        <option value="NO" ${guide === 'NO' ? 'selected' : ''}>Guide: NO</option>
+                    <select name="guide_travel" class="form-select mb-2" >
+                        <option value="NO" ${currentData.guide_travel === 'NO' ? 'selected' : ''}>Guide: NO</option>
+                        <option value="YES" ${currentData.guide_travel === 'YES' ? 'selected' : ''}>Guide: YES</option>
                     </select>
-                    <textarea name="description" class="form-control mb-2" rows="3" placeholder="Description" required>${description}</textarea>
+                    <textarea name="description" class="form-control mb-2" rows="3" required placeholder="Description">${currentData.description}</textarea>
                     <div class="text-danger small error-msg" style="display:none;"></div>
 
                     <div class="mt-auto d-flex justify-content-center gap-2">
@@ -405,55 +394,50 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button type="submit" class="btn btn-success btn-sm">Save</button>
                     </div>
                 </form>
-            `;
+                `;
 
-            const form= document.getElementById(`editForm-${id}`);
-            const cancelBtn = card.querySelector('.btnCancelEdit');
+                card.innerHTML = originalHTML;
 
-            const inputs = form.querySelectorAll('input, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('input', () => validateActivities(input));
-                input.addEventListener('blur', () => validateActivities(input));
-            });
+                const form = document.getElementById(`editActivityForm-${id}`);
+                const inputs = form.querySelectorAll('input, textarea');
 
-            cancelBtn.addEventListener('click', () => {
-                card.innerHTML = originalHTMl;
-                window.location.reload();
-            });
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                let isFormValid = true;
                 inputs.forEach(input => {
-                    if (!validateActivities(input)) isFormValid = false;
+                    input.addEventListener('input', () => validateActivities(input));
+                    input.addEventListener('blur', () => validateActivities(input));
+                });
+                
+                //Cancel edited activity button
+                card.querySelector('.btnCancelEdit').addEventListener('click', () => {
+                    card.innerHTML = originalViewHTML;
+                    activityListener(card);
                 });
 
-                if (!isFormValid) {
-                    e.stopPropagation();
-                    return;
-                }
-
-                const submitBtn = form.querySelector('button[type="submit"]');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Saving...';
-
-                const formData = new FormData(form);
-                const dataToSend = Object.fromEntries(formData.entries());
-
-                try {
-                    const response = await fetch(`/edit/activity/${id}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(dataToSend)
+                //Save edited activity
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    let isFormValid = true;
+                    inputs.forEach(input => {
+                        if (!validateActivities(input)) isFormValid = false;
                     });
+                    if (!isFormValid) { e.stopPropagation(); return; }
 
-                    const result = await response.json();
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    if (loadingSpinner) loadingSpinner.style.display = 'flex';
 
-                    if (result.success) {
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = 'Save';
+                    const formData = new FormData(form);
+                    const dataToSend = Object.fromEntries(formData.entries());
 
-                        card.innerHTML = `
+                    try {
+                        const response = await fetch(`/edit/activity/${id}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(dataToSend)
+                        });
+                        const result = await response.json();
+
+                        if (result.success) {
+                            card.innerHTML = `
                             <h3 class="text-center">${dataToSend.name}</h3>
                             <ol>
                                 <li><strong>Fee: </strong> $${dataToSend.price}</li>
@@ -473,121 +457,87 @@ document.addEventListener('DOMContentLoaded', () => {
                                     Delete Activity
                                 </button>
                             </div>
-                        `;
-                        const newEditBtn = card.querySelector('.btnEditActivity');
-                        newEditBtn.addEventListener('click', function() {
-                            alert("Activity updated. Please refresh the page to edit again.");
-                        });
-                        const newDeleteBtn = card.querySelector('.btnOpenDeleteActivityModal');
-                        newDeleteBtn.addEventListener('click', function() {
-                            activityIdToDelete = this.getAttribute('data-id');
-                        });
-                    } else {
-                        alert("Error updating activity: " + (result.message || 'Unknown error'));
+                            `;
+                            activityListener(card);
+                        } else {
+                            alert("Error updating activity: " + result.message);
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Save';
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert("Connection error trying to update activity.");
                         submitBtn.disabled = false;
                         submitBtn.textContent = 'Save';
                     }
-                } catch (error) {
-                    console.error(error);
-                    alert("Connection error trying to update activity.");
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Save';
-                }
-            });
-        });
-    });
-    }
-    
-      //Delete trip modal
-    
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const deleteTriggerBtn = document.getElementById('btnDeleteTrigger');
-
-        if (confirmDeleteBtn && deleteTriggerBtn) {
-            
-            
-            let tripIdToDelete = null;
-
-            deleteTriggerBtn.addEventListener('click', function() {
-             
-                tripIdToDelete = this.getAttribute('data-id'); 
-            });
-
-
-            confirmDeleteBtn.addEventListener('click', async function(e) {
-                e.preventDefault(); 
-                
-                const idViaje = tripIdToDelete;
-
-                if (!idViaje) {
-                    alert("This trip does not exist.");
-                    
-                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('deleteTripModal'));
-                    if (modalInstance) modalInstance.hide();
-                    return;
-                }
-
-                
-                const modalElement = document.getElementById('deleteTripModal');
-                const modalInstance = bootstrap.Modal.getInstance(modalElement);
-                if (modalInstance) modalInstance.hide();
-
-
-               
-                const loader = document.getElementById('loadingSpinner');
-                if (loader) loader.style.display = 'flex';
-                this.disabled = true; 
-                try {
-                   
-                    const response = await fetch(`/delete/trip/${idViaje}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({})); 
-                        throw new Error(errorData.message || "Error processing request");
-                    }
-
-                   
-                    window.location.href = '/';
-
-                } catch (error) {
-                  
-                    if (loader) loader.style.display = 'none';
-                    this.disabled = false;
-                    
-                    const errorModalBody = document.getElementById('errorModalBody');
-                    if(errorModalBody) errorModalBody.textContent = "An error occurred during deletion: " + error.message;
-                    
-                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-                    errorModal.show();
-
-                    if (deleteTriggerBtn) deleteTriggerBtn.disabled = false;
-                }
+                });
             });
         }
+
+        //Delete button
+        const btnDelete = card.querySelector('.btnOpenDeleteActivityModal');
+        if (btnDelete) {
+            btnDelete.addEventListener('click', function() {
+                activityIdToDelete = this.getAttribute('data-id')
+                });
+        }
+    };
+    
+    const allActivityCards = document.querySelectorAll('[id^="activity-card-"]');
+    allActivityCards.forEach(card => activityListener(card));
+
+    const btnConfirmDeleteActivity = document.getElementById('btnConfirmDeleteActivity');
+    if (btnConfirmDeleteActivity) {
+        btnConfirmDeleteActivity.addEventListener('click', async function() {
+            if (!activityIdToDelete) return;
+
+            this.disabled = true;
+            if (loadingSpinner) loadingSpinner.style.display = 'flex';
+
+            try {
+                const response = await fetch(`/delete/activity/${activityIdToDelete}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    const modalEl = document.getElementById('deleteActivityModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    modalInstance.hide();
+
+                    const cardToDelete = document.getElementById(`activity-card-${activityIdToDelete}`);
+                    if (cardToDelete) {
+                        cardToDelete.closest('.col-12').remove();
+                    }
+                } else {
+                    alert("Error deleting activity: " + data.message);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Connection error trying to delete activity.");
+            } finally {
+                this.disabled = false;
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
+            }
+        });
+    }
 
     //Create activity 
     const addActivityForm = document.getElementById('addActivityForm');
     if (addActivityForm) {
-        const inputsAdd = addActivityForm.querySelectorAll('input, textarea');
-
-        inputsAdd.forEach(input => {
+        const addActivityInputs = addActivityForm.querySelectorAll('input, textarea');
+        addActivityInputs.forEach(input => {
             input.addEventListener('input', () => validateActivities(input));
             input.addEventListener('blur', () => validateActivities(input));
         });
 
         addActivityForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             let isFormValid = true;
-            inputsAdd.forEach(input => {
+            addActivityInputs.forEach(input => {
                 if (!validateActivities(input)) isFormValid = false;
             });
-
             if (!isFormValid) return;
 
             const submitBtn = addActivityForm.querySelector('button[type="submit"]');
@@ -605,14 +555,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(dataToSend)
                 });
                 const result = await response.json();
+
                 if (result.success) {
                     addActivityForm.reset();
-                    inputsAdd.forEach(i => i.classList.remove('is-valid'));
+                    addActivityInputs.forEach(input => input.classList.remove('is-valid'));
 
                     const activitiesContainer = document.getElementById('activitiesContainer');
-
-                    const newCardHTML = `
-                    <div class="col-12 col-md-6 col-sm-2" >
+                    const newActivityCard = `
+                    <div class="col-12 col-md-6 col-sm-2">
                         <div class="p-4 bg-white rounded shadow h-100" id="activity-card-${result.activity._id}">
                             <h3 class="text-center">${result.activity.name}</h3>
                             <ol>
@@ -636,10 +586,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     `;
-                    activitiesContainer.insertAdjacentHTML('beforeend', newCardHTML);
+                    activitiesContainer.insertAdjacentHTML('beforeend', newActivityCard);
+
+                    const newCard = document.getElementById(`activity-card-${result.activity._id}`);
+                    activityListener(newCard);
+
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                    alert("Error adding activity: " + (result.message));
+                    alert("Error adding activity: " + result.message);
                 }
             } catch (error) {
                 console.error(error);
@@ -650,5 +604,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-});
+}); 
