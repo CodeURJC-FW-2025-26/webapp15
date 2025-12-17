@@ -177,18 +177,18 @@ In addition to that, I created the header for all three pages, designed the butt
   -Later, I focused on the overall functionality of the details page, which required modifying the database and router. I also created the confirmation page, which serves as the gateway for all intermediate pages, including the error page.
 
   - **List of the 5 most significant commits:**
-  -[Database base](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/a635d21ceee2da186865291862fa3bba41eb3945)
-  -[Edit trip](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/2c78f7b3dd9420beee94649150977451d255d392)
-  -[Edit, delete (of main entity) and create of the secondary entity done. Confirmation page done](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/6d5f72b21a4c9a0657c7bc16432ef80a9d9b0138)
-  -[Delete and edit of the secondary entity done](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/c336e33f533a2f2e198ac2575031fc86103dc17b)
-  -[Error page done](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/1ab8abed04e81730703ada6ecf490effa2be71aa)
+  - [Database base](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/a635d21ceee2da186865291862fa3bba41eb3945)
+  - [Edit trip](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/2c78f7b3dd9420beee94649150977451d255d392)
+  - [Edit, delete (of main entity) and create of the secondary entity done. Confirmation page done](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/6d5f72b21a4c9a0657c7bc16432ef80a9d9b0138)
+  - [Delete and edit of the secondary entity done](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/c336e33f533a2f2e198ac2575031fc86103dc17b)
+  - [Error page done](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/1ab8abed04e81730703ada6ecf490effa2be71aa)
 
   - **List of the 5 files in which I have participated the most:**
-  -[confirmation_page.html](confirmation_page.html)
-  -[router.js](router.js)
-  -[database.js](database.js)
-  -[edit_activity](edit_activity)
-  -[app.js](app.js)
+  - [confirmation_page.html](confirmation_page.html)
+  - [router.js](router.js)
+  - [database.js](database.js)
+  - [edit_activity](edit_activity)
+  - [app.js](app.js)
    
 ## 3 Part
 
@@ -214,15 +214,15 @@ In addition to that, I created the header for all three pages, designed the butt
   - I also removed duplicate code as well as make minor corrections in other parts of the code where necessary.
 
   - **List of the 5 most significant commits:**
-  -[big fix on reload](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/4708b89dac2b3d339b7396b4740785ca406bd072)
-  -[finished  add activity form](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/fe6f44368f7210194926b367728b1f3721adebbc)
-  -[validation on edit activity](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/babe1775098a674c0ccfc22eff27cbd44629ba63)
-  -[edit and delete on activity and fix on load_data](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/0b579209fb733639f4199390680a26ad8a5aea00)
-  -[drying on router](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/5b20e71bc19a37c65b97cb5b031194c588af7be4)
+  - [big fix on reload](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/4708b89dac2b3d339b7396b4740785ca406bd072)
+  - [finished  add activity form](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/fe6f44368f7210194926b367728b1f3721adebbc)
+  - [validation on edit activity](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/babe1775098a674c0ccfc22eff27cbd44629ba63)
+  - [edit and delete on activity and fix on load_data](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/0b579209fb733639f4199390680a26ad8a5aea00)
+  - [drying on router](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/5b20e71bc19a37c65b97cb5b031194c588af7be4)
 
   - **List of the 5 files in which I have participated the most:**
-  -[script.js](script.js)
-  -[router.js](router.js)
-  -[detalle.html](detalle.html)
-  -[load_data.js](load_data.js)
-  -[app.js](app.js)
+  - [script.js](script.js)
+  - [router.js](router.js)
+  - [detalle.html](detalle.html)
+  - [load_data.js](load_data.js)
+  - [app.js](app.js)
