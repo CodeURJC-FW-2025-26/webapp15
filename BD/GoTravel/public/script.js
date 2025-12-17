@@ -309,42 +309,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const btnDelete = document.getElementById('btnDelete');
+     } 
+    
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const deleteTrigger = document.getElementById('btnDeleteTrigger');
 
-        if (btnDelete) {
-            btnDelete.addEventListener('click', async () => {
-                if (!confirm("¿Estás seguro de que quieres borrar este viaje?")) return;
+    if (confirmDeleteBtn && deleteTrigger) {
+        confirmDeleteBtn.addEventListener('click', async () => {
+            
+            if (loadingSpinner) loadingSpinner.style.display = 'flex';
+            confirmDeleteBtn.disabled = true;
 
-                if (loadingSpinner) loadingSpinner.style.display = 'flex';
-                btnDelete.disabled = true;
+            const id = deleteTrigger.dataset.id;
 
-                const id = btnDelete.dataset.id;
+            try {
+                const response = await fetch(`/delete/trip/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
 
-                try {
-                    const response = await fetch(`/delete/trip/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
+                const data = await response.json();
 
-                    const data = await response.json();
-
-                    if (data.success) {
-                        window.location.href = '/';
-                    } else {
-                        alert("Error: " + data.message);
-                    }
-
-                } catch (error) {
-                    console.error(error);
-                    alert("Error de conexión: " + error.message);
-                } finally {
+                if (data.success) {
+                    window.location.href = '/';
+                } else {
+                    alert("Error: " + data.message);
                     if (loadingSpinner) loadingSpinner.style.display = 'none';
-                    btnDelete.disabled = false;
+                    confirmDeleteBtn.disabled = false;
                 }
-            });
-        }
+            } catch (error) {
+                console.error(error);
+                alert("Error de conexión: " + error.message);
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
+                confirmDeleteBtn.disabled = false;
+            }
+        });
     }
 //Activity modals
     let activityIdToDelete = null;
