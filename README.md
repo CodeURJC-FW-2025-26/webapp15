@@ -208,3 +208,21 @@ In addition to that, I created the header for all three pages, designed the butt
   - [database.js](database.js)
   - [app.js](app.js)
   - [main.html](main.html)
+
+➡ **Daniel Villalón Muñoz**
+  - I focused on making the Activities section dynamic. I modified the JavaScript code and the server router so users can add, edit, and delete activities without reloading the page. I also added specific validations to the forms, such as ensuring that activity names do not contain numbers, and I fixed the connection errors between the client and the server.
+  - I also removed duplicate code as well as make minor corrections in other parts of the code where necessary.
+
+  - **List of the 5 most significant commits:**
+  -[big fix on reload](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/4708b89dac2b3d339b7396b4740785ca406bd072)
+  -[finished  add activity form](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/fe6f44368f7210194926b367728b1f3721adebbc)
+  -[validation on edit activity](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/babe1775098a674c0ccfc22eff27cbd44629ba63)
+  -[edit and delete on activity and fix on load_data](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/0b579209fb733639f4199390680a26ad8a5aea00)
+  -[drying on router](https://github.com/CodeURJC-FW-2025-26/webapp15/commit/5b20e71bc19a37c65b97cb5b031194c588af7be4)
+
+  - **List of the 5 files in which I have participated the most:**
+  -[script.js](script.js)
+  -[router.js](router.js)
+  -[detalle.html](detalle.html)
+  -[load_data.js](load_data.js)
+  -[app.js](app.js)
