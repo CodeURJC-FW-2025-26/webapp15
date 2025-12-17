@@ -135,7 +135,7 @@ In addition to that, I created the header for all three pages, designed the butt
   -app.js:
   -database.js: This file is the responsable of loading the example trips and activities.
 
-➡ **Video** https://youtu.be/t_0I_cP7d8Q
+➡ [Vídeo](https://youtu.be/t_0I_cP7d8Q)
 
 
   ➡ **Raul Martin Sanchez**
@@ -243,3 +243,8 @@ In addition to that, I created the header for all three pages, designed the butt
   - [detalle.html](detalle.html)
   - [footer.html](footer.html)
   - [database.js](database.js)
+
+
+➡ [Video](https://youtu.be/fU8W7-kIav0)
+
+  
